@@ -1,0 +1,11 @@
+.spinner {
+  display: flex;
+  align-items: center;
+}
+
+input[type="number"] {
+  width: 50px;
+  text-align: center;
+  margin-right: 10px;
+}
+
