@@ -4,12 +4,12 @@ import Navigation from "./navigation/navigation";
 import Seite_1 from "./seite_1/seite_1";
 import Seite_2 from "./seite_2/seite_2";
 ///////////////////////////////////////////////////////////////////////////////
-import Einsatzdaten from "./einsatzdaten/einsatzdaten";
+
 
 export default function App() {
   return (
     <div className="App">
-      <Einsatzdaten/>
+      <Seite_1/>
     </div>
   );
 }
