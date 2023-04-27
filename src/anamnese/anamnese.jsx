@@ -12,32 +12,118 @@ import {
 
 export default function Anamnese() {
 
-    const [isChecked, setIsChecked] = useState([false, false, false]);
-    const [atemwege, setAtemwege] = useState("Frei");
 
+    const [atemwege, setAtemwege] = useState("Frei");
+    const [isChecked_belueftung, setIsChecked_belueftung] = useState([false, false, false, false, false, false, false]);
+    const [isChecked_puls, setIsChecked_puls] = useState([false, false, false, false, false]);
+    const [isChecked_haut, setIsChecked_haut] = useState([false, false, false, false, false, false]);
+    const [SonstigValue, setSonstigValue] = useState("");
+
+    const handleInputChange_SonstigValue = (event) => {
+        setSonstigValue(event.target.value);
+    }
 
     function handleOnChange(event) {
         setAtemwege(event.target.value);
     }
 
-    function handleOnChange(type) {
-        if (type === "Privat PKW") {
-            const newIsChecked = isChecked.slice();
+    function handleOnChange_belueftng(type) {
+        if (type === "Unauffaellig") {
+            const newIsChecked = isChecked_belueftung.slice();
             newIsChecked[0] = !newIsChecked[0];
-            setIsChecked(newIsChecked);
+            setIsChecked_belueftung(newIsChecked);
 
-        } else if (type === "Feuerwehr MTW") {
-            const newIsChecked = isChecked.slice();
+        } else if (type === "Zyanose") {
+            const newIsChecked = isChecked_belueftung.slice();
             newIsChecked[1] = !newIsChecked[1];
-            setIsChecked(newIsChecked);
+            setIsChecked_belueftung(newIsChecked);
 
-        } else if (type === "58/19-2") {
-            const newIsChecked = isChecked.slice();
+        } else if (type === "Rasseln") {
+            const newIsChecked = isChecked_belueftung.slice();
             newIsChecked[2] = !newIsChecked[2];
-            setIsChecked(newIsChecked);
+            setIsChecked_belueftung(newIsChecked);
 
+        } else if (type === "Schnappatmung") {
+            const newIsChecked = isChecked_belueftung.slice();
+            newIsChecked[3] = !newIsChecked[3];
+            setIsChecked_belueftung(newIsChecked);
+
+        } else if (type === "Atemnot") {
+            const newIsChecked = isChecked_belueftung.slice();
+            newIsChecked[4] = !newIsChecked[4];
+            setIsChecked_belueftung(newIsChecked);
+
+        } else if (type === "Hyperventillation") {
+            const newIsChecked = isChecked_belueftung.slice();
+            newIsChecked[5] = !newIsChecked[5];
+            setIsChecked_belueftung(newIsChecked);
+
+        } else if (type === "Atemstillstand") {
+            const newIsChecked = isChecked_belueftung.slice();
+            newIsChecked[6] = !newIsChecked[6];
+            setIsChecked_belueftung(newIsChecked);
         }
 
+    }
+
+    function handleOnChange_puls(type) {
+        if (type === "Regelmaeßig") {
+            const newIsChecked = isChecked_puls.slice();
+            newIsChecked[0] = !newIsChecked[0];
+            setIsChecked_puls(newIsChecked);
+
+        } else if (type === "Unregelmaeßig") {
+            const newIsChecked = isChecked_puls.slice();
+            newIsChecked[1] = !newIsChecked[1];
+            setIsChecked_puls(newIsChecked);
+
+        } else if (type === "Gut tastbar") {
+            const newIsChecked = isChecked_puls.slice();
+            newIsChecked[2] = !newIsChecked[2];
+            setIsChecked_puls(newIsChecked);
+        } else if (type === "Schlecht tastbar") {
+            const newIsChecked = isChecked_puls.slice();
+            newIsChecked[3] = !newIsChecked[3];
+            setIsChecked_puls(newIsChecked);
+
+        } else if (type === "Nicht tastbar") {
+            const newIsChecked = isChecked_puls.slice();
+            newIsChecked[4] = !newIsChecked[4];
+            setIsChecked_puls(newIsChecked);
+        }
+    }
+
+    function handleOnChange_haut(type) {
+        if (type === "Rosig") {
+            const newIsChecked = isChecked_haut.slice();
+            newIsChecked[0] = !newIsChecked[0];
+            setIsChecked_haut(newIsChecked);
+
+        } else if (type === "Blass") {
+            const newIsChecked = isChecked_haut.slice();
+            newIsChecked[1] = !newIsChecked[1];
+            setIsChecked_haut(newIsChecked);
+
+        } else if (type === "Blau") {
+            const newIsChecked = isChecked_haut.slice();
+            newIsChecked[2] = !newIsChecked[2];
+            setIsChecked_haut(newIsChecked);
+
+        } else if (type === "Rot") {
+            const newIsChecked = isChecked_haut.slice();
+            newIsChecked[3] = !newIsChecked[3];
+            setIsChecked_haut(newIsChecked);
+
+        } else if (type === "Warm") {
+            const newIsChecked = isChecked_haut.slice();
+            newIsChecked[4] = !newIsChecked[4];
+            setIsChecked_haut(newIsChecked);
+
+        } else if (type === "Kalt") {
+            const newIsChecked = isChecked_haut.slice();
+            newIsChecked[5] = !newIsChecked[5];
+            setIsChecked_haut(newIsChecked);
+        }
     }
 
     return (
@@ -72,64 +158,66 @@ export default function Anamnese() {
                                 <div className="anamnese_body_components_line_right2_body_multiselect">
                                     <input
                                         type="checkbox"
-                                    /*checked={isChecked[0]}*/
-                                    /*onChange={() => handleOnChange("Privat PKW")}*/
+                                        checked={isChecked_belueftung[0]}
+                                        onChange={() => handleOnChange_belueftng("Unauffaellig")}
                                     />
                                     <span>Unauffällig</span>
                                 </div>
                                 <div className="anamnese_body_components_line_right2_body_multiselect">
                                     <input
                                         type="checkbox"
-                                    /*checked={isChecked[1]}*/
-                                    /*onChange={() => handleOnChange("Feuerwehr MTW")}*/
+                                        checked={isChecked_belueftung[1]}
+                                        onChange={() => handleOnChange_belueftng("Zyanose")}
                                     />
                                     <span>Zyanose</span>
                                 </div>
                                 <div className="anamnese_body_components_line_right2_body_multiselect">
                                     <input
                                         type="checkbox"
-                                    /*checked={isChecked[2]}*/
-                                    /*onChange={() => handleOnChange("58/19-2")}*/
+                                        checked={isChecked_belueftung[2]}
+                                        onChange={() => handleOnChange_belueftng("Rasseln")}
                                     />
                                     <span>Rasseln</span>
                                 </div>
                                 <div className="anamnese_body_components_line_right2_body_multiselect">
                                     <input
                                         type="checkbox"
-                                    /*checked={isChecked[0]}*/
-                                    /*onChange={() => handleOnChange("Privat PKW")}*/
+                                        checked={isChecked_belueftung[3]}
+                                        onChange={() => handleOnChange_belueftng("Schnappatmung")}
                                     />
                                     <span>Schnappatmung</span>
                                 </div>
                                 <div className="anamnese_body_components_line_right2_body_multiselect">
                                     <input
                                         type="checkbox"
-                                    /*checked={isChecked[1]}*/
-                                    /*onChange={() => handleOnChange("Feuerwehr MTW")}*/
+                                        checked={isChecked_belueftung[4]}
+                                        onChange={() => handleOnChange_belueftng("Atemnot")}
                                     />
                                     <span>Atemnot</span>
                                 </div>
                                 <div className="anamnese_body_components_line_right2_body_multiselect">
                                     <input
                                         type="checkbox"
-                                    /*checked={isChecked[2]}*/
-                                    /*onChange={() => handleOnChange("58/19-2")}*/
+                                        checked={isChecked_belueftung[5]}
+                                        onChange={() => handleOnChange_belueftng("Hyperventillation")}
                                     />
                                     <span>Hyperventillation</span>
                                 </div>
                                 <div className="anamnese_body_components_line_right2_body_multiselect">
                                     <input
                                         type="checkbox"
-                                    /*checked={isChecked[2]}*/
-                                    /*onChange={() => handleOnChange("58/19-2")}*/
+                                        checked={isChecked_belueftung[6]}
+                                        onChange={() => handleOnChange_belueftng("Atemstillstand")}
                                     />
                                     <span>Atemstillstand</span>
                                 </div>
                             </div>
-                            <input required type="text"
+                            <input type="text"
                                 className="anamnese_body_components_line_right2_txt"
                                 placeholder="Sonstiges"
                                 title="Sonstiges"
+                                value={SonstigValue}
+                                onChange={handleInputChange_SonstigValue}
                             />
                         </div>
                     </div>
@@ -142,40 +230,40 @@ export default function Anamnese() {
                             <div className="anamnese_body_components_line_right3_multiselect">
                                 <input
                                     type="checkbox"
-                                /*checked={isChecked[0]}*/
-                                /*onChange={() => handleOnChange("Privat PKW")}*/
+                                    checked={isChecked_puls[0]}
+                                    onChange={() => handleOnChange_puls("Regelmaeßig")}
                                 />
                                 <span>Regelmäßig</span>
                             </div>
                             <div className="anamnese_body_components_line_right3_multiselect">
                                 <input
                                     type="checkbox"
-                                /*checked={isChecked[1]}*/
-                                /*onChange={() => handleOnChange("Feuerwehr MTW")}*/
+                                    checked={isChecked_puls[1]}
+                                    onChange={() => handleOnChange_puls("Unregelmaeßig")}
                                 />
                                 <span>Unregelmäßig</span>
                             </div>
                             <div className="anamnese_body_components_line_right3_multiselect">
                                 <input
                                     type="checkbox"
-                                /*checked={isChecked[2]}*/
-                                /*onChange={() => handleOnChange("58/19-2")}*/
+                                    checked={isChecked_puls[2]}
+                                    onChange={() => handleOnChange_puls("Gut tastbar")}
                                 />
                                 <span>Gut tastbar</span>
                             </div>
                             <div className="anamnese_body_components_line_right3_multiselect">
                                 <input
                                     type="checkbox"
-                                /*checked={isChecked[2]}*/
-                                /*onChange={() => handleOnChange("58/19-2")}*/
+                                    checked={isChecked_puls[3]}
+                                    onChange={() => handleOnChange_puls("Schlecht tastbar")}
                                 />
                                 <span>Schlecht tastbar</span>
                             </div>
                             <div className="anamnese_body_components_line_right3_multiselect">
                                 <input
                                     type="checkbox"
-                                /*checked={isChecked[2]}*/
-                                /*onChange={() => handleOnChange("58/19-2")}*/
+                                    checked={isChecked_puls[4]}
+                                    onChange={() => handleOnChange_puls("Nicht tastbar")}
                                 />
                                 <span>Nicht tastbar</span>
                             </div>
@@ -191,40 +279,40 @@ export default function Anamnese() {
                             <div className="anamnese_body_components_line_right3_multiselect">
                                 <input
                                     type="checkbox"
-                                /*checked={isChecked[0]}*/
-                                /*onChange={() => handleOnChange("Privat PKW")}*/
+                                    checked={isChecked_haut[0]}
+                                    onChange={() => handleOnChange_haut("Rosig")}
                                 />
                                 <span>Rosig</span>
                             </div>
                             <div className="anamnese_body_components_line_right3_multiselect">
                                 <input
                                     type="checkbox"
-                                /*checked={isChecked[1]}*/
-                                /*onChange={() => handleOnChange("Feuerwehr MTW")}*/
+                                    checked={isChecked_haut[1]}
+                                    onChange={() => handleOnChange_haut("Blass")}
                                 />
                                 <span>Blass</span>
                             </div>
                             <div className="anamnese_body_components_line_right3_multiselect">
                                 <input
                                     type="checkbox"
-                                /*checked={isChecked[2]}*/
-                                /*onChange={() => handleOnChange("58/19-2")}*/
+                                    checked={isChecked_haut[2]}
+                                    onChange={() => handleOnChange_haut("Blau")}
                                 />
                                 <span>Blau</span>
                             </div>
                             <div className="anamnese_body_components_line_right3_multiselect">
                                 <input
                                     type="checkbox"
-                                /*checked={isChecked[2]}*/
-                                /*onChange={() => handleOnChange("58/19-2")}*/
+                                    checked={isChecked_haut[3]}
+                                    onChange={() => handleOnChange_haut("Rot")}
                                 />
                                 <span>Rot</span>
                             </div>
                             <div className="anamnese_body_components_line_right3_multiselect">
                                 <input
                                     type="checkbox"
-                                /*checked={isChecked[2]}*/
-                                /*onChange={() => handleOnChange("58/19-2")}*/
+                                    checked={isChecked_haut[4]}
+                                    onChange={() => handleOnChange_haut("Warm")}
                                 />
                                 <span>Warm</span>
                             </div>
@@ -232,8 +320,8 @@ export default function Anamnese() {
                             <div className="anamnese_body_components_line_right3_multiselect">
                                 <input
                                     type="checkbox"
-                                /*checked={isChecked[2]}*/
-                                /*onChange={() => handleOnChange("58/19-2")}*/
+                                    checked={isChecked_haut[5]}
+                                    onChange={() => handleOnChange_haut("Kalt")}
                                 />
                                 <span>Kalt</span>
                             </div>
