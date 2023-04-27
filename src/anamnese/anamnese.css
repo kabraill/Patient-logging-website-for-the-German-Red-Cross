@@ -1,4 +1,4 @@
-.s2 {
+.anamnese {
     position: sticky;
     top: 45px;
     background-color: greenyellow;
@@ -9,8 +9,8 @@
     min-height: 410px;
 }
 
-.s2_body {
-    
+.anamnese_body {
+
     background-color: antiquewhite;
     height: calc(100vh - 45px);
     width: 100%;
@@ -19,12 +19,13 @@
     justify-content: flex-start;
     flex-direction: column;
     gap: 30px;
-    
+
 
 }
+
 /************************************************************************/
 
-.s2_body_title {
+.anamnese_body_title {
     font-size: 25px;
     font-weight: bold;
     margin-top: 10px;
@@ -32,7 +33,7 @@
 
 /***********************************************************************/
 
-.s2_body_components {
+.anamnese_body_components {
     background-color: rgb(255, 166, 0);
     display: flex;
     align-items: center;
@@ -40,10 +41,10 @@
     flex-direction: column;
     border: 2px solid black;
     height: 250px;
-    width: 520px;
+    width: 580px;
 }
 
-.s2_body_components_line {
+.anamnese_body_components_line {
     background-color: aquamarine;
     width: 100%;
     height: 30px;
@@ -53,7 +54,7 @@
 
 }
 
-.s2_body_components_line_label {
+.anamnese_body_components_line_label {
     flex: 1;
     background-color: red;
     font-size: 19px;
@@ -64,9 +65,64 @@
     padding-right: 5px;
 }
 
-.s2_body_components_line_right {
-    background-color: rgb(177, 177, 211);
+.anamnese_body_components_line_right1 {
+    background-color: rgb(122, 196, 199);
+    flex: 2;
+    height: 30px;
+    display: flex;
+    align-items: center;
+}
+
+.anamnese_body_components_line_right_singleselect {
     flex: 1;
+    height: 30px;
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.anamnese_body_components_line_right2 {
+    background-color: rgb(177, 177, 211);
+    flex: 2;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 3px;
+    
+}
+
+.anamnese_body_components_line_right2_body{
+    flex: 1;
+    height: 60px;
+    gap: 3px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    flex-direction: column;
+    overflow-x: scroll;
+    overflow-y: scroll;
+}
+
+.anamnese_body_components_line_right2_body_multiselect {
+    display: flex;
+    gap: 3px;
+    background: pink;
+}
+
+.anamnese_body_components_line_right2_txt {
+    flex: 1;
+    text-overflow: ellipsis;
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.anamnese_body_components_line_right2_txt:focus {
+    outline: none;
+}
+
+.anamnese_body_components_line_right3 {
+    background-color: rgb(177, 177, 211);
+    flex: 2;
     height: 60px;
     display: flex;
     align-items: flex-start;
@@ -77,7 +133,7 @@
     overflow-y: scroll;
 }
 
-.s2_body_components_line_right_dropdown {
+.anamnese_body_components_line_right3_multiselect {
     display: flex;
     gap: 3px;
     background: pink;
@@ -88,30 +144,39 @@
 /*and (max-height: 850px)*/
     {
 
-    .s2_body {
+    .anamnese_body {
         background-color: blue;
         gap: 8px;
     }
 
-    .s2_body_components {
+    .anamnese_body_components {
         width: 440px;
     }
 
-    .s2_body_components_line_label {
+    .anamnese_body_components_line_label {
         font-size: 12px;
         font-weight: bold;
     }
 
-    .s2_body_components_line_right {
-        flex: 1;
+    .anamnese_body_components_line_right1{
+        flex: 2;
+    }
+
+    .anamnese_body_components_line_right2{
+        flex: 2;
+    }
+
+    .anamnese_body_components_line_right3{
+        flex: 2;
     }
 
 
 }
+
 /*********************************************************************/
 
-@media only screen and (max-height: 410px){
-    .s2_body {
+@media only screen and (max-height: 410px) {
+    .anamnese_body {
         background-color: blueviolet;
         height: 100%;
     }

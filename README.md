@@ -1,26 +1,6 @@
 # Protokoll-Tool
 
-## Download from github
 
-open git bash in the directory where you want to install the project and rund the following command:
-
-git clone https://a643f76.online-server.cloud/Nils-Rubehn/protokoll-tool.git
-
-after that open the git bash in the directory protokoll-tool and runf the following command in order to switch to new branch:
-
-git checkout new
-
-## how to install the libraries
-
-make sure that nodeJS is installed on your pc, then open the terminal in the current directory of the Project, after that run the following Command:
-
-npm install react-scripts --save
-
-## how to run the Project
-
-make sure that nodeJS is installed on your pc, then open the terminal in the current directory of the Project, after you installed all needed libraries run the command:
-
-npm start
 
 ## Getting started
 
