@@ -41,7 +41,7 @@ export default function Seite_2() {
             <Topbar />
             <div className="s2_body">
                 <span className="s2_body_title">
-                    Seite 2
+                    Beteiligte Einsatzkräfte
                 </span>
                 <div className="s2_body_components">
                     <div className="s2_body_components_line">
