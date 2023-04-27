@@ -136,7 +136,7 @@ export default function Anamnese() {
 
                     <div className="anamnese_body_components_line">
                         <span className="anamnese_body_components_line_label">
-                            Einsatzkräfte vor Ort:
+                            Puls: *
                         </span>
                         <div className="anamnese_body_components_line_right3">
                             <div className="anamnese_body_components_line_right3_multiselect">
@@ -145,7 +145,7 @@ export default function Anamnese() {
                                 /*checked={isChecked[0]}*/
                                 /*onChange={() => handleOnChange("Privat PKW")}*/
                                 />
-                                <span>Privat PKW</span>
+                                <span>Regelmäßig</span>
                             </div>
                             <div className="anamnese_body_components_line_right3_multiselect">
                                 <input
@@ -153,7 +153,7 @@ export default function Anamnese() {
                                 /*checked={isChecked[1]}*/
                                 /*onChange={() => handleOnChange("Feuerwehr MTW")}*/
                                 />
-                                <span>Feuerwehr MTW</span>
+                                <span>Unregelmäßig</span>
                             </div>
                             <div className="anamnese_body_components_line_right3_multiselect">
                                 <input
@@ -161,7 +161,81 @@ export default function Anamnese() {
                                 /*checked={isChecked[2]}*/
                                 /*onChange={() => handleOnChange("58/19-2")}*/
                                 />
-                                <span>58/19-2</span>
+                                <span>Gut tastbar</span>
+                            </div>
+                            <div className="anamnese_body_components_line_right3_multiselect">
+                                <input
+                                    type="checkbox"
+                                /*checked={isChecked[2]}*/
+                                /*onChange={() => handleOnChange("58/19-2")}*/
+                                />
+                                <span>Schlecht tastbar</span>
+                            </div>
+                            <div className="anamnese_body_components_line_right3_multiselect">
+                                <input
+                                    type="checkbox"
+                                /*checked={isChecked[2]}*/
+                                /*onChange={() => handleOnChange("58/19-2")}*/
+                                />
+                                <span>Nicht tastbar</span>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div className="anamnese_body_components_line">
+                        <span className="anamnese_body_components_line_label">
+                            Haut: *
+                        </span>
+                        <div className="anamnese_body_components_line_right3">
+                            <div className="anamnese_body_components_line_right3_multiselect">
+                                <input
+                                    type="checkbox"
+                                /*checked={isChecked[0]}*/
+                                /*onChange={() => handleOnChange("Privat PKW")}*/
+                                />
+                                <span>Rosig</span>
+                            </div>
+                            <div className="anamnese_body_components_line_right3_multiselect">
+                                <input
+                                    type="checkbox"
+                                /*checked={isChecked[1]}*/
+                                /*onChange={() => handleOnChange("Feuerwehr MTW")}*/
+                                />
+                                <span>Blass</span>
+                            </div>
+                            <div className="anamnese_body_components_line_right3_multiselect">
+                                <input
+                                    type="checkbox"
+                                /*checked={isChecked[2]}*/
+                                /*onChange={() => handleOnChange("58/19-2")}*/
+                                />
+                                <span>Blau</span>
+                            </div>
+                            <div className="anamnese_body_components_line_right3_multiselect">
+                                <input
+                                    type="checkbox"
+                                /*checked={isChecked[2]}*/
+                                /*onChange={() => handleOnChange("58/19-2")}*/
+                                />
+                                <span>Rot</span>
+                            </div>
+                            <div className="anamnese_body_components_line_right3_multiselect">
+                                <input
+                                    type="checkbox"
+                                /*checked={isChecked[2]}*/
+                                /*onChange={() => handleOnChange("58/19-2")}*/
+                                />
+                                <span>Warm</span>
+                            </div>
+
+                            <div className="anamnese_body_components_line_right3_multiselect">
+                                <input
+                                    type="checkbox"
+                                /*checked={isChecked[2]}*/
+                                /*onChange={() => handleOnChange("58/19-2")}*/
+                                />
+                                <span>Kalt</span>
                             </div>
 
                         </div>
