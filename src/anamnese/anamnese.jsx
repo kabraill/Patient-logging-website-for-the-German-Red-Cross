@@ -13,7 +13,7 @@ import {
 export default function Anamnese() {
 
 
-    const [atemwege, setAtemwege] = useState("Frei");
+    const [atemwege, setAtemwege] = useState("frei");
     const [isChecked_belueftung, setIsChecked_belueftung] = useState([false, false, false, false, false, false, false]);
     const [isChecked_puls, setIsChecked_puls] = useState([false, false, false, false, false]);
     const [isChecked_haut, setIsChecked_haut] = useState([false, false, false, false, false, false]);
