@@ -1,15 +1,16 @@
-.neurologie {
+.verletzungen {
     position: sticky;
     top: 45px;
     background-color: greenyellow;
     /*background-color: aqua;*/
     height: 100vh;
     width: 100vw;
-    min-width: 596px;
-    min-height: 615px;
+    min-width: 570px;
+    min-height: 915px;
 }
 
-.neurologie_body {
+.verletzungen_body {
+
     background-color: antiquewhite;
     height: calc(100vh - 45px);
     width: 100%;
@@ -18,14 +19,14 @@
     justify-content: flex-start;
     flex-direction: column;
     gap: 30px;
-    min-width: 596px;
-    min-height: 570px;
+    min-width: 570px;
+    min-height: 870px;
 
 }
 
 /************************************************************************/
 
-.neurologie_body_title {
+.verletzungen_body_title {
     font-size: 25px;
     font-weight: bold;
     margin-top: 10px;
@@ -33,19 +34,19 @@
 
 /***********************************************************************/
 
-.neurologie_body_components {
+.verletzungen_body_components {
     background-color: rgb(255, 166, 0);
     display: flex;
     align-items: center;
     justify-content: space-around;
     flex-direction: column;
     border: 2px solid black;
-    min-height: 350px;
-    height: 420px;
-    width: 580px;
+    min-height: 700px;
+    height: 700px;
+    width: 540px;
 }
 
-.neurologie_body_components_line {
+.verletzungen_body_components_line {
     background-color: aquamarine;
     width: 100%;
     height: 30px;
@@ -55,7 +56,7 @@
 
 }
 
-.neurologie_body_components_line_label {
+.verletzungen_body_components_line_label {
     flex: 1;
     background-color: red;
     font-size: 19px;
@@ -66,34 +67,7 @@
     padding-right: 5px;
 }
 
-.neurologie_body_components_line_right1 {
-    background-color: rgb(122, 196, 199);
-    flex: 2;
-    height: 30px;
-    display: flex;
-    align-items: center;
-}
-
-.neurologie_body_components_line_right_singleselect {
-    flex: 1;
-    height: 30px;
-    font-size: 15px;
-    font-weight: bold;
-}
-
-.neurologie_body_components_line_right1_txt {
-    flex: 1;
-    text-overflow: ellipsis;
-    font-size: 15px;
-    font-weight: bold;
-}
-
-.neurologie_body_components_line_right1_txt:focus {
-    outline: none;
-    
-}
-
-.neurologie_body_components_line_right3 {
+.verletzungen_body_components_line_right3 {
     background-color: rgb(177, 177, 211);
     flex: 2;
     height: 60px;
@@ -106,7 +80,7 @@
     overflow-y: scroll;
 }
 
-.neurologie_body_components_line_right3_multiselect {
+.verletzungen_body_components_line_right3_multiselect {
     display: flex;
     gap: 3px;
     background: pink;
@@ -117,29 +91,21 @@
 /*and (max-height: 850px)*/
     {
 
-    .neurologie_body {
+    .verletzungen_body {
         background-color: blue;
         gap: 8px;
     }
 
-    .neurologie_body_components {
-        width: 440px;
+    .verletzungen_body_components {
+        width: 360px;
     }
 
-    .neurologie_body_components_line_label {
+    .verletzungen_body_components_line_label {
         font-size: 12px;
         font-weight: bold;
     }
 
-    .neurologie_body_components_line_right1 {
-        flex: 2;
-    }
-
-    .neurologie_body_components_line_right2 {
-        flex: 2;
-    }
-
-    .neurologie_body_components_line_right3 {
+    .verletzungen_body_components_line_right3{
         flex: 2;
     }
 
@@ -149,7 +115,7 @@
 /*********************************************************************/
 
 @media only screen and (max-height: 510px) {
-    .neurologie_body {
+    .verletzungen_body {
         background-color: blueviolet;
         height: 100%;
     }
