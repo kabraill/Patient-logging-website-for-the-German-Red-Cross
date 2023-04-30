@@ -7,6 +7,7 @@ import Messwerte from "./messwerte/messwerte";
 import Neurologie from "./neurologie/neurologie";
 import Verletzungen from "./verletzungen/verletzungen";
 import Monitoring from "./monitoring/monitoring";
+import Massnahmen_einsatzart from "./maßnahmen_einsatzart/massnahmen_einsatzart";
 ///////////////////////////////////////////////////////////////////////////////
 
 
@@ -16,7 +17,7 @@ export default function App() {
 
   return (
     <div className="App">
-      <Monitoring/>
+      <Massnahmen_einsatzart/>
     </div>
   );
 }
