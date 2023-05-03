@@ -1,7 +1,7 @@
 import "./messwerte.css"
 
 import React, { useState } from "react";
-
+import { useNavigate } from "react-router-dom";
 
 import Topbar from "../topbar/topbar";
 import Sidebar from "../sidebar/sidebar";
@@ -13,10 +13,19 @@ import {
 
 export default function Messwerte() {
 
+    const navigate = useNavigate();
     const [PulsValue, setPuls] = useState("");
     const [BlutdruckValue, setBlutdruck] = useState("");
     const [SPo2Value, setSPo2] = useState("");
     const [KeineMesswerteValue, setKeineMesswerte] = useState(false);
+
+    const nav_next = () => {
+        navigate('/neurologie');
+    }
+
+    const nav_previous = () => {
+        navigate('/anamnese');
+    }
 
     const handleInputChange_Puls = (event) => {
         setPuls(event.target.value);
@@ -105,8 +114,8 @@ export default function Messwerte() {
                 </div>
 
                 <div className="s1_body_buttons">
-                    <button className="s1_body_buttons_btn_back"><ArrowBackIos />Vorherige</button>
-                    <button className="s1_body_buttons_btn_next">nächste<ArrowForwardIos /></button>
+                    <button onClick={nav_previous} className="s1_body_buttons_btn_back"><ArrowBackIos />Vorherige</button>
+                    <button onClick={nav_next} className="s1_body_buttons_btn_next">nächste<ArrowForwardIos /></button>
                 </div>
             </div>
         </div>

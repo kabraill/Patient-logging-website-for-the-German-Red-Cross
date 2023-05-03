@@ -1,6 +1,7 @@
 import "./massnahmen_einsatzart.css"
 
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 import Topbar from "../topbar/topbar";
 import Sidebar from "../sidebar/sidebar";
@@ -12,6 +13,8 @@ import {
 
 
 export default function Massnahmen_einsatzart() {
+
+    const navigate = useNavigate();
     const [ischeckedMassnahmen_value, Setischeckedmassnahmen_value] = useState([false, false, false, false, false, false, false, false,
         false, false, false, false, false, false, false, false, false, false, false]);
     const [Anzahl_Schocks, setAnzahl_Schocks] = useState("");
@@ -23,6 +26,10 @@ export default function Massnahmen_einsatzart() {
     const [sonstigg2, setSonstigg2] = useState("");
     const [Uebergabe_an, setUebergabe_an] = useState("");
     const [Freitext, setFreitext] = useState("");
+
+    const nav_previous = () => {
+        navigate('/monitoring');
+    }
 
     const handleInputChange_Freitext = (e) => {
         setFreitext(e.target.value);
@@ -580,9 +587,8 @@ export default function Massnahmen_einsatzart() {
 
                 </div>
 
-                <div className="s1_body_buttons">
-                    <button className="s1_body_buttons_btn_back"><ArrowBackIos />Vorherige</button>
-                    <button className="s1_body_buttons_btn_next">nächste<ArrowForwardIos /></button>
+                <div className="s1_body_buttons_special">
+                    <button onClick={nav_previous} className="s1_body_buttons_btn_back"><ArrowBackIos />Vorherige</button>
                 </div>
             </div>
         </div>

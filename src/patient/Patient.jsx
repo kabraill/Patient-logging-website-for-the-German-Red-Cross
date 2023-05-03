@@ -1,6 +1,7 @@
 import "./Patient.css"
 
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 import Topbar from "../topbar/topbar";
 import Sidebar from "../sidebar/sidebar";
@@ -11,19 +12,30 @@ import {
 } from "@mui/icons-material";
 
 export default function Patient() {
+
+    const navigate = useNavigate();
+
     const [borderColor, setBorderColor] = useState("black");
     const [backgroundColor, setBackgroundColor] = useState("white");
     const [gender, setGender] = useState("unbekannt");
+    const [alter, setAlter] = useState("");
 
-    function handleOnChange(event) {
-        setGender(event.target.value);
+    const nav_next = () => {
+        navigate('/anamnese');
+    }
+
+    const nav_previous = () => {
+        navigate('/seite_2');
+    }
+
+    function handleOnChange(e) {
+        setGender(e.target.value);
     }
 
     function handleChangeAlter(e) {
-
+        setAlter(e.target.value);
 
         if (e.target.value.match('^([0-9]+)$')) {
-            //setAlarmkey(e.target.value);
             setBorderColor("black");
             setBackgroundColor("white");
         } else {
@@ -33,7 +45,7 @@ export default function Patient() {
     }
 
     useEffect(() => {
-        console.log(gender);
+        
     })
 
     return (
@@ -69,6 +81,7 @@ export default function Patient() {
                             <input required type="text"
                                 className="patient_body_components_line_right_txt"
                                 style={{ borderColor: borderColor[0], backgroundColor: backgroundColor[0] }}
+                                value={alter}
                                 onChange={handleChangeAlter}
                                 placeholder="Alter"
                                 title="Alter"
@@ -78,8 +91,8 @@ export default function Patient() {
                 </div>
 
                 <div className="s1_body_buttons">
-                    <button className="s1_body_buttons_btn_back"><ArrowBackIos />Vorherige</button>
-                    <button className="s1_body_buttons_btn_next">nächste<ArrowForwardIos /></button>
+                    <button onClick={nav_previous} className="s1_body_buttons_btn_back"><ArrowBackIos />Vorherige</button>
+                    <button onClick={nav_next} className="s1_body_buttons_btn_next">nächste<ArrowForwardIos /></button>
                 </div>
             </div>
         </div>

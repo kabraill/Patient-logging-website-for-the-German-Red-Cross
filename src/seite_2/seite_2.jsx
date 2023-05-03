@@ -1,7 +1,7 @@
 import "./seite_2.css"
 
 import React, { useState } from "react";
-
+import { useNavigate } from "react-router-dom";
 
 import Topbar from "../topbar/topbar";
 import Sidebar from "../sidebar/sidebar";
@@ -13,7 +13,16 @@ import {
 
 export default function Seite_2() {
 
+    const navigate = useNavigate();
     const [isChecked, setIsChecked] = useState([false, false, false]);
+
+    const nav_next = () => {
+        navigate('/patient');
+    }
+
+    const nav_previous = () => {
+        navigate('/seite_1');
+    }
 
     function handleOnChange(type) {
         if (type === "Privat PKW") {
@@ -145,8 +154,8 @@ export default function Seite_2() {
                 </div>
 
                 <div className="s1_body_buttons">
-                    <button className="s1_body_buttons_btn_back"><ArrowBackIos />Vorherige</button>
-                    <button className="s1_body_buttons_btn_next">nächste<ArrowForwardIos /></button>
+                    <button onClick={nav_previous} className="s1_body_buttons_btn_back"><ArrowBackIos />Vorherige</button>
+                    <button onClick={nav_next} className="s1_body_buttons_btn_next">nächste<ArrowForwardIos /></button>
                 </div>
 
 

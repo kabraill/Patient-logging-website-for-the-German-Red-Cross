@@ -1,7 +1,7 @@
 .patient {
     position: sticky;
     top: 45px;
-    background-color: greenyellow;
+    /*background-color: greenyellow;*/
     /*background-color: aqua;*/
     height: 100vh;
     width: 100vw;
@@ -11,7 +11,7 @@
 
 .patient_body {
     
-    background-color: antiquewhite;
+    /*background-color: antiquewhite;*/
     height: calc(100vh - 45px);
     width: 100%;
     display: flex;
@@ -19,7 +19,8 @@
     justify-content: flex-start;
     flex-direction: column;
     gap: 30px;
-    
+    min-width: 596px;
+    min-height: 365px;
 
 }
 
@@ -29,23 +30,25 @@
     font-size: 25px;
     font-weight: bold;
     margin-top: 10px;
+    color: red;
 }
 
 /***********************************************************************/
 
 .patient_body_components {
-    background-color: rgb(255, 166, 0);
+    /*background-color: rgb(255, 166, 0);*/
     display: flex;
     align-items: center;
     justify-content: space-around;
     flex-direction: column;
     border: 2px solid black;
+    min-height: 250px;
     height: 250px;
     width: 450px;
 }
 
 .patient_body_components_line {
-    background-color: aquamarine;
+    /*background-color: aquamarine;*/
     width: 100%;
     height: 30px;
     display: flex;
@@ -56,7 +59,7 @@
 
 .patient_body_components_line_label {
     flex: 1;
-    background-color: red;
+    /*background-color: red;*/
     font-size: 19px;
     font-weight: bold;
     display: flex;
@@ -66,7 +69,7 @@
 }
 
 .patient_body_components_line_right {
-    background-color: rgb(101, 101, 211);
+    /*background-color: rgb(101, 101, 211);*/
     flex: 2;
     height: 30px;
     display: flex;
@@ -91,7 +94,7 @@
     {
 
     .patient_body {
-        background-color: blue;
+        /*background-color: blue;*/
         gap: 8px;
     }
 
@@ -116,7 +119,7 @@
 
 @media only screen and (max-height: 410px){
     .patient_body {
-        background-color: blueviolet;
+        /*background-color: blueviolet;*/
         height: 100%;
     }
 }

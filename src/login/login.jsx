@@ -1,15 +1,19 @@
 import "./login.css"
 import { useState } from "react";
 
+import { useNavigate  } from 'react-router-dom';
 
 import {
     Visibility, Login
 } from "@mui/icons-material";
 
 export default function LLogin() {
+    const navigate = useNavigate();
     const [shown, setShown] = useState(false);
-    const navigate = () => {
+
+    const nav = () => {
         //window.location.replace('https://codefrontend.com');
+        navigate('/seite_1');
     }
 
     const contact = () => {
@@ -42,9 +46,9 @@ export default function LLogin() {
                         </div>
                     </div>
 
-                    <button className="login_mc_c_body_login_button" onClick={navigate}><Login className="login_mc_c_body_login_ico" /> Anmelden</button>
-                    <a href="javascript:void(0)" className="login_mc_c_body_link">Kennwort Vergessen?</a>
-                    <a href="javascript:void(0)" className="login_mc_c_body_link" onClick={contact}>Kontakt</a>
+                    <button className="login_mc_c_body_login_button" onClick={nav} ><Login className="login_mc_c_body_login_ico" /> Anmelden </button>
+                    <a href="#" className="login_mc_c_body_link">Kennwort Vergessen?</a>
+                    <a href="#" className="login_mc_c_body_link" onClick={contact}>Kontakt</a>
 
                 </div>
             </div>

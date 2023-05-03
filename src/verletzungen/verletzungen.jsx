@@ -1,7 +1,7 @@
 import "./verletzungen.css"
 
 import React, { useState } from "react";
-
+import { useNavigate } from "react-router-dom";
 
 import Topbar from "../topbar/topbar";
 import Sidebar from "../sidebar/sidebar";
@@ -13,6 +13,7 @@ import {
 
 export default function Verletzungen() {
 
+    const navigate = useNavigate();
     const [isChecked_Schaedel_Hirn, setIsChecked_Schaedel_Hirn] = useState([false, false, false, false, false]);
     const [isChecked_Gesicht, setIsChecked_Gesicht] = useState([false, false, false, false, false]);
     const [isChecked_HWS, setIsChecked_HWS] = useState([false, false, false, false, false]);
@@ -25,6 +26,13 @@ export default function Verletzungen() {
     const [isChecked_Weichteile, setIsChecked_Weichteile] = useState([false, false, false, false, false]);
 
     
+    const nav_next = () => {
+        navigate('/monitoring');
+    }
+
+    const nav_previous = () => {
+        navigate('/neurologie');
+    }
 
     function handleOnChange_Schaedel_Hirn(type) {
         if (type === "Offen") {
@@ -810,8 +818,8 @@ export default function Verletzungen() {
                 </div>
 
                 <div className="s1_body_buttons">
-                    <button className="s1_body_buttons_btn_back"><ArrowBackIos />Vorherige</button>
-                    <button className="s1_body_buttons_btn_next">nächste<ArrowForwardIos /></button>
+                    <button onClick={nav_previous} className="s1_body_buttons_btn_back"><ArrowBackIos />Vorherige</button>
+                    <button onClick={nav_next} className="s1_body_buttons_btn_next">nächste<ArrowForwardIos /></button>
                 </div>
             </div>
         </div>

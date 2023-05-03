@@ -1,7 +1,7 @@
 import "./neurologie.css"
 
 import React, { useState } from "react";
-
+import { useNavigate } from "react-router-dom";
 
 import Topbar from "../topbar/topbar";
 import Sidebar from "../sidebar/sidebar";
@@ -13,12 +13,21 @@ import {
 
 export default function Neurologie() {
 
+    const navigate = useNavigate();
     const [Bewusstsein, setBewusstsein] = useState("orientiert");
     const [Blutzucker, setBlutzucker] = useState("");
     const [isChecked_PupilleLinks, setIsChecked_PupilleLinks] = useState([false, false, false, false, false]);
     const [isChecked_PupilleRechts, setIsChecked_PupilleRechts] = useState([false, false, false, false, false]);
     const [Schmerzen, setSchmerzen] = useState("keine");
     const [Schmerzskala, setSchmerzskala] = useState("");
+
+    const nav_next = () => {
+        navigate('/verletzungen');
+    }
+
+    const nav_previous = () => {
+        navigate('/messwerte');
+    }
 
     function handleOnChange_Bewusstsein(event) {
         setBewusstsein(event.target.value);
@@ -275,8 +284,8 @@ export default function Neurologie() {
                 </div>
 
                 <div className="s1_body_buttons">
-                    <button className="s1_body_buttons_btn_back"><ArrowBackIos />Vorherige</button>
-                    <button className="s1_body_buttons_btn_next">nächste<ArrowForwardIos /></button>
+                    <button onClick={nav_previous} className="s1_body_buttons_btn_back"><ArrowBackIos />Vorherige</button>
+                    <button onClick={nav_next} className="s1_body_buttons_btn_next">nächste<ArrowForwardIos /></button>
                 </div>
             </div>
         </div>

@@ -1,7 +1,7 @@
 import "./monitoring.css"
 
 import React, { useState } from "react";
-
+import { useNavigate } from "react-router-dom";
 
 import Topbar from "../topbar/topbar";
 import Sidebar from "../sidebar/sidebar";
@@ -12,7 +12,8 @@ import {
 } from "@mui/icons-material";
 
 export default function Monitoring() {
-
+    
+    const navigate = useNavigate();
     const [zeit_1, setzeit_1] = useState("");
     const [puls_1, setpuls_1] = useState("");
     const [blutdruck_1, setblutdruck_1] = useState("");
@@ -22,6 +23,14 @@ export default function Monitoring() {
     const [puls_2, setpuls_2] = useState("");
     const [blutdruck_2, setblutdruck_2] = useState("");
     const [SpO2_2, setSpO2_2] = useState("");
+
+    const nav_next = () => {
+        navigate('/massnahmen_einsatzart');
+    }
+
+    const nav_previous = () => {
+        navigate('/verletzungen');
+    }
 
     const handleChange_zeit_1 = (e) => {
         setzeit_1(e.target.value);
@@ -208,8 +217,8 @@ export default function Monitoring() {
                 </div>
 
                 <div className="s1_body_buttons">
-                    <button className="s1_body_buttons_btn_back"><ArrowBackIos />Vorherige</button>
-                    <button className="s1_body_buttons_btn_next">nächste<ArrowForwardIos /></button>
+                    <button onClick={nav_previous} className="s1_body_buttons_btn_back"><ArrowBackIos />Vorherige</button>
+                    <button onClick={nav_next} className="s1_body_buttons_btn_next">nächste<ArrowForwardIos /></button>
                 </div>
             </div>
 

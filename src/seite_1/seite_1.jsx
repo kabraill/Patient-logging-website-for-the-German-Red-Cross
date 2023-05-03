@@ -9,15 +9,48 @@ import {
     ArrowBackIos, ArrowForwardIos
 } from "@mui/icons-material";
 
+import { useNavigate } from "react-router-dom";
 
 export default function Seite_1() {
+    const navigate = useNavigate();
+
     const [borderColor, setBorderColor] = useState(["black", "black", "black",
         "black", "black", "black", "black"]);
     const [backgroundColor, setBackgroundColor] = useState(["white", "white", "white",
         "white", "white", "white", "white"]);
 
+    const [alarmkey, setAlarmkey] = useState("");
+    const [auftragsnummer, setAuftragsnummer] = useState("");
     const [isCheckboxChecked, setIsCheckboxChecked] = useState(false);
+    const [einsatzort, setEinsatzort] = useState("");
+    const [alarmzeit, setAlarmzeit] = useState("");
+    const [ankunfthvo, setAnkunfthvo] = useState("");
+    const [ankunft_rtw_nef, setAnkunft_rtw_nef] = useState("");
+    const [einsatzende, setEinsatzende] = useState("");
 
+    const nav_next = () => {
+        navigate('/seite_2');
+    }
+
+    const handleChange_einsatzende = (e) => {
+        setEinsatzende(e.target.value);
+    }
+
+    const handleChange_ankunft_rtw_nef = (e) =>{
+        setAnkunft_rtw_nef(e.target.value);
+    }
+
+    const handleChange_ankunfthvo = (e) =>{
+        setAnkunfthvo(e.target.value);
+    }
+
+    const handleChange_alarmzeit = (e) =>{
+        setAlarmzeit(e.target.value);
+    }
+
+    const handleChange_einsatzort = (e) =>{
+        setEinsatzort(e.target.value);
+    }
 
     function handleChangeCheckbox(e) {
         setIsCheckboxChecked(e.target.checked);
@@ -25,6 +58,7 @@ export default function Seite_1() {
     }
 
     function handleChangealarmkey(e) {
+        setAlarmkey(e.target.value);
         const newBorderColor = borderColor.slice();
         const newBackgroundColor = backgroundColor.slice();
 
@@ -44,6 +78,7 @@ export default function Seite_1() {
     }
 
     function handleChangeAuftragsNummer(e) {
+        setAuftragsnummer(e.target.value);
         const newBorderColor = borderColor.slice();
         const newBackgroundColor = backgroundColor.slice();
 
@@ -82,6 +117,7 @@ export default function Seite_1() {
                                 className="s1_body_components_line_right_txt"
                                 style={{ borderColor: borderColor[0], backgroundColor: backgroundColor[0] }}
                                 onChange={handleChangealarmkey}
+                                value={alarmkey}
                                 placeholder={/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ? "Mit finger halten um den Hinweis zu lesen" : "Maus darauf platzieren um den Hinweis zu lesen"}
                                 title="Die Eingabe sollte entweder mit 1, 2 oder 3 beginnen, gefolgt von drei Ziffern, und dann gefolgt von einem optionalen N oder B (Groß-/Kleinschreibung wird nicht beachtet)."
                             />
@@ -96,12 +132,13 @@ export default function Seite_1() {
                             <input required type="text"
                                 className="s1_body_components_line_right_txt"
                                 style={{ borderColor: borderColor[1], backgroundColor: backgroundColor[1] }}
+                                value={auftragsnummer}
                                 onChange={handleChangeAuftragsNummer}
                                 placeholder="Schreiben Sie eine oder mehrere Ziffern"
                                 title="Schreiben Sie eine oder mehrere Ziffern"
                                 disabled={isCheckboxChecked}
                             />
-                            <input onChange={handleChangeCheckbox} type="checkbox" className="s1_body_components_line_right_nonr" />
+                            <input checked={isCheckboxChecked} onChange={handleChangeCheckbox} type="checkbox" className="s1_body_components_line_right_nonr" />
                             <span className="s1_body_components_line_right_nonrtxt">
                                 Keine Auftragsnummer
                             </span>
@@ -110,11 +147,13 @@ export default function Seite_1() {
 
                     <div className="s1_body_components_line">
                         <span className="s1_body_components_line_label">
-                            Einsatzort: *
+                            Einsatzort:
                         </span>
                         <div className="s1_body_components_line_right">
                             <input required type="text"
                                 className="s1_body_components_line_right_txt"
+                                value={einsatzort}
+                                onChange={handleChange_einsatzort}
                                 style={{ borderColor: borderColor[2], backgroundColor: backgroundColor[2] }}
                             />
                         </div>
@@ -127,6 +166,8 @@ export default function Seite_1() {
                         <div className="s1_body_components_line_right">
                             <input required type="time"
                                 className="s1_body_components_line_right_txt"
+                                value={alarmzeit}
+                                onChange={handleChange_alarmzeit}
                                 style={{ borderColor: borderColor[3], backgroundColor: backgroundColor[3] }}
                             />
                         </div>
@@ -139,6 +180,8 @@ export default function Seite_1() {
                         <div className="s1_body_components_line_right">
                             <input required type="time"
                                 className="s1_body_components_line_right_txt"
+                                value={ankunfthvo}
+                                onChange={handleChange_ankunfthvo}
                                 style={{ borderColor: borderColor[4], backgroundColor: backgroundColor[4] }}
                             />
                         </div>
@@ -151,6 +194,8 @@ export default function Seite_1() {
                         <div className="s1_body_components_line_right">
                             <input type="time"
                                 className="s1_body_components_line_right_txt"
+                                value={ankunft_rtw_nef}
+                                onChange={handleChange_ankunft_rtw_nef}
                                 style={{ borderColor: borderColor[5], backgroundColor: backgroundColor[5] }}
                             />
                         </div>
@@ -163,6 +208,8 @@ export default function Seite_1() {
                         <div className="s1_body_components_line_right">
                             <input required type="time"
                                 className="s1_body_components_line_right_txt"
+                                value={einsatzende}
+                                onChange={handleChange_einsatzende}
                                 style={{ borderColor: borderColor[6], backgroundColor: backgroundColor[6] }}
                             />
                         </div>
@@ -170,9 +217,8 @@ export default function Seite_1() {
 
                 </div>
 
-                <div className="s1_body_buttons">
-                    <button className="s1_body_buttons_btn_back"><ArrowBackIos />Vorherige</button>
-                    <button className="s1_body_buttons_btn_next">nächste<ArrowForwardIos /></button>
+                <div className="s1_body_buttons_special">
+                    <button onClick={nav_next} className="s1_body_buttons_btn_next">nächste<ArrowForwardIos /></button>
                 </div>
             </div>
         </div>

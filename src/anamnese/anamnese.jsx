@@ -1,6 +1,7 @@
 import "./anamnese.css"
 
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 import Topbar from "../topbar/topbar";
 import Sidebar from "../sidebar/sidebar";
@@ -12,12 +13,20 @@ import {
 
 export default function Anamnese() {
 
-
+    const navigate = useNavigate();
     const [atemwege, setAtemwege] = useState("frei");
     const [isChecked_belueftung, setIsChecked_belueftung] = useState([false, false, false, false, false, false, false]);
     const [isChecked_puls, setIsChecked_puls] = useState([false, false, false, false, false]);
     const [isChecked_haut, setIsChecked_haut] = useState([false, false, false, false, false, false]);
     const [SonstigValue, setSonstigValue] = useState("");
+
+    const nav_next = () => {
+        navigate('/messwerte');
+    }
+
+    const nav_previous = () => {
+        navigate('/patient');
+    }
 
     const handleInputChange_SonstigValue = (event) => {
         setSonstigValue(event.target.value);
@@ -331,8 +340,8 @@ export default function Anamnese() {
                 </div>
 
                 <div className="s1_body_buttons">
-                    <button className="s1_body_buttons_btn_back"><ArrowBackIos />Vorherige</button>
-                    <button className="s1_body_buttons_btn_next">nächste<ArrowForwardIos /></button>
+                    <button onClick={nav_previous} className="s1_body_buttons_btn_back"><ArrowBackIos />Vorherige</button>
+                    <button onClick={nav_next} className="s1_body_buttons_btn_next">nächste<ArrowForwardIos /></button>
                 </div>
             </div>
         </div>
