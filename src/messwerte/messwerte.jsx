@@ -72,9 +72,12 @@ export default function Messwerte() {
                                 className="messwerte_body_components_line_right_txt"
                                 value={PulsValue}
                                 onChange={handleInputChange_Puls}
+                                placeholder="Z.B 72"
                             />
                         </div>
                     </div>
+
+                    <div className="horizontal-line"></div>
 
                     <div className="messwerte_body_components_line">
                         <span className="messwerte_body_components_line_label">
@@ -90,6 +93,8 @@ export default function Messwerte() {
                         </div>
                     </div>
 
+                    <div className="horizontal-line"></div>
+
                     <div className="messwerte_body_components_line">
                         <span className="messwerte_body_components_line_label">
                             SpO2:
@@ -103,6 +108,8 @@ export default function Messwerte() {
                             />
                         </div>
                     </div>
+
+                    <div className="horizontal-line"></div>
 
                     <div className="messwerte_body_components_line2">
                         <input type="checkbox"

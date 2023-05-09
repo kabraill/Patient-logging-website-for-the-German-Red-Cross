@@ -1,7 +1,7 @@
 import "./login.css"
 import { useState } from "react";
 
-import { useNavigate  } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import {
     Visibility, Login
@@ -9,7 +9,7 @@ import {
 
 export default function LLogin() {
     const navigate = useNavigate();
-    const [shown, setShown] = useState(false);
+    const [shown, setShown] = useState(true);
 
     const nav = () => {
         //window.location.replace('https://codefrontend.com');
@@ -23,36 +23,40 @@ export default function LLogin() {
 
 
     return (
-        <div className="login_mc">
-            <div className="login_mc_c">
-                <div className="login_mc_c_logo">
-                    <img className="login_mc_c_logo_ico" src="assets/red_cross.jpg"></img>
-                    <span className="login_mc_c_logo_txt1">DRK HvO Protokollierer</span>
+        <div className="login">
+            <div className="login_body">
+                <div className="login_body_top">
+                    <img className="login_body_top_ico" src="assets/red_cross.png"></img>
+                    <span className="login_body_top_txt">DRK HvO Protokollierer</span>
+                </div>
+                
+                <div className="horizontal-line"></div>
+
+                <div className="login_body_middle">
+                    <span className="login_body_middle_txt">
+                        Name: *
+                    </span>
+                    <input className="login_body_middle_txtbx" placeholder="Ihr Name" />
+
+                    <span className="login_body_middle_txt">
+                        Kennwort: *
+                    </span>
+                    <div className="login_body_middle_c">
+                        <input type={shown? "password" : "text"} className="login_body_middle_c_txtbx" placeholder="Ihr Kennwort" />
+                        <Visibility onClick={() => setShown(!shown)} />
+                    </div>
+
                 </div>
 
-                <div className="login_mc_c_body">
-                    <div className="login_mc_c_body_name">
-                        <span className="login_mc_c_body_name_txt">Name</span>
-                        <br></br>
-                        <input className="login_mc_c_body_name_txtbx" placeholder="Ihr Name"></input>
-                    </div>
-                    <div className="login_mc_c_body_password">
+                <div className="horizontal-line"></div>
 
-                        <span className="login_mc_c_body_password_txt">Kennwort</span>
-                        <br></br>
-                        <div className="login_mc_c_body_password_c">
-                            <input type={shown ? "text" : "password"} className="login_mc_c_body_password_txtbx" placeholder="Ihr Kennwort"></input>
-                            <Visibility onClick={() => setShown(!shown)} className="login_mc_c_body_password_txt_ico"></Visibility>
-                        </div>
-                    </div>
-
-                    <button className="login_mc_c_body_login_button" onClick={nav} ><Login className="login_mc_c_body_login_ico" /> Anmelden </button>
-                    <a href="#" className="login_mc_c_body_link">Kennwort Vergessen?</a>
-                    <a href="#" className="login_mc_c_body_link" onClick={contact}>Kontakt</a>
+                <div className="login_body_bottom">
+                    <button className="login_body_bottom_button" onClick={nav} ><Login className="login_body_bottom_ico" /> Anmelden </button>
+                    <a href="#" className="login_body_bottom_link">Kennwort Vergessen?</a>
+                    <a href="#" className="login_body_bottom_link" onClick={contact}>Kontakt</a>
 
                 </div>
             </div>
-
         </div>
     );
 }

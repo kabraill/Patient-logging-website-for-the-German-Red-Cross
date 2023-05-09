@@ -373,7 +373,7 @@ export default function Verletzungen() {
 
                         </div>
                     </div>
-
+                    <div className="horizontal-line"></div>
                     <div className="verletzungen_body_components_line">
                         <span className="verletzungen_body_components_line_label">
                             Gesicht:
@@ -422,7 +422,7 @@ export default function Verletzungen() {
 
                         </div>
                     </div>
-
+                    <div className="horizontal-line"></div>
                     <div className="verletzungen_body_components_line">
                         <span className="verletzungen_body_components_line_label">
                             HWS:
@@ -471,7 +471,7 @@ export default function Verletzungen() {
 
                         </div>
                     </div>
-
+                    <div className="horizontal-line"></div>
                     <div className="verletzungen_body_components_line">
                         <span className="verletzungen_body_components_line_label">
                             Thorax:
@@ -520,7 +520,7 @@ export default function Verletzungen() {
 
                         </div>
                     </div>
-
+                    <div className="horizontal-line"></div>
                     <div className="verletzungen_body_components_line">
                         <span className="verletzungen_body_components_line_label">
                             Abdomen:
@@ -569,7 +569,7 @@ export default function Verletzungen() {
 
                         </div>
                     </div>
-
+                    <div className="horizontal-line"></div>
                     <div className="verletzungen_body_components_line">
                         <span className="verletzungen_body_components_line_label">
                             BWS/LWS:
@@ -618,7 +618,7 @@ export default function Verletzungen() {
 
                         </div>
                     </div>
-
+                    <div className="horizontal-line"></div>
                     <div className="verletzungen_body_components_line">
                         <span className="verletzungen_body_components_line_label">
                             Becken:
@@ -667,7 +667,7 @@ export default function Verletzungen() {
 
                         </div>
                     </div>
-
+                    <div className="horizontal-line"></div>
                     <div className="verletzungen_body_components_line">
                         <span className="verletzungen_body_components_line_label">
                             Obere Extremitäten:
@@ -716,7 +716,7 @@ export default function Verletzungen() {
 
                         </div>
                     </div>
-
+                    <div className="horizontal-line"></div>
                     <div className="verletzungen_body_components_line">
                         <span className="verletzungen_body_components_line_label">
                             Untere Extremitäten:
@@ -765,7 +765,7 @@ export default function Verletzungen() {
 
                         </div>
                     </div>
-
+                    <div className="horizontal-line"></div>
                     <div className="verletzungen_body_components_line">
                         <span className="verletzungen_body_components_line_label">
                             Weichteile:

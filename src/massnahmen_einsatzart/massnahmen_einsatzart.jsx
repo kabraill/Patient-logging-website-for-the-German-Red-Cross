@@ -405,7 +405,9 @@ export default function Massnahmen_einsatzart() {
                             </div>
                         </div>
                     </div>
-
+                    
+                    <div className="horizontal-line"></div>
+                    
                     <div className="massnahmen_einsatzart_body_components_line">
                         <span className="massnahmen_einsatzart_body_components_line_label">
                             Bei AED: Anzahl Schocks:
@@ -420,6 +422,8 @@ export default function Massnahmen_einsatzart() {
                         </div>
                     </div>
 
+                    <div className="horizontal-line"></div>
+
                     <div className="massnahmen_einsatzart_body_components_line">
                         <span className="massnahmen_einsatzart_body_components_line_label">
                             Bei O2: Gegebene Liter/min:
@@ -433,6 +437,8 @@ export default function Massnahmen_einsatzart() {
                             />
                         </div>
                     </div>
+
+                    <div className="horizontal-line"></div>
 
                     <div className="massnahmen_einsatzart_body_components_line">
                         <span className="massnahmen_einsatzart_body_components_line_label">
@@ -512,6 +518,7 @@ export default function Massnahmen_einsatzart() {
                                     />
                                     <span>Fehleinsatz ..siehe Protokoll Fehleinsatz..</span>
                                 </div>
+
                             </div>
                             <input type="text"
                                 className="massnahmen_einsatzart_body_components_line_right2_txt"
@@ -527,7 +534,7 @@ export default function Massnahmen_einsatzart() {
                         <span className="massnahmen_einsatzart_body_components_line_label">
                             Weitere beteiligte Einsatzkräfte:
                         </span>
-                        <div className="massnahmen_einsatzart_body_components_line_right2">
+                        <div className="massnahmen_einsatzart_body_components_line_right4">
                             <div className="massnahmen_einsatzart_body_components_line_right2_body">
                                 <div className="massnahmen_einsatzart_body_components_line_right2_body_multiselect">
                                     <input
@@ -570,6 +577,8 @@ export default function Massnahmen_einsatzart() {
                             />
                         </div>
                     </div>
+
+                    <div className="horizontal-line"></div>
 
                     <div className="massnahmen_einsatzart_body_components_line">
                         <span className="massnahmen_einsatzart_body_components_line_label">

@@ -154,6 +154,8 @@ export default function Neurologie() {
                         </div>
                     </div>
 
+                    <div className="horizontal-line"></div>
+
                     <div className="neurologie_body_components_line">
                         <span className="neurologie_body_components_line_label">
                             Pupille links:
@@ -203,6 +205,8 @@ export default function Neurologie() {
                         </div>
                     </div>
 
+                    <div className="horizontal-line"></div>
+
                     <div className="neurologie_body_components_line">
                         <span className="neurologie_body_components_line_label">
                             Pupille Rechts:
@@ -251,6 +255,7 @@ export default function Neurologie() {
 
                         </div>
                     </div>
+
 
                     <div className="neurologie_body_components_line">
                         <span className="neurologie_body_components_line_label">

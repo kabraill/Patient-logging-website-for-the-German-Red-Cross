@@ -1,26 +1,28 @@
 .sidebar_mc {
-    height: 100vh;
+    height: 100%;
     width: 0px;
     position: fixed;
     z-index: 1;
-    top: 0;
-    left: 0;
-    background: linear-gradient(90deg, rgb(255, 0, 0) 14%, rgb(241, 77, 77) 90%);
+    top: 0px;
+    left: 0px;
+    background: whitesmoke;
     overflow-x: hidden;
     transition: 0.5s;
     padding-top: 60px;
-    overflow-x: scroll;
     overflow-y: scroll;
+    border: none;
   }
   
-
+  .sidebar_mcc{
+    min-height: 640px;
+  }
 
   .sidebar_mc a {
     user-select: none;
     padding: 10px 15px 10px 20px;
     /*text-decoration: none;*/
     font-size: 20px;
-    color: white;
+    color: red;
     display: flex;
     align-items: center;
     justify-content: flex-start;
@@ -28,8 +30,8 @@
   }
   
   .sidebar_mc a:hover {
-    color: red;
-    background-color: white;
+    color: whitesmoke;
+    background-color: red;
     cursor: pointer;
   }
 

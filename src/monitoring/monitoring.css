@@ -1,17 +1,12 @@
 .monitoring {
-    position: sticky;
-    top: 45px;
-    /*background-color: greenyellow;*/
-    /*background-color: aqua;*/
     height: 100vh;
     width: 100vw;
-    min-width: 496px;
-    min-height: 410px;
+    min-height: 708px;
 }
 
 .monitoring_body {
-    
-    /*background-color: antiquewhite;*/
+    /*background-color: aquamarine;*/
+
     height: calc(100vh - 45px);
     width: 100%;
     display: flex;
@@ -19,9 +14,9 @@
     justify-content: flex-start;
     flex-direction: column;
     gap: 30px;
-    
-    min-width: 496px;
-    min-height: 370px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    min-height: 663px;
 }
 
 /************************************************************************/
@@ -36,89 +31,60 @@
 /***********************************************************************/
 
 .monitoring_body_components {
-    /*background-color: rgb(255, 166, 0);*/
+    /*background-color: rgb(240, 239, 239);*/
     display: flex;
     align-items: center;
-    justify-content: space-around;
     flex-direction: column;
-    border: 2px solid black;
-    min-height: 300px;
-    height: 300px;
+    border: 1px solid black;
+
+    min-height: 500px;
+    height: 500px;
     width: 380px;
 }
 
 .monitoring_body_components_line {
-    /*background-color: aquamarine;*/
+    /*background-color: aqua;*/
+    flex: 1;
     width: 100%;
-    height: 30px;
     display: flex;
     align-items: center;
-    
-    margin-right: 4px;
+    flex-direction: column;
 
 }
 
 .monitoring_body_components_line_label {
+    background-color: rgb(240, 239, 239);
     flex: 1;
-    /*background-color: red;*/
-    font-size: 19px;
-    font-weight: bold;
     display: flex;
     align-items: center;
-    justify-content: flex-end;
-    padding-right: 5px;
+    width: 98.6%;
+    padding-left: 5px;
 }
 
 .monitoring_body_components_line_right {
-    /*background-color: rgb(101, 101, 211);*/
-    flex: 2;
-    height: 30px;
+    /*background-color: burlywood;*/
+    flex: 1.6;
+    width: 100%;
     display: flex;
+    align-items: center;
     gap: 3px;
 }
 
 .monitoring_body_components_line_right_txt {
     flex: 1;
-    text-overflow: ellipsis;
-    font-size: 15px;
-    font-weight: bold;
+    height: 80%;
+    border: none;
+    font-size: 18px;
 }
 
 .monitoring_body_components_line_right_txt:focus {
     outline: none;
 }
 
-@media only screen and (max-width: 496px)
-
-/*and (max-height: 850px)*/
-    {
-
-    .monitoring_body {
-        /*background-color: blue;*/
-        gap: 8px;
-    }
-
+/***********************************************************/
+@media only screen and (max-width: 1080px) {
     .monitoring_body_components {
-        width: 360px;
-    }
 
-    .monitoring_body_components_line_label {
-        font-size: 12px;
-        font-weight: bold;
-    }
-
-    .monitoring_body_components_line_right{
-        flex: 2;
-    }
-
-
-}
-
-/*********************************************************************/
-
-@media only screen and (max-height: 510px) {
-    .monitoring_body {
-        /*background-color: blueviolet;*/
-        height: 100%;
+        width: 100%;
     }
 }

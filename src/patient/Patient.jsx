@@ -59,12 +59,13 @@ export default function Patient() {
 
                 <div className="patient_body_components">
                     <div className="patient_body_components_line">
+                        
                         <span className="patient_body_components_line_label">
                             Geschlecht: *
                         </span>
                         <div className="patient_body_components_line_right">
                             <select value={gender}
-                                onChange={handleOnChange} className="patient_body_components_line_right_txt">
+                                onChange={handleOnChange} className="patient_body_components_line_right_dropdown">
                                 <option value="unbekannt">unbekannt</option>
                                 <option value="maennlich">männlich</option>
                                 <option value="weiblich">weiblich</option>

@@ -86,6 +86,8 @@ export default function Seite_2() {
                         </div>
                     </div>
 
+                    <div className="horizontal-line"></div>
+
                     <div className="s2_body_components_line">
                         <span className="s2_body_components_line_label">
                             Einsatzkräfte am Patienten: *
@@ -119,6 +121,8 @@ export default function Seite_2() {
                         </div>
                     </div>
 
+                    <div className="horizontal-line"></div>
+
                     <div className="s2_body_components_line">
                         <span className="s2_body_components_line_label">
                             Einsatzkräfte vor Ort:
@@ -148,7 +152,7 @@ export default function Seite_2() {
                                 />
                                 <span>58/19-2</span>
                             </div>
-
+                           
                         </div>
                     </div>
                 </div>

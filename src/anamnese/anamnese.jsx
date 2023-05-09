@@ -149,14 +149,25 @@ export default function Anamnese() {
                         <span className="anamnese_body_components_line_label">
                             Atemwege: *
                         </span>
-                        <div className="anamnese_body_components_line_right1">
-                            <select value={atemwege}
-                                onChange={handleOnChange} className="anamnese_body_components_line_right_singleselect">
-                                <option value="frei">Frei</option>
-                                <option value="verlegt">Verlegt</option>
-                            </select>
+                        <div className="anamnese_body_components_line_right3">
+                            <div className="anamnese_body_components_line_right3_multiselect">
+                                <input
+                                    type="radio"
+                                    name="atemwege"
+                                />
+                                <span>Frei</span>
+                            </div>
+                            <div className="anamnese_body_components_line_right3_multiselect">
+                                <input
+                                    type="radio"
+                                    name="atemwege"
+                                />
+                                <span>Verlegt</span>
+                            </div>
                         </div>
                     </div>
+
+                    <div className="horizontal-line"></div>
 
                     <div className="anamnese_body_components_line">
                         <span className="anamnese_body_components_line_label">
@@ -221,6 +232,7 @@ export default function Anamnese() {
                                     <span>Atemstillstand</span>
                                 </div>
                             </div>
+                            
                             <input type="text"
                                 className="anamnese_body_components_line_right2_txt"
                                 placeholder="Sonstiges"
@@ -230,6 +242,8 @@ export default function Anamnese() {
                             />
                         </div>
                     </div>
+
+                    <div className="horizontal-line"></div>
 
                     <div className="anamnese_body_components_line">
                         <span className="anamnese_body_components_line_label">
@@ -279,6 +293,8 @@ export default function Anamnese() {
 
                         </div>
                     </div>
+
+                    <div className="horizontal-line"></div>
 
                     <div className="anamnese_body_components_line">
                         <span className="anamnese_body_components_line_label">

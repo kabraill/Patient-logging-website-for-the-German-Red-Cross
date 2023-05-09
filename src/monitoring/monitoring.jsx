@@ -117,7 +117,7 @@ export default function Monitoring() {
                             />
                         </div>
                     </div>
-
+                    <div className="horizontal-line"></div>
                     <div className="monitoring_body_components_line">
                         <span className="monitoring_body_components_line_label">
                             1. Puls:
@@ -131,7 +131,7 @@ export default function Monitoring() {
                             />
                         </div>
                     </div>
-
+                    <div className="horizontal-line"></div>
                     <div className="monitoring_body_components_line">
                         <span className="monitoring_body_components_line_label">
                             1. Blutdruck:
@@ -145,7 +145,7 @@ export default function Monitoring() {
                             />
                         </div>
                     </div>
-
+                    <div className="horizontal-line"></div>
                     <div className="monitoring_body_components_line">
                         <span className="monitoring_body_components_line_label">
                             1. SpO2:
@@ -159,7 +159,7 @@ export default function Monitoring() {
                             />
                         </div>
                     </div>
-
+                    <div className="horizontal-line"></div>
                     <div className="monitoring_body_components_line">
                         <span className="monitoring_body_components_line_label">
                             2. Zeit:
@@ -172,7 +172,7 @@ export default function Monitoring() {
                             />
                         </div>
                     </div>
-
+                    <div className="horizontal-line"></div>
                     <div className="monitoring_body_components_line">
                         <span className="monitoring_body_components_line_label">
                             2. Puls:
@@ -186,7 +186,7 @@ export default function Monitoring() {
                             />
                         </div>
                     </div>
-
+                    <div className="horizontal-line"></div>
                     <div className="monitoring_body_components_line">
                         <span className="monitoring_body_components_line_label">
                             2. Blutdruck:
@@ -200,7 +200,7 @@ export default function Monitoring() {
                             />
                         </div>
                     </div>
-
+                    <div className="horizontal-line"></div>
                     <div className="monitoring_body_components_line">
                         <span className="monitoring_body_components_line_label">
                             2. SpO2:
