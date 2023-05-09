@@ -573,7 +573,6 @@ export default function Massnahmen_einsatzart() {
                                 className="massnahmen_einsatzart_body_components_line_right_txt"
                                 value={Uebergabe_an}
                                 onChange={handleInputChange_Uebergabe_an}
-                                placeholder="Z.B 70"
                             />
                         </div>
                     </div>
@@ -589,7 +588,6 @@ export default function Massnahmen_einsatzart() {
                                 className="massnahmen_einsatzart_body_components_line_right_txt"
                                 value={Freitext}
                                 onChange={handleInputChange_Freitext}
-                                placeholder="Z.B 70"
                             />
                         </div>
                     </div>
