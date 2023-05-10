@@ -16,7 +16,8 @@
     flex-direction: column;
     gap: 30px;
     min-height: 870px;
-
+    overflow-y: scroll;
+    overflow-x: hidden;
 }
 
 /************************************************************************/
