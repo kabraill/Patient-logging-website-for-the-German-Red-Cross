@@ -39,7 +39,7 @@
 
     min-height: 500px;
     height: 500px;
-    width: 380px;
+    width: 826px;
 }
 
 .monitoring_body_components_line {
@@ -57,8 +57,8 @@
     flex: 1;
     display: flex;
     align-items: center;
-    width: 98.6%;
-    padding-left: 5px;
+    width: calc(100% - 6px);
+    padding-left: 6px;
 }
 
 .monitoring_body_components_line_right {
@@ -75,6 +75,7 @@
     height: 80%;
     border: none;
     font-size: 18px;
+    padding-left: 6px;
 }
 
 .monitoring_body_components_line_right_txt:focus {

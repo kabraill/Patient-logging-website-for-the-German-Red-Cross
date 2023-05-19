@@ -39,7 +39,7 @@
     border: 1px solid black;
     min-height: 700px;
     height: 700px;
-    width: 540px;
+    width: 826px;
 }
 
 .verletzungen_body_components_line {
@@ -62,7 +62,7 @@
     flex: 1;
     display: flex;
     align-items: center;
-    width: 98.6%;
+    width: calc(100% - 6px);
     padding-left: 6px;
 
 }
@@ -73,7 +73,7 @@
     width: 100%;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-around;
     gap: 3px;
     flex-wrap: wrap;
     overflow-x: scroll;
@@ -85,6 +85,7 @@
     display: flex;
     gap: 5px;
     margin-left: 5px;
+    cursor: pointer;
     /*background: pink;*/
 }
 

@@ -8,13 +8,15 @@ import Sidebar from "../sidebar/sidebar";
 
 
 import {
-    ArrowBackIos, ArrowForwardIos
+    ArrowBackIos
 } from "@mui/icons-material";
 
 
 export default function Massnahmen_einsatzart() {
 
     const navigate = useNavigate();
+
+    const [fontColor, setFontColor] = useState(["black", "black", "red"])
     const [ischeckedMassnahmen_value, Setischeckedmassnahmen_value] = useState([false, false, false, false, false, false, false, false,
         false, false, false, false, false, false, false, false, false, false, false]);
     const [Anzahl_Schocks, setAnzahl_Schocks] = useState("");
@@ -37,6 +39,15 @@ export default function Massnahmen_einsatzart() {
 
     const handleInputChange_Uebergabe_an = (e) => {
         setUebergabe_an(e.target.value);
+
+        const newFontColor = fontColor.slice();
+        if (e.target.value === "") {
+            newFontColor[2] = "red";
+            setFontColor(newFontColor);
+        } else {
+            newFontColor[2] = "black";
+            setFontColor(newFontColor);
+        }
     }
 
     const handleInputChange_sonstigg2 = (e) => {
@@ -49,19 +60,27 @@ export default function Massnahmen_einsatzart() {
 
     const handleInputChange_Anzahl_Schocks = (e) => {
         setAnzahl_Schocks(e.target.value);
+
+        const newFontColor = fontColor.slice();
         if (e.target.value.match('^([0-9]+)$')) {
-
+            newFontColor[0] = "black";
+            setFontColor(newFontColor);
         } else {
-
+            newFontColor[0] = "red";
+            setFontColor(newFontColor);
         }
     }
 
     const handleInputChange_Gegebene_Liter_min = (e) => {
         setGegebene_Liter_min(e.target.value);
+
+        const newFontColor = fontColor.slice();
         if (e.target.value.match('^([0-9]+)$')) {
-
+            newFontColor[1] = "black";
+            setFontColor(newFontColor);
         } else {
-
+            newFontColor[1] = "red";
+            setFontColor(newFontColor);
         }
     }
 
@@ -226,190 +245,214 @@ export default function Massnahmen_einsatzart() {
         <div className="massnahmen_einsatzart">
             <Sidebar />
             <Topbar />
-            <div className="massnahmen_einsatzart_body">
+            <div onClick={() => {
+                document.getElementById("sidebar_mc_id").style.width = "0px";
+                document.getElementById("sidebar_mc_id").style.border = "none";
+            }} className="massnahmen_einsatzart_body">
                 <span className="massnahmen_einsatzart_body_title">
-                    Massnahmen & Einsatzart
+                    Maßnahmen & Einsatzart
                 </span>
 
                 <div className="massnahmen_einsatzart_body_components">
                     <div className="massnahmen_einsatzart_body_components_line">
                         <span className="massnahmen_einsatzart_body_components_line_label">
-                            Massnahmen:
+                            Maßnahmen:
                         </span>
                         <div className="massnahmen_einsatzart_body_components_line_right3">
                             <div className="massnahmen_einsatzart_body_components_line_right3_multiselect">
                                 <input
                                     type="checkbox"
+                                    id="massnahmen_einsatzart_massnahmen_atemwege_freimachen"
                                     checked={ischeckedMassnahmen_value[0]}
                                     onChange={() => handleOnChange_massnahmen("Atemwege freimachen")}
                                 />
-                                <span>Atemwege freimachen</span>
+                                <label htmlFor="massnahmen_einsatzart_massnahmen_atemwege_freimachen">Atemwege freimachen</label>
                             </div>
                             <div className="massnahmen_einsatzart_body_components_line_right3_multiselect">
                                 <input
                                     type="checkbox"
+                                    id="massnahmen_einsatzart_massnahmen_larynxtubus"
                                     checked={ischeckedMassnahmen_value[1]}
                                     onChange={() => handleOnChange_massnahmen("Larynxtubus")}
                                 />
-                                <span>Larynxtubus</span>
+                                <label htmlFor="massnahmen_einsatzart_massnahmen_larynxtubus">Larynxtubus</label>
                             </div>
                             <div className="massnahmen_einsatzart_body_components_line_right3_multiselect">
                                 <input
                                     type="checkbox"
+                                    id="massnahmen_einsatzart_massnahmen_o2_gabe"
                                     checked={ischeckedMassnahmen_value[2]}
                                     onChange={() => handleOnChange_massnahmen("O2 Gabe")}
                                 />
-                                <span>O2 Gabe</span>
+                                <label htmlFor="massnahmen_einsatzart_massnahmen_o2_gabe">O2 Gabe</label>
                             </div>
                             <div className="massnahmen_einsatzart_body_components_line_right3_multiselect">
                                 <input
                                     type="checkbox"
+                                    id="massnahmen_einsatzart_massnahmen_brille_maske_beutel"
                                     checked={ischeckedMassnahmen_value[3]}
                                     onChange={() => handleOnChange_massnahmen("Brille/Maske/Beutel")}
                                 />
-                                <span>Brille/Maske/Beutel</span>
+                                <label htmlFor="massnahmen_einsatzart_massnahmen_brille_maske_beutel">Brille/Maske/Beutel</label>
                             </div>
                             <div className="massnahmen_einsatzart_body_components_line_right3_multiselect">
                                 <input
                                     type="checkbox"
+                                    id="massnahmen_einsatzart_massnahmen_sonstiges_siehe_text"
                                     checked={ischeckedMassnahmen_value[4]}
                                     onChange={() => handleOnChange_massnahmen("sonstiges ...siehe Text")}
                                 />
-                                <span>sonstiges ...siehe Text</span>
+                                <label htmlFor="massnahmen_einsatzart_massnahmen_sonstiges_siehe_text">sonstiges ...siehe Text</label>
                             </div>
 
                             <div className="massnahmen_einsatzart_body_components_line_right3_multiselect">
                                 <input
                                     type="checkbox"
+                                    id="massnahmen_einsatzart_massnahmen_herzdruckmassage"
                                     checked={ischeckedMassnahmen_value[5]}
                                     onChange={() => handleOnChange_massnahmen("Herzdruckmassage")}
                                 />
-                                <span>Herzdruckmassage</span>
+                                <label htmlFor="massnahmen_einsatzart_massnahmen_herzdruckmassage">Herzdruckmassage</label>
                             </div>
 
                             <div className="massnahmen_einsatzart_body_components_line_right3_multiselect">
                                 <input
                                     type="checkbox"
+                                    id="massnahmen_einsatzart_massnahmen_aed"
                                     checked={ischeckedMassnahmen_value[6]}
                                     onChange={() => handleOnChange_massnahmen("AED")}
                                 />
-                                <span>AED</span>
+                                <label htmlFor="massnahmen_einsatzart_massnahmen_aed">AED</label>
                             </div>
 
                             <div className="massnahmen_einsatzart_body_components_line_right3_multiselect">
                                 <input
                                     type="checkbox"
+                                    id="massnahmen_einsatzart_massnahmen_wunderversorgung"
                                     checked={ischeckedMassnahmen_value[7]}
                                     onChange={() => handleOnChange_massnahmen("Wundversorgung")}
                                 />
-                                <span>Wundversorgung</span>
+                                <label htmlFor="massnahmen_einsatzart_massnahmen_wunderversorgung">Wundversorgung</label>
                             </div>
 
                             <div className="massnahmen_einsatzart_body_components_line_right3_multiselect">
                                 <input
                                     type="checkbox"
+                                    id="massnahmen_einsatzart_massnahmen_hws_fixierung"
                                     checked={ischeckedMassnahmen_value[8]}
                                     onChange={() => handleOnChange_massnahmen("HWS Fixierung")}
                                 />
-                                <span>HWS Fixierung</span>
+                                <label htmlFor="massnahmen_einsatzart_massnahmen_hws_fixierung">HWS Fixierung</label>
                             </div>
 
                             <div className="massnahmen_einsatzart_body_components_line_right3_multiselect">
                                 <input
                                     type="checkbox"
+                                    id="massnahmen_einsatzart_massnahmen_na_nachforderung"
                                     checked={ischeckedMassnahmen_value[9]}
                                     onChange={() => handleOnChange_massnahmen("NA Nachforderung")}
                                 />
-                                <span>NA Nachforderung</span>
+                                <label htmlFor="massnahmen_einsatzart_massnahmen_na_nachforderung">NA Nachforderung</label>
                             </div>
 
                             <div className="massnahmen_einsatzart_body_components_line_right3_multiselect">
                                 <input
                                     type="checkbox"
+                                    id="massnahmen_einsatzart_massnahmen_seitenlage"
                                     checked={ischeckedMassnahmen_value[10]}
                                     onChange={() => handleOnChange_massnahmen("Seitenlage")}
                                 />
-                                <span>Seitenlage</span>
+                                <label htmlFor="massnahmen_einsatzart_massnahmen_seitenlage">Seitenlage</label>
                             </div>
 
                             <div className="massnahmen_einsatzart_body_components_line_right3_multiselect">
                                 <input
                                     type="checkbox"
+                                    id="massnahmen_einsatzart_massnahmen_oberkorper_hoch_sitzend"
                                     checked={ischeckedMassnahmen_value[11]}
                                     onChange={() => handleOnChange_massnahmen("Oberkoerper hoch/sitzend")}
                                 />
-                                <span>Oberkörper hoch/sitzend</span>
+                                <label htmlFor="massnahmen_einsatzart_massnahmen_oberkorper_hoch_sitzend">Oberkörper hoch/sitzend</label>
                             </div>
 
                             <div className="massnahmen_einsatzart_body_components_line_right3_multiselect">
                                 <input
                                     type="checkbox"
+                                    id="massnahmen_einsatzart_massnahmen_flachlagerung"
                                     checked={ischeckedMassnahmen_value[12]}
                                     onChange={() => handleOnChange_massnahmen("Flachlagerung")}
                                 />
-                                <span>Flachlagerung</span>
+                                <label htmlFor="massnahmen_einsatzart_massnahmen_flachlagerung">Flachlagerung</label>
                             </div>
 
                             <div className="massnahmen_einsatzart_body_components_line_right3_multiselect">
                                 <input
                                     type="checkbox"
+                                    id="massnahmen_einsatzart_massnahmen_schocklage"
                                     checked={ischeckedMassnahmen_value[13]}
                                     onChange={() => handleOnChange_massnahmen("Schocklage")}
                                 />
-                                <span>Schocklage</span>
+                                <label htmlFor="massnahmen_einsatzart_massnahmen_schocklage">Schocklage</label>
                             </div>
 
                             <div className="massnahmen_einsatzart_body_components_line_right3_multiselect">
                                 <input
                                     type="checkbox"
+                                    id="massnahmen_einsatzart_massnahmen_ruhigstellung"
                                     checked={ischeckedMassnahmen_value[14]}
                                     onChange={() => handleOnChange_massnahmen("Ruhigstellung")}
                                 />
-                                <span>Ruhigstellung</span>
+                                <label htmlFor="massnahmen_einsatzart_massnahmen_ruhigstellung">Ruhigstellung</label>
                             </div>
 
                             <div className="massnahmen_einsatzart_body_components_line_right3_multiselect">
                                 <input
                                     type="checkbox"
+                                    id="massnahmen_einsatzart_massnahmen_absicherung"
                                     checked={ischeckedMassnahmen_value[15]}
                                     onChange={() => handleOnChange_massnahmen("Absicherung")}
                                 />
-                                <span>Absicherung</span>
+                                <label htmlFor="massnahmen_einsatzart_massnahmen_absicherung">Absicherung</label>
                             </div>
 
                             <div className="massnahmen_einsatzart_body_components_line_right3_multiselect">
                                 <input
                                     type="checkbox"
+                                    id="massnahmen_einsatzart_massnahmen_einweisung_rd"
                                     checked={ischeckedMassnahmen_value[16]}
                                     onChange={() => handleOnChange_massnahmen("Einweisung RD")}
                                 />
-                                <span>Einweisung RD</span>
+                                <label htmlFor="massnahmen_einsatzart_massnahmen_einweisung_rd">Einweisung RD</label>
                             </div>
 
                             <div className="massnahmen_einsatzart_body_components_line_right3_multiselect">
                                 <input
                                     type="checkbox"
+                                    id="massnahmen_einsatzart_massnahmen_unterstutzung_rd"
                                     checked={ischeckedMassnahmen_value[17]}
                                     onChange={() => handleOnChange_massnahmen("Unterstuetzung RD")}
                                 />
-                                <span>Unterstützung RD</span>
+                                <label htmlFor="massnahmen_einsatzart_massnahmen_unterstutzung_rd">Unterstützung RD</label>
                             </div>
 
                             <div className="massnahmen_einsatzart_body_components_line_right3_multiselect">
                                 <input
                                     type="checkbox"
+                                    id="massnahmen_einsatzart_massnahmen_nnd_abwartend"
                                     checked={ischeckedMassnahmen_value[18]}
                                     onChange={() => handleOnChange_massnahmen("NND abwartend")}
                                 />
-                                <span>NND abwartend</span>
+                                <label htmlFor="massnahmen_einsatzart_massnahmen_nnd_abwartend">NND abwartend</label>
                             </div>
+
+                            <input placeholder="Sonstiges" className="massnahmen_einsatzart_body_components_line_right3_sontiges" />
                         </div>
                     </div>
-                    
+
                     <div className="horizontal-line"></div>
-                    
+
                     <div className="massnahmen_einsatzart_body_components_line">
-                        <span className="massnahmen_einsatzart_body_components_line_label">
+                        <span style={{ color: fontColor[0] }} className="massnahmen_einsatzart_body_components_line_label">
                             Bei AED: Anzahl Schocks:
                         </span>
                         <div className="massnahmen_einsatzart_body_components_line_right">
@@ -417,7 +460,7 @@ export default function Massnahmen_einsatzart() {
                                 className="massnahmen_einsatzart_body_components_line_right_txt"
                                 value={Anzahl_Schocks}
                                 onChange={handleInputChange_Anzahl_Schocks}
-                                placeholder="Z.B 70"
+                                placeholder="Z.B 2"
                             />
                         </div>
                     </div>
@@ -425,7 +468,7 @@ export default function Massnahmen_einsatzart() {
                     <div className="horizontal-line"></div>
 
                     <div className="massnahmen_einsatzart_body_components_line">
-                        <span className="massnahmen_einsatzart_body_components_line_label">
+                        <span style={{ color: fontColor[1] }} className="massnahmen_einsatzart_body_components_line_label">
                             Bei O2: Gegebene Liter/min:
                         </span>
                         <div className="massnahmen_einsatzart_body_components_line_right">
@@ -433,7 +476,7 @@ export default function Massnahmen_einsatzart() {
                                 className="massnahmen_einsatzart_body_components_line_right_txt"
                                 value={Gegebene_Liter_min}
                                 onChange={handleInputChange_Gegebene_Liter_min}
-                                placeholder="Z.B 70"
+                                placeholder="Z.B 4"
                             />
                         </div>
                     </div>
@@ -449,74 +492,83 @@ export default function Massnahmen_einsatzart() {
                                 <div className="massnahmen_einsatzart_body_components_line_right2_body_multiselect">
                                     <input
                                         type="checkbox"
+                                        id="massnahmen_einsatzart_einsatzart_verkehrsunfall"
                                         checked={ischeckedEinsatzart_value[0]}
                                         onChange={() => handleOnChange_einsatzart("Verkehrsunfall")}
                                     />
-                                    <span>Verkehrsunfall</span>
+                                    <label htmlFor="massnahmen_einsatzart_einsatzart_verkehrsunfall">Verkehrsunfall</label>
                                 </div>
                                 <div className="massnahmen_einsatzart_body_components_line_right2_body_multiselect">
                                     <input
                                         type="checkbox"
+                                        id="massnahmen_einsatzart_einsatzart_chirurgischer_notfall"
                                         checked={ischeckedEinsatzart_value[1]}
                                         onChange={() => handleOnChange_einsatzart("Chirurgischer Notfall")}
                                     />
-                                    <span>Chirurgischer Notfall</span>
+                                    <label htmlFor="massnahmen_einsatzart_einsatzart_chirurgischer_notfall">Chirurgischer Notfall</label>
                                 </div>
                                 <div className="massnahmen_einsatzart_body_components_line_right2_body_multiselect">
                                     <input
                                         type="checkbox"
+                                        id="massnahmen_einsatzart_einsatzart_internistischer_notfall"
                                         checked={ischeckedEinsatzart_value[2]}
                                         onChange={() => handleOnChange_einsatzart("Internistischer Notfall")}
                                     />
-                                    <span>Internistischer Notfall</span>
+                                    <label htmlFor="massnahmen_einsatzart_einsatzart_internistischer_notfall">Internistischer Notfall</label>
                                 </div>
                                 <div className="massnahmen_einsatzart_body_components_line_right2_body_multiselect_marking">
                                     <input
                                         type="checkbox"
+                                        id="massnahmen_einsatzart_einsatzart_reanimation"
                                         checked={ischeckedEinsatzart_value[3]}
                                         onChange={() => handleOnChange_einsatzart("Reanimation")}
                                     />
-                                    <span>Reanimation</span>
+                                    <label htmlFor="massnahmen_einsatzart_einsatzart_reanimation">Reanimation</label>
                                 </div>
                                 <div className="massnahmen_einsatzart_body_components_line_right2_body_multiselect">
                                     <input
                                         type="checkbox"
+                                        id="massnahmen_einsatzart_einsatzart_infektionseinsatz"
                                         checked={ischeckedEinsatzart_value[4]}
                                         onChange={() => handleOnChange_einsatzart("Infektionseinsatz")}
                                     />
-                                    <span>Infektionseinsatz</span>
+                                    <label htmlFor="massnahmen_einsatzart_einsatzart_infektionseinsatz">Infektionseinsatz</label>
                                 </div>
                                 <div className="massnahmen_einsatzart_body_components_line_right2_body_multiselect">
                                     <input
                                         type="checkbox"
+                                        id="massnahmen_einsatzart_einsatzart_paediatrischer_notfall"
                                         checked={ischeckedEinsatzart_value[5]}
                                         onChange={() => handleOnChange_einsatzart("Paediatrischer Notfall")}
                                     />
-                                    <span>Paediatrischer Notfall</span>
+                                    <label htmlFor="massnahmen_einsatzart_einsatzart_paediatrischer_notfall">Paediatrischer Notfall</label>
                                 </div>
                                 <div className="massnahmen_einsatzart_body_components_line_right2_body_multiselect">
                                     <input
                                         type="checkbox"
+                                        id="massnahmen_einsatzart_einsatzart_arbeitsunfall"
                                         checked={ischeckedEinsatzart_value[6]}
                                         onChange={() => handleOnChange_einsatzart("Arbeitsunfall")}
                                     />
-                                    <span>Arbeitsunfall</span>
+                                    <label htmlFor="massnahmen_einsatzart_einsatzart_arbeitsunfall">Arbeitsunfall</label>
                                 </div>
                                 <div className="massnahmen_einsatzart_body_components_line_right2_body_multiselect">
                                     <input
                                         type="checkbox"
+                                        id="massnahmen_einsatzart_einsatzart_gynaekologischer_notfall"
                                         checked={ischeckedEinsatzart_value[7]}
                                         onChange={() => handleOnChange_einsatzart("Gynaekologischer Notfall")}
                                     />
-                                    <span>Gynäkologischer Notfall</span>
+                                    <label htmlFor="massnahmen_einsatzart_einsatzart_gynaekologischer_notfall">Gynäkologischer Notfall</label>
                                 </div>
                                 <div className="massnahmen_einsatzart_body_components_line_right2_body_multiselect">
                                     <input
                                         type="checkbox"
+                                        id="massnahmen_einsatzart_einsatzart_fehleinsatz_siehe_protokoll_fehleinsatz"
                                         checked={ischeckedEinsatzart_value[8]}
                                         onChange={() => handleOnChange_einsatzart("Fehleinsatz ..siehe Protokoll Fehleinsatz..")}
                                     />
-                                    <span>Fehleinsatz ..siehe Protokoll Fehleinsatz..</span>
+                                    <label htmlFor="massnahmen_einsatzart_einsatzart_fehleinsatz_siehe_protokoll_fehleinsatz">Fehleinsatz ..siehe Protokoll Fehleinsatz..</label>
                                 </div>
 
                             </div>
@@ -529,7 +581,7 @@ export default function Massnahmen_einsatzart() {
                             />
                         </div>
                     </div>
-
+                    <div className="horizontal-line"></div>
                     <div className="massnahmen_einsatzart_body_components_line">
                         <span className="massnahmen_einsatzart_body_components_line_label">
                             Weitere beteiligte Einsatzkräfte:
@@ -538,19 +590,21 @@ export default function Massnahmen_einsatzart() {
                             <div className="massnahmen_einsatzart_body_components_line_right2_body">
                                 <div className="massnahmen_einsatzart_body_components_line_right2_body_multiselect">
                                     <input
+                                        id="massnahmen_einsatzart_weitere_beteiligte_einsatzkraefte_feuerwehr"
                                         type="checkbox"
                                         checked={Weitere_beteiligte_Einsatzkraefte[0]}
                                         onChange={() => handleOnChange_Weitere_beteiligte_Einsatzkraefte("Feuerwehr")}
                                     />
-                                    <span>Feuerwehr</span>
+                                    <label htmlFor="massnahmen_einsatzart_weitere_beteiligte_einsatzkraefte_feuerwehr">Feuerwehr</label>
                                 </div>
                                 <div className="massnahmen_einsatzart_body_components_line_right2_body_multiselect">
                                     <input
                                         type="checkbox"
+                                        id="massnahmen_einsatzart_weitere_beteiligte_einsatzkraefte_polizei"
                                         checked={Weitere_beteiligte_Einsatzkraefte[1]}
                                         onChange={() => handleOnChange_Weitere_beteiligte_Einsatzkraefte("Polizei")}
                                     />
-                                    <span>Polizei</span>
+                                    <label htmlFor="massnahmen_einsatzart_weitere_beteiligte_einsatzkraefte_polizei">Polizei</label>
                                 </div>
                             </div>
 
@@ -563,9 +617,9 @@ export default function Massnahmen_einsatzart() {
                             />
                         </div>
                     </div>
-
+                    <div className="horizontal-line"></div>
                     <div className="massnahmen_einsatzart_body_components_line">
-                        <span className="massnahmen_einsatzart_body_components_line_label">
+                        <span style={{ color: fontColor[2] }} className="massnahmen_einsatzart_body_components_line_label">
                             Übergabe an: *
                         </span>
                         <div className="massnahmen_einsatzart_body_components_line_right">
@@ -584,7 +638,7 @@ export default function Massnahmen_einsatzart() {
                             Freitext:
                         </span>
                         <div className="massnahmen_einsatzart_body_components_line_right">
-                            <input type="text"
+                            <textarea type="text"
                                 className="massnahmen_einsatzart_body_components_line_right_txt"
                                 value={Freitext}
                                 onChange={handleInputChange_Freitext}

@@ -1,12 +1,13 @@
 import "./seite_1.css"
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import Topbar from "../topbar/topbar";
 import Sidebar from "../sidebar/sidebar";
 
+
 import {
-    ArrowBackIos, ArrowForwardIos
+    ArrowForwardIos
 } from "@mui/icons-material";
 
 import { useNavigate } from "react-router-dom";
@@ -14,14 +15,14 @@ import { useNavigate } from "react-router-dom";
 export default function Seite_1() {
     const navigate = useNavigate();
 
-    const [borderColor, setBorderColor] = useState(["black", "black", "black",
-        "black", "black", "black", "black"]);
-    const [backgroundColor, setBackgroundColor] = useState(["white", "white", "white",
-        "white", "white", "white", "white"]);
+    const [fontColor, setFontColor] = useState(["red", "red", "black",
+        "red", "red", "black", "red"]);
+
 
     const [alarmkey, setAlarmkey] = useState("");
     const [auftragsnummer, setAuftragsnummer] = useState("");
     const [isCheckboxChecked, setIsCheckboxChecked] = useState(false);
+    const [keineAuftragNummerLabel, setkeineAuftragNummerLabel] = useState("rgb(255, 255, 255)");
     const [einsatzort, setEinsatzort] = useState("");
     const [alarmzeit, setAlarmzeit] = useState("");
     const [ankunfthvo, setAnkunfthvo] = useState("");
@@ -34,6 +35,16 @@ export default function Seite_1() {
 
     const handleChange_einsatzende = (e) => {
         setEinsatzende(e.target.value);
+
+        const newFontColor = fontColor.slice();
+
+        if (e.target.value.match('^[0-9][0-9]:[0-9][0-9]$')) {
+            newFontColor[6] = "black";
+            setFontColor(newFontColor);
+        } else {
+            newFontColor[6] = "red";
+            setFontColor(newFontColor);
+        }
     }
 
     const handleChange_ankunft_rtw_nef = (e) => {
@@ -42,10 +53,29 @@ export default function Seite_1() {
 
     const handleChange_ankunfthvo = (e) => {
         setAnkunfthvo(e.target.value);
+        const newFontColor = fontColor.slice();
+
+        if (e.target.value.match('^[0-9][0-9]:[0-9][0-9]$')) {
+            newFontColor[4] = "black";
+            setFontColor(newFontColor);
+        } else {
+            newFontColor[4] = "red";
+            setFontColor(newFontColor);
+        }
     }
 
     const handleChange_alarmzeit = (e) => {
         setAlarmzeit(e.target.value);
+        const newFontColor = fontColor.slice();
+
+        if (e.target.value.match('^[0-9][0-9]:[0-9][0-9]$')) {
+            newFontColor[3] = "black";
+            setFontColor(newFontColor);
+        } else {
+            newFontColor[3] = "red";
+            setFontColor(newFontColor);
+        }
+
     }
 
     const handleChange_einsatzort = (e) => {
@@ -55,61 +85,66 @@ export default function Seite_1() {
     function handleChangeCheckbox(e) {
         setIsCheckboxChecked(e.target.checked);
 
+        if (keineAuftragNummerLabel === "rgb(255, 255, 255)") {
+            setkeineAuftragNummerLabel("rgb(220, 220, 220)");
+        } else {
+            setkeineAuftragNummerLabel("rgb(255, 255, 255)");
+        }
     }
 
     function handleChangealarmkey(e) {
         setAlarmkey(e.target.value);
-        const newBorderColor = borderColor.slice();
-        const newBackgroundColor = backgroundColor.slice();
+        const newFontColor = fontColor.slice();
+
 
         if (e.target.value.match('^[123][0-9]{3}[NBnb]?$')) {
-            newBorderColor[0] = "black";
-            newBackgroundColor[0] = "white";
+            newFontColor[0] = "black";
             //setAlarmkey(e.target.value);
-            setBorderColor(newBorderColor);
-            setBackgroundColor(newBackgroundColor);
+            setFontColor(newFontColor);
         } else {
-            newBorderColor[0] = "red";
-            newBackgroundColor[0] = "rgba(255, 0, 0, 0.2)";
-            setBorderColor(newBorderColor);
-            setBackgroundColor(newBackgroundColor);
+            newFontColor[0] = "red";
+            setFontColor(newFontColor);
         }
 
     }
 
     function handleChangeAuftragsNummer(e) {
         setAuftragsnummer(e.target.value);
-        const newBorderColor = borderColor.slice();
-        const newBackgroundColor = backgroundColor.slice();
+        const newFontColor = fontColor.slice();
+
 
         if (e.target.value.match('^([0-9]+)$')) {
-            newBorderColor[1] = "black";
-            newBackgroundColor[1] = "white";
+            newFontColor[1] = "black";
             //setAlarmkey(e.target.value);
-            setBorderColor(newBorderColor);
-            setBackgroundColor(newBackgroundColor);
+            setFontColor(newFontColor);
+
         } else {
-            newBorderColor[1] = "red";
-            newBackgroundColor[1] = "rgba(255, 0, 0, 0.2)";
-            setBorderColor(newBorderColor);
-            setBackgroundColor(newBackgroundColor);
+            newFontColor[1] = "red";
+            setFontColor(newFontColor);
         }
 
     }
 
+    useEffect(() => {
+        document.getElementById("s1_keine_nummer").style.background = keineAuftragNummerLabel;
+    }, [keineAuftragNummerLabel]);
 
+    
     return (
 
         <div className="s1">
             <Sidebar />
             <Topbar />
-            <div className="s1_body">
+            <div onClick={() => {
+                document.getElementById("sidebar_mc_id").style.width = "0px";
+                document.getElementById("sidebar_mc_id").style.border = "none";
+            }} className="s1_body">
                 <span className="s1_body_title">
                     Einsatzdaten
                 </span>
                 <div className="s1_body_components">
                     <div className="s1_body_components_line">
-                        <span className="s1_body_components_line_label">
+                        <span style={{ color: fontColor[0] }} className="s1_body_components_line_label">
                             Alarmschlüssel: *
                         </span>
                         <div className="s1_body_components_line_right">
@@ -125,7 +160,7 @@ export default function Seite_1() {
                     <div className="horizontal-line"></div>
 
                     <div className="s1_body_components_line">
-                        <span className="s1_body_components_line_label">
+                        <span style={{ color: fontColor[1] }} className="s1_body_components_line_label">
                             Auftragsnummer: *
                         </span>
                         <div className="s1_body_components_line_right">
@@ -136,11 +171,11 @@ export default function Seite_1() {
                                 placeholder="Z.B 23"
                                 disabled={isCheckboxChecked}
                             />
-                            <div className="vertical-line"></div>
-                            <input checked={isCheckboxChecked} onChange={handleChangeCheckbox} type="checkbox" className="s1_body_components_line_right_nonr" />
-                            <span className="s1_body_components_line_right_nonrtxt">
+
+                            <input id="einsatzdaten_auftragnummer" checked={isCheckboxChecked} onChange={handleChangeCheckbox} type="checkbox" className="s1_body_components_line_right_nonr" />
+                            <label htmlFor="einsatzdaten_auftragnummer" id="s1_keine_nummer" className="s1_body_components_line_right_nonrtxt">
                                 Keine Auftragsnummer
-                            </span>
+                            </label>
                         </div>
                     </div>
 
@@ -155,6 +190,7 @@ export default function Seite_1() {
                                 className="s1_body_components_line_right_txt"
                                 value={einsatzort}
                                 onChange={handleChange_einsatzort}
+                                placeholder="Z.B Ulrich Straße 40"
                             />
                         </div>
                     </div>
@@ -162,7 +198,7 @@ export default function Seite_1() {
                     <div className="horizontal-line"></div>
 
                     <div className="s1_body_components_line">
-                        <span className="s1_body_components_line_label">
+                        <span style={{ color: fontColor[3] }} className="s1_body_components_line_label">
                             Alarmzeit: *
                         </span>
                         <div className="s1_body_components_line_right">
@@ -177,7 +213,7 @@ export default function Seite_1() {
                     <div className="horizontal-line"></div>
 
                     <div className="s1_body_components_line">
-                        <span className="s1_body_components_line_label">
+                        <span style={{ color: fontColor[4] }} className="s1_body_components_line_label">
                             Ankunft HvO: *
                         </span>
                         <div className="s1_body_components_line_right">
@@ -207,7 +243,7 @@ export default function Seite_1() {
                     <div className="horizontal-line"></div>
 
                     <div className="s1_body_components_line">
-                        <span className="s1_body_components_line_label">
+                        <span style={{ color: fontColor[6] }} className="s1_body_components_line_label">
                             Einsatzende: *
                         </span>
                         <div className="s1_body_components_line_right">
@@ -222,7 +258,7 @@ export default function Seite_1() {
                 </div>
 
                 <div className="s1_body_buttons_special">
-                    <button onClick={nav_next} className="s1_body_buttons_btn_next">nächste<ArrowForwardIos /></button>
+                    <button onClick={nav_next} className="s1_body_buttons_btn_next">Nächste<ArrowForwardIos /></button>
                 </div>
 
             </div>

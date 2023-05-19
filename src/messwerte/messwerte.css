@@ -42,7 +42,7 @@
     border: 1px solid black;
     min-height: 250px;
     height: 250px;
-    width: 580px;
+    width: 826px;
 }
 
 .messwerte_body_components_line {
@@ -60,7 +60,7 @@
     flex: 1;
     display: flex;
     align-items: center;
-    width: 98.6%;
+    width: calc(100% - 6px);
     padding-left: 6px;
 
 }
@@ -78,6 +78,7 @@
     flex: 1;
     border: none;
     font-size: 18px;
+    padding-left: 6px;
 }
 
 .messwerte_body_components_line_right_txt:focus {
@@ -93,6 +94,7 @@
     justify-content: center;
     margin-right: 4px;
     gap: 3px;
+    cursor: pointer;
 }
 
 /********************************************************************/

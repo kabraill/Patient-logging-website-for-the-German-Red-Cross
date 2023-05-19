@@ -25,7 +25,7 @@ export default function Verletzungen() {
     const [isChecked_Untere_Extremitaeten, setIsChecked_Untere_Extremitaeten] = useState([false, false, false, false, false]);
     const [isChecked_Weichteile, setIsChecked_Weichteile] = useState([false, false, false, false, false]);
 
-    
+
     const nav_next = () => {
         navigate('/monitoring');
     }
@@ -318,7 +318,10 @@ export default function Verletzungen() {
         <div className="verletzungen">
             <Sidebar />
             <Topbar />
-            <div className="verletzungen_body">
+            <div onClick={() => {
+                document.getElementById("sidebar_mc_id").style.width = "0px";
+                document.getElementById("sidebar_mc_id").style.border = "none";
+            }} className="verletzungen_body">
                 <span className="verletzungen_body_title">
                     Verletzungen
                 </span>
@@ -333,42 +336,47 @@ export default function Verletzungen() {
                             <div className="verletzungen_body_components_line_right3_multiselect">
                                 <input
                                     type="checkbox"
+                                    id="verletzungen_schaedel_hirn_offen"
                                     checked={isChecked_Schaedel_Hirn[0]}
                                     onChange={() => handleOnChange_Schaedel_Hirn("Offen")}
                                 />
-                                <span>Offen</span>
+                                <label htmlFor="verletzungen_schaedel_hirn_offen">Offen</label>
                             </div>
                             <div className="verletzungen_body_components_line_right3_multiselect">
                                 <input
                                     type="checkbox"
+                                    id="verletzungen_schaedel_hirn_geschlossen"
                                     checked={isChecked_Schaedel_Hirn[1]}
                                     onChange={() => handleOnChange_Schaedel_Hirn("Geschlossen")}
                                 />
-                                <span>Geschlossen</span>
+                                <label htmlFor="verletzungen_schaedel_hirn_geschlossen">Geschlossen</label>
                             </div>
                             <div className="verletzungen_body_components_line_right3_multiselect">
                                 <input
                                     type="checkbox"
+                                    id="verletzungen_schaedel_hirn_leicht"
                                     checked={isChecked_Schaedel_Hirn[2]}
                                     onChange={() => handleOnChange_Schaedel_Hirn("Leicht")}
                                 />
-                                <span>Leicht</span>
+                                <label htmlFor="verletzungen_schaedel_hirn_leicht">Leicht</label>
                             </div>
                             <div className="verletzungen_body_components_line_right3_multiselect">
                                 <input
                                     type="checkbox"
+                                    id="verletzungen_schaedel_hirn_mittel"
                                     checked={isChecked_Schaedel_Hirn[3]}
                                     onChange={() => handleOnChange_Schaedel_Hirn("Mittel")}
                                 />
-                                <span>Mittel</span>
+                                <label htmlFor="verletzungen_schaedel_hirn_mittel">Mittel</label>
                             </div>
                             <div className="verletzungen_body_components_line_right3_multiselect">
                                 <input
                                     type="checkbox"
+                                    id="verletzungen_schaedel_hirn_schwer"
                                     checked={isChecked_Schaedel_Hirn[4]}
                                     onChange={() => handleOnChange_Schaedel_Hirn("Schwer")}
                                 />
-                                <span>Schwer</span>
+                                <label htmlFor="verletzungen_schaedel_hirn_schwer">Schwer</label>
                             </div>
 
                         </div>
@@ -382,42 +390,47 @@ export default function Verletzungen() {
                             <div className="verletzungen_body_components_line_right3_multiselect">
                                 <input
                                     type="checkbox"
+                                    id="verletzungen_gesicht_offen"
                                     checked={isChecked_Gesicht[0]}
                                     onChange={() => handleOnChange_Gesicht("Offen")}
                                 />
-                                <span>Offen</span>
+                                <label htmlFor="verletzungen_gesicht_offen">Offen</label>
                             </div>
                             <div className="verletzungen_body_components_line_right3_multiselect">
                                 <input
                                     type="checkbox"
+                                    id="verletzungen_gesicht_geschlossen"
                                     checked={isChecked_Gesicht[1]}
                                     onChange={() => handleOnChange_Gesicht("Geschlossen")}
                                 />
-                                <span>Geschlossen</span>
+                                <label htmlFor="verletzungen_gesicht_geschlossen">Geschlossen</label>
                             </div>
                             <div className="verletzungen_body_components_line_right3_multiselect">
                                 <input
                                     type="checkbox"
+                                    id="verletzungen_gesicht_leicht"
                                     checked={isChecked_Gesicht[2]}
                                     onChange={() => handleOnChange_Gesicht("Leicht")}
                                 />
-                                <span>Leicht</span>
+                                <label htmlFor="verletzungen_gesicht_leicht">Leicht</label>
                             </div>
                             <div className="verletzungen_body_components_line_right3_multiselect">
                                 <input
                                     type="checkbox"
+                                    id="verletzungen_gesicht_mittel"
                                     checked={isChecked_Gesicht[3]}
                                     onChange={() => handleOnChange_Gesicht("Mittel")}
                                 />
-                                <span>Mittel</span>
+                                <label htmlFor="verletzungen_gesicht_mittel">Mittel</label>
                             </div>
                             <div className="verletzungen_body_components_line_right3_multiselect">
                                 <input
                                     type="checkbox"
+                                    id="verletzungen_gesicht_schwer"
                                     checked={isChecked_Gesicht[4]}
                                     onChange={() => handleOnChange_Gesicht("Schwer")}
                                 />
-                                <span>Schwer</span>
+                                <label htmlFor="verletzungen_gesicht_schwer">Schwer</label>
                             </div>
 
                         </div>
@@ -431,42 +444,47 @@ export default function Verletzungen() {
                             <div className="verletzungen_body_components_line_right3_multiselect">
                                 <input
                                     type="checkbox"
+                                    id="verletzungen_hws_offen"
                                     checked={isChecked_HWS[0]}
                                     onChange={() => handleOnChange_HWS("Offen")}
                                 />
-                                <span>Offen</span>
+                                <label htmlFor="verletzungen_hws_offen">Offen</label>
                             </div>
                             <div className="verletzungen_body_components_line_right3_multiselect">
                                 <input
                                     type="checkbox"
+                                    id="verletzungen_hws_geschlossen"
                                     checked={isChecked_HWS[1]}
                                     onChange={() => handleOnChange_HWS("Geschlossen")}
                                 />
-                                <span>Geschlossen</span>
+                                <label htmlFor="verletzungen_hws_geschlossen">Geschlossen</label>
                             </div>
                             <div className="verletzungen_body_components_line_right3_multiselect">
                                 <input
                                     type="checkbox"
+                                    id="verletzungen_hws_leicht"
                                     checked={isChecked_HWS[2]}
                                     onChange={() => handleOnChange_HWS("Leicht")}
                                 />
-                                <span>Leicht</span>
+                                <label htmlFor="verletzungen_hws_leicht">Leicht</label>
                             </div>
                             <div className="verletzungen_body_components_line_right3_multiselect">
                                 <input
                                     type="checkbox"
+                                    id="verletzungen_hws_mittel"
                                     checked={isChecked_HWS[3]}
                                     onChange={() => handleOnChange_HWS("Mittel")}
                                 />
-                                <span>Mittel</span>
+                                <label htmlFor="verletzungen_hws_mittel">Mittel</label>
                             </div>
                             <div className="verletzungen_body_components_line_right3_multiselect">
                                 <input
                                     type="checkbox"
+                                    id="verletzungen_hws_schwer"
                                     checked={isChecked_HWS[4]}
                                     onChange={() => handleOnChange_HWS("Schwer")}
                                 />
-                                <span>Schwer</span>
+                                <label htmlFor="verletzungen_hws_schwer">Schwer</label>
                             </div>
 
                         </div>
@@ -480,42 +498,47 @@ export default function Verletzungen() {
                             <div className="verletzungen_body_components_line_right3_multiselect">
                                 <input
                                     type="checkbox"
+                                    id="verletzungen_thorax_offen"
                                     checked={isChecked_Thorax[0]}
                                     onChange={() => handleOnChange_Thorax("Offen")}
                                 />
-                                <span>Offen</span>
+                                <label htmlFor="verletzungen_thorax_offen">Offen</label>
                             </div>
                             <div className="verletzungen_body_components_line_right3_multiselect">
                                 <input
                                     type="checkbox"
+                                    id="verletzungen_thorax_geschlossen"
                                     checked={isChecked_Thorax[1]}
                                     onChange={() => handleOnChange_Thorax("Geschlossen")}
                                 />
-                                <span>Geschlossen</span>
+                                <label htmlFor="verletzungen_thorax_geschlossen">Geschlossen</label>
                             </div>
                             <div className="verletzungen_body_components_line_right3_multiselect">
                                 <input
                                     type="checkbox"
+                                    id="verletzungen_thorax_leicht"
                                     checked={isChecked_Thorax[2]}
                                     onChange={() => handleOnChange_Thorax("Leicht")}
                                 />
-                                <span>Leicht</span>
+                                <label htmlFor="verletzungen_thorax_leicht">Leicht</label>
                             </div>
                             <div className="verletzungen_body_components_line_right3_multiselect">
                                 <input
                                     type="checkbox"
+                                    id="verletzungen_thorax_mittel"
                                     checked={isChecked_Thorax[3]}
                                     onChange={() => handleOnChange_Thorax("Mittel")}
                                 />
-                                <span>Mittel</span>
+                                <label htmlFor="verletzungen_thorax_mittel">Mittel</label>
                             </div>
                             <div className="verletzungen_body_components_line_right3_multiselect">
                                 <input
                                     type="checkbox"
+                                    id="verletzungen_thorax_schwer"
                                     checked={isChecked_Thorax[4]}
                                     onChange={() => handleOnChange_Thorax("Schwer")}
                                 />
-                                <span>Schwer</span>
+                                <label htmlFor="verletzungen_thorax_schwer">Schwer</label>
                             </div>
 
                         </div>
@@ -529,42 +552,47 @@ export default function Verletzungen() {
                             <div className="verletzungen_body_components_line_right3_multiselect">
                                 <input
                                     type="checkbox"
+                                    id="verletzungen_abdomen_offen"
                                     checked={isChecked_Abdomen[0]}
                                     onChange={() => handleOnChange_Abdomen("Offen")}
                                 />
-                                <span>Offen</span>
+                                <label htmlFor="verletzungen_abdomen_offen">Offen</label>
                             </div>
                             <div className="verletzungen_body_components_line_right3_multiselect">
                                 <input
                                     type="checkbox"
+                                    id="verletzungen_abdomen_geschlossen"
                                     checked={isChecked_Abdomen[1]}
                                     onChange={() => handleOnChange_Abdomen("Geschlossen")}
                                 />
-                                <span>Geschlossen</span>
+                                <label htmlFor="verletzungen_abdomen_geschlossen">Geschlossen</label>
                             </div>
                             <div className="verletzungen_body_components_line_right3_multiselect">
                                 <input
                                     type="checkbox"
+                                    id="verletzungen_abdomen_leicht"
                                     checked={isChecked_Abdomen[2]}
                                     onChange={() => handleOnChange_Abdomen("Leicht")}
                                 />
-                                <span>Leicht</span>
+                                <label htmlFor="verletzungen_abdomen_leicht">Leicht</label>
                             </div>
                             <div className="verletzungen_body_components_line_right3_multiselect">
                                 <input
                                     type="checkbox"
+                                    id="verletzungen_abdomen_mittel"
                                     checked={isChecked_Abdomen[3]}
                                     onChange={() => handleOnChange_Abdomen("Mittel")}
                                 />
-                                <span>Mittel</span>
+                                <label htmlFor="verletzungen_abdomen_mittel">Mittel</label>
                             </div>
                             <div className="verletzungen_body_components_line_right3_multiselect">
                                 <input
                                     type="checkbox"
+                                    id="verletzungen_abdomen_schwer"
                                     checked={isChecked_Abdomen[4]}
                                     onChange={() => handleOnChange_Abdomen("Schwer")}
                                 />
-                                <span>Schwer</span>
+                                <label htmlFor="verletzungen_abdomen_schwer">Schwer</label>
                             </div>
 
                         </div>
@@ -578,42 +606,47 @@ export default function Verletzungen() {
                             <div className="verletzungen_body_components_line_right3_multiselect">
                                 <input
                                     type="checkbox"
+                                    id="verletzungen_bws_lws_offen"
                                     checked={isChecked_BWS_LWS[0]}
                                     onChange={() => handleOnChange_BWS_LWS("Offen")}
                                 />
-                                <span>Offen</span>
+                                <label htmlFor="verletzungen_bws_lws_offen">Offen</label>
                             </div>
                             <div className="verletzungen_body_components_line_right3_multiselect">
                                 <input
                                     type="checkbox"
+                                    id="verletzungen_bws_lws_geschlossen"
                                     checked={isChecked_BWS_LWS[1]}
                                     onChange={() => handleOnChange_BWS_LWS("Geschlossen")}
                                 />
-                                <span>Geschlossen</span>
+                                <label htmlFor="verletzungen_bws_lws_geschlossen">Geschlossen</label>
                             </div>
                             <div className="verletzungen_body_components_line_right3_multiselect">
                                 <input
                                     type="checkbox"
+                                    id="verletzungen_bws_lws_leicht"
                                     checked={isChecked_BWS_LWS[2]}
                                     onChange={() => handleOnChange_BWS_LWS("Leicht")}
                                 />
-                                <span>Leicht</span>
+                                <label htmlFor="verletzungen_bws_lws_leicht">Leicht</label>
                             </div>
                             <div className="verletzungen_body_components_line_right3_multiselect">
                                 <input
                                     type="checkbox"
+                                    id="verletzungen_bws_lws_mittel"
                                     checked={isChecked_BWS_LWS[3]}
                                     onChange={() => handleOnChange_BWS_LWS("Mittel")}
                                 />
-                                <span>Mittel</span>
+                                <label htmlFor="verletzungen_bws_lws_mittel">Mittel</label>
                             </div>
                             <div className="verletzungen_body_components_line_right3_multiselect">
                                 <input
                                     type="checkbox"
+                                    id="verletzungen_bws_lws_schwer"
                                     checked={isChecked_BWS_LWS[4]}
                                     onChange={() => handleOnChange_BWS_LWS("Schwer")}
                                 />
-                                <span>Schwer</span>
+                                <label htmlFor="verletzungen_bws_lws_schwer">Schwer</label>
                             </div>
 
                         </div>
@@ -627,42 +660,47 @@ export default function Verletzungen() {
                             <div className="verletzungen_body_components_line_right3_multiselect">
                                 <input
                                     type="checkbox"
+                                    id="verletzungen_becken_offen"
                                     checked={isChecked_Becken[0]}
                                     onChange={() => handleOnChange_Becken("Offen")}
                                 />
-                                <span>Offen</span>
+                                <label htmlFor="verletzungen_becken_offen">Offen</label>
                             </div>
                             <div className="verletzungen_body_components_line_right3_multiselect">
                                 <input
                                     type="checkbox"
+                                    id="verletzungen_becken_geschlossen"
                                     checked={isChecked_Becken[1]}
                                     onChange={() => handleOnChange_Becken("Geschlossen")}
                                 />
-                                <span>Geschlossen</span>
+                                <label htmlFor="verletzungen_becken_geschlossen">Geschlossen</label>
                             </div>
                             <div className="verletzungen_body_components_line_right3_multiselect">
                                 <input
                                     type="checkbox"
+                                    id="verletzungen_becken_leicht"
                                     checked={isChecked_Becken[2]}
                                     onChange={() => handleOnChange_Becken("Leicht")}
                                 />
-                                <span>Leicht</span>
+                                <label htmlFor="verletzungen_becken_leicht">Leicht</label>
                             </div>
                             <div className="verletzungen_body_components_line_right3_multiselect">
                                 <input
                                     type="checkbox"
+                                    id="verletzungen_becken_mittel"
                                     checked={isChecked_Becken[3]}
                                     onChange={() => handleOnChange_Becken("Mittel")}
                                 />
-                                <span>Mittel</span>
+                                <label htmlFor="verletzungen_becken_mittel">Mittel</label>
                             </div>
                             <div className="verletzungen_body_components_line_right3_multiselect">
                                 <input
                                     type="checkbox"
+                                    id="verletzungen_becken_schwer"
                                     checked={isChecked_Becken[4]}
                                     onChange={() => handleOnChange_Becken("Schwer")}
                                 />
-                                <span>Schwer</span>
+                                <label htmlFor="verletzungen_becken_schwer">Schwer</label>
                             </div>
 
                         </div>
@@ -676,42 +714,47 @@ export default function Verletzungen() {
                             <div className="verletzungen_body_components_line_right3_multiselect">
                                 <input
                                     type="checkbox"
+                                    id="verletzungen_obere_extremitaeten_offen"
                                     checked={isChecked_Obere_Extremitaeten[0]}
                                     onChange={() => handleOnChange_Obere_Extremitaeten("Offen")}
                                 />
-                                <span>Offen</span>
+                                <label htmlFor="verletzungen_obere_extremitaeten_offen">Offen</label>
                             </div>
                             <div className="verletzungen_body_components_line_right3_multiselect">
                                 <input
                                     type="checkbox"
+                                    id="verletzungen_obere_extremitaeten_geschlossen"
                                     checked={isChecked_Obere_Extremitaeten[1]}
                                     onChange={() => handleOnChange_Obere_Extremitaeten("Geschlossen")}
                                 />
-                                <span>Geschlossen</span>
+                                <label htmlFor="verletzungen_obere_extremitaeten_geschlossen">Geschlossen</label>
                             </div>
                             <div className="verletzungen_body_components_line_right3_multiselect">
                                 <input
                                     type="checkbox"
+                                    id="verletzungen_obere_extremitaeten_leicht"
                                     checked={isChecked_Obere_Extremitaeten[2]}
                                     onChange={() => handleOnChange_Obere_Extremitaeten("Leicht")}
                                 />
-                                <span>Leicht</span>
+                                <label htmlFor="verletzungen_obere_extremitaeten_leicht">Leicht</label>
                             </div>
                             <div className="verletzungen_body_components_line_right3_multiselect">
                                 <input
                                     type="checkbox"
+                                    id="verletzungen_obere_extremitaeten_mittel"
                                     checked={isChecked_Obere_Extremitaeten[3]}
                                     onChange={() => handleOnChange_Obere_Extremitaeten("Mittel")}
                                 />
-                                <span>Mittel</span>
+                                <label htmlFor="verletzungen_obere_extremitaeten_mittel">Mittel</label>
                             </div>
                             <div className="verletzungen_body_components_line_right3_multiselect">
                                 <input
                                     type="checkbox"
+                                    id="verletzungen_obere_extremitaeten_schwer"
                                     checked={isChecked_Obere_Extremitaeten[4]}
                                     onChange={() => handleOnChange_Obere_Extremitaeten("Schwer")}
                                 />
-                                <span>Schwer</span>
+                                <label htmlFor="verletzungen_obere_extremitaeten_schwer">Schwer</label>
                             </div>
 
                         </div>
@@ -725,42 +768,47 @@ export default function Verletzungen() {
                             <div className="verletzungen_body_components_line_right3_multiselect">
                                 <input
                                     type="checkbox"
+                                    id="verletzungen_untere_extremitaeten_offen"
                                     checked={isChecked_Untere_Extremitaeten[0]}
                                     onChange={() => handleOnChange_Untere_Extremitaeten("Offen")}
                                 />
-                                <span>Offen</span>
+                                <label htmlFor="verletzungen_untere_extremitaeten_offen">Offen</label>
                             </div>
                             <div className="verletzungen_body_components_line_right3_multiselect">
                                 <input
                                     type="checkbox"
+                                    id="verletzungen_untere_extremitaeten_geschlossen"
                                     checked={isChecked_Untere_Extremitaeten[1]}
                                     onChange={() => handleOnChange_Untere_Extremitaeten("Geschlossen")}
                                 />
-                                <span>Geschlossen</span>
+                                <label htmlFor="verletzungen_untere_extremitaeten_geschlossen">Geschlossen</label>
                             </div>
                             <div className="verletzungen_body_components_line_right3_multiselect">
                                 <input
                                     type="checkbox"
+                                    id="verletzungen_untere_extremitaeten_leicht"
                                     checked={isChecked_Untere_Extremitaeten[2]}
                                     onChange={() => handleOnChange_Untere_Extremitaeten("Leicht")}
                                 />
-                                <span>Leicht</span>
+                                <label htmlFor="verletzungen_untere_extremitaeten_leicht">Leicht</label>
                             </div>
                             <div className="verletzungen_body_components_line_right3_multiselect">
                                 <input
                                     type="checkbox"
+                                    id="verletzungen_untere_extremitaeten_mittel"
                                     checked={isChecked_Untere_Extremitaeten[3]}
                                     onChange={() => handleOnChange_Untere_Extremitaeten("Mittel")}
                                 />
-                                <span>Mittel</span>
+                                <label htmlFor="verletzungen_untere_extremitaeten_mittel">Mittel</label>
                             </div>
                             <div className="verletzungen_body_components_line_right3_multiselect">
                                 <input
                                     type="checkbox"
+                                    id="verletzungen_untere_extremitaeten_schwer"
                                     checked={isChecked_Untere_Extremitaeten[4]}
                                     onChange={() => handleOnChange_Untere_Extremitaeten("Schwer")}
                                 />
-                                <span>Schwer</span>
+                                <label htmlFor="verletzungen_untere_extremitaeten_schwer">Schwer</label>
                             </div>
 
                         </div>
@@ -774,42 +822,47 @@ export default function Verletzungen() {
                             <div className="verletzungen_body_components_line_right3_multiselect">
                                 <input
                                     type="checkbox"
+                                    id="verletzungen_weichteile_offen"
                                     checked={isChecked_Weichteile[0]}
                                     onChange={() => handleOnChange_Weichteile("Offen")}
                                 />
-                                <span>Offen</span>
+                                <label htmlFor="verletzungen_weichteile_offen">Offen</label>
                             </div>
                             <div className="verletzungen_body_components_line_right3_multiselect">
                                 <input
                                     type="checkbox"
+                                    id="verletzungen_weichteile_geschlossen"
                                     checked={isChecked_Weichteile[1]}
                                     onChange={() => handleOnChange_Weichteile("Geschlossen")}
                                 />
-                                <span>Geschlossen</span>
+                                <label htmlFor="verletzungen_weichteile_geschlossen">Geschlossen</label>
                             </div>
                             <div className="verletzungen_body_components_line_right3_multiselect">
                                 <input
                                     type="checkbox"
+                                    id="verletzungen_weichteile_leicht"
                                     checked={isChecked_Weichteile[2]}
                                     onChange={() => handleOnChange_Weichteile("Leicht")}
                                 />
-                                <span>Leicht</span>
+                                <label htmlFor="verletzungen_weichteile_leicht">Leicht</label>
                             </div>
                             <div className="verletzungen_body_components_line_right3_multiselect">
                                 <input
                                     type="checkbox"
+                                    id="verletzungen_weichteile_mittel"
                                     checked={isChecked_Weichteile[3]}
                                     onChange={() => handleOnChange_Weichteile("Mittel")}
                                 />
-                                <span>Mittel</span>
+                                <label htmlFor="verletzungen_weichteile_mittel">Mittel</label>
                             </div>
                             <div className="verletzungen_body_components_line_right3_multiselect">
                                 <input
                                     type="checkbox"
+                                    id="verletzungen_weichteile_schwer"
                                     checked={isChecked_Weichteile[4]}
                                     onChange={() => handleOnChange_Weichteile("Schwer")}
                                 />
-                                <span>Schwer</span>
+                                <label htmlFor="verletzungen_weichteile_schwer">Schwer</label>
                             </div>
 
                         </div>
@@ -819,7 +872,7 @@ export default function Verletzungen() {
 
                 <div className="s1_body_buttons">
                     <button onClick={nav_previous} className="s1_body_buttons_btn_back"><ArrowBackIos />Vorherige</button>
-                    <button onClick={nav_next} className="s1_body_buttons_btn_next">nächste<ArrowForwardIos /></button>
+                    <button onClick={nav_next} className="s1_body_buttons_btn_next">Nächste<ArrowForwardIos /></button>
                 </div>
             </div>
         </div>

@@ -16,20 +16,22 @@ import Monitoring from './monitoring/monitoring';
 import Massnahmen_einsatzart from './massnahmen_einsatzart/massnahmen_einsatzart';
 
 export default function App() {
+  
+
   return (
     <div className="App">
       <Router>
         <Routes>
-          <Route exact path="/" element={<LLogin/>} />
-          <Route path="/seite_1" element={<Seite_1/>} />
-          <Route path="/seite_2" element={<Seite_2/>} />
-          <Route path="/patient" element={<Patient/>} />
-          <Route path="/anamnese" element={<Anamnese/>} />
-          <Route path="/messwerte" element={<Messwerte/>} />
-          <Route path="/neurologie" element={<Neurologie/>} />
-          <Route path="/verletzungen" element={<Verletzungen/>} />
-          <Route path="/monitoring" element={<Monitoring/>} />
-          <Route path="/massnahmen_einsatzart" element={<Massnahmen_einsatzart/>} />
+          <Route exact path="/" element={<LLogin />} />
+          <Route path="/seite_1" element={<Seite_1 />} />
+          <Route path="/seite_2" element={<Seite_2 />} />
+          <Route path="/patient" element={<Patient />} />
+          <Route path="/anamnese" element={<Anamnese />} />
+          <Route path="/messwerte" element={<Messwerte />} />
+          <Route path="/neurologie" element={<Neurologie />} />
+          <Route path="/verletzungen" element={<Verletzungen />} />
+          <Route path="/monitoring" element={<Monitoring />} />
+          <Route path="/massnahmen_einsatzart" element={<Massnahmen_einsatzart />} />
         </Routes>
       </Router>
     </div>

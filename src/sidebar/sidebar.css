@@ -5,16 +5,18 @@
     z-index: 1;
     top: 0px;
     left: 0px;
-    background: whitesmoke;
+    background: white;
     overflow-x: hidden;
     transition: 0.5s;
     padding-top: 60px;
     overflow-y: scroll;
     border: none;
+    cursor: e-resize;
   }
   
   .sidebar_mcc{
     min-height: 640px;
+    cursor: e-resize;
   }
 
   .sidebar_mc a {
@@ -22,7 +24,7 @@
     padding: 10px 15px 10px 20px;
     /*text-decoration: none;*/
     font-size: 20px;
-    color: red;
+    color: rgb(151, 151, 151);
     display: flex;
     align-items: center;
     justify-content: flex-start;
@@ -30,7 +32,7 @@
   }
   
   .sidebar_mc a:hover {
-    color: whitesmoke;
+    color: white;
     background-color: red;
     cursor: pointer;
   }
@@ -46,10 +48,10 @@
   .sidebar_mc .sidebar_mc_closebtn {
     cursor: pointer;
     position: absolute;
-    top: 0;
-    right: 25px;
+    top: 10px;
+    left: 15px;
     font-size: 36px;
-    margin-left: 50px;
+    color: rgb(151, 151, 151);
   }
 
   .sidebar_mc hr{

@@ -14,7 +14,10 @@ import {
 export default function Anamnese() {
 
     const navigate = useNavigate();
-    const [atemwege, setAtemwege] = useState("frei");
+    const [fontcolor, setFontcolor] = useState(["red", "red", "red", "red"]);
+    const [page_load, setPage_load] = useState(0);
+
+    const [atemwege, setAtemwege] = useState("");
     const [isChecked_belueftung, setIsChecked_belueftung] = useState([false, false, false, false, false, false, false]);
     const [isChecked_puls, setIsChecked_puls] = useState([false, false, false, false, false]);
     const [isChecked_haut, setIsChecked_haut] = useState([false, false, false, false, false, false]);
@@ -34,6 +37,11 @@ export default function Anamnese() {
 
     function handleOnChange(event) {
         setAtemwege(event.target.value);
+
+        const copy_fontcolor = fontcolor.slice();
+        copy_fontcolor[0] = "black";
+        setFontcolor(copy_fontcolor);
+
     }
 
     function handleOnChange_belueftng(type) {
@@ -75,6 +83,23 @@ export default function Anamnese() {
 
     }
 
+    useEffect(() => {
+
+        if (page_load == 0) {
+            setPage_load(page_load + 1);
+        } else {
+            const fontcolor_copy = fontcolor.slice();
+            if (isChecked_belueftung.includes(true) || SonstigValue !== "") {
+                fontcolor_copy[1] = "black"
+                setFontcolor(fontcolor_copy);
+            } else {
+                fontcolor_copy[1] = "red"
+                setFontcolor(fontcolor_copy);
+            }
+        }
+
+    }, [isChecked_belueftung, SonstigValue]);
+
     function handleOnChange_puls(type) {
         if (type === "Regelmaeßig") {
             const newIsChecked = isChecked_puls.slice();
@@ -101,6 +126,22 @@ export default function Anamnese() {
             setIsChecked_puls(newIsChecked);
         }
     }
+
+    useEffect(() => {
+        if (page_load == 0) {
+            setPage_load(page_load + 1);
+        } else {
+            const fontcolor_copy = fontcolor.slice();
+            if (!isChecked_puls.includes(true)) {
+                fontcolor_copy[2] = "red"
+                setFontcolor(fontcolor_copy);
+            } else {
+                fontcolor_copy[2] = "black"
+                setFontcolor(fontcolor_copy);
+            }
+        }
+
+    }, [isChecked_puls]);
 
     function handleOnChange_haut(type) {
         if (type === "Rosig") {
@@ -135,34 +176,62 @@ export default function Anamnese() {
         }
     }
 
+    useEffect(() => {
+        if (page_load == 0) {
+            setPage_load(page_load + 1);
+        } else {
+            const fontcolor_copy = fontcolor.slice();
+            if (!isChecked_haut.includes(true)) {
+                fontcolor_copy[3] = "red"
+                setFontcolor(fontcolor_copy);
+            } else {
+                fontcolor_copy[3] = "black"
+                setFontcolor(fontcolor_copy);
+            }
+        }
+
+    }, [isChecked_haut]);
+
+
     return (
         <div className="anamnese">
             <Sidebar />
             <Topbar />
 
-            <div className="anamnese_body">
+            <div onClick={() => {
+                document.getElementById("sidebar_mc_id").style.width = "0px";
+                document.getElementById("sidebar_mc_id").style.border = "none";
+            }} className="anamnese_body">
                 <span className="anamnese_body_title">
                     Anamnese
                 </span>
                 <div className="anamnese_body_components">
                     <div className="anamnese_body_components_line">
-                        <span className="anamnese_body_components_line_label">
+                        <span style={{ color: fontcolor[0] }} className="anamnese_body_components_line_label">
                             Atemwege: *
                         </span>
                         <div className="anamnese_body_components_line_right3">
                             <div className="anamnese_body_components_line_right3_multiselect">
                                 <input
+                                    className="anamnese_body_components_line_right3_multiselect_radio"
+                                    id="anamnese_atemwege_frei"
                                     type="radio"
                                     name="atemwege"
+                                    value="frei"
+                                    onClick={handleOnChange}
                                 />
-                                <span>Frei</span>
+                                <label htmlFor="anamnese_atemwege_frei">Frei</label>
                             </div>
                             <div className="anamnese_body_components_line_right3_multiselect">
                                 <input
+                                    className="anamnese_body_components_line_right3_multiselect_radio"
+                                    id="anamnese_atemwege_verlegt"
                                     type="radio"
                                     name="atemwege"
+                                    value="verlegt"
+                                    onClick={handleOnChange}
                                 />
-                                <span>Verlegt</span>
+                                <label htmlFor="anamnese_atemwege_verlegt">Verlegt</label>
                             </div>
                         </div>
                     </div>
@@ -170,7 +239,7 @@ export default function Anamnese() {
                     <div className="horizontal-line"></div>
 
                     <div className="anamnese_body_components_line">
-                        <span className="anamnese_body_components_line_label">
+                        <span style={{ color: fontcolor[1] }} className="anamnese_body_components_line_label">
                             Belüftung: *
                         </span>
                         <div className="anamnese_body_components_line_right2">
@@ -178,61 +247,68 @@ export default function Anamnese() {
                                 <div className="anamnese_body_components_line_right2_body_multiselect">
                                     <input
                                         type="checkbox"
+                                        id="anamnese_beluftung_unauffaellig"
                                         checked={isChecked_belueftung[0]}
                                         onChange={() => handleOnChange_belueftng("Unauffaellig")}
                                     />
-                                    <span>Unauffällig</span>
+                                    <label htmlFor="anamnese_beluftung_unauffaellig">Unauffällig</label>
                                 </div>
                                 <div className="anamnese_body_components_line_right2_body_multiselect">
                                     <input
                                         type="checkbox"
+                                        id="anamnese_beluftung_zyanose"
                                         checked={isChecked_belueftung[1]}
                                         onChange={() => handleOnChange_belueftng("Zyanose")}
                                     />
-                                    <span>Zyanose</span>
+                                    <label htmlFor="anamnese_beluftung_zyanose">Zyanose</label>
                                 </div>
                                 <div className="anamnese_body_components_line_right2_body_multiselect">
                                     <input
                                         type="checkbox"
+                                        id="anamnese_beluftung_rasseln"
                                         checked={isChecked_belueftung[2]}
                                         onChange={() => handleOnChange_belueftng("Rasseln")}
                                     />
-                                    <span>Rasseln</span>
+                                    <label htmlFor="anamnese_beluftung_rasseln">Rasseln</label>
                                 </div>
                                 <div className="anamnese_body_components_line_right2_body_multiselect">
                                     <input
                                         type="checkbox"
+                                        id="anamnese_beluftung_schnappatmung"
                                         checked={isChecked_belueftung[3]}
                                         onChange={() => handleOnChange_belueftng("Schnappatmung")}
                                     />
-                                    <span>Schnappatmung</span>
+                                    <label htmlFor="anamnese_beluftung_schnappatmung">Schnappatmung</label>
                                 </div>
                                 <div className="anamnese_body_components_line_right2_body_multiselect">
                                     <input
                                         type="checkbox"
+                                        id="anamnese_beluftung_atemnot"
                                         checked={isChecked_belueftung[4]}
                                         onChange={() => handleOnChange_belueftng("Atemnot")}
                                     />
-                                    <span>Atemnot</span>
+                                    <label htmlFor="anamnese_beluftung_atemnot">Atemnot</label>
                                 </div>
                                 <div className="anamnese_body_components_line_right2_body_multiselect">
                                     <input
                                         type="checkbox"
+                                        id="anamnese_beluftung_hyperventillation"
                                         checked={isChecked_belueftung[5]}
                                         onChange={() => handleOnChange_belueftng("Hyperventillation")}
                                     />
-                                    <span>Hyperventillation</span>
+                                    <label htmlFor="anamnese_beluftung_hyperventillation">Hyperventillation</label>
                                 </div>
                                 <div className="anamnese_body_components_line_right2_body_multiselect">
                                     <input
                                         type="checkbox"
+                                        id="anamnese_beluftung_atemstillstand"
                                         checked={isChecked_belueftung[6]}
                                         onChange={() => handleOnChange_belueftng("Atemstillstand")}
                                     />
-                                    <span>Atemstillstand</span>
+                                    <label htmlFor="anamnese_beluftung_atemstillstand">Atemstillstand</label>
                                 </div>
                             </div>
-                            
+
                             <input type="text"
                                 className="anamnese_body_components_line_right2_txt"
                                 placeholder="Sonstiges"
@@ -246,49 +322,54 @@ export default function Anamnese() {
                     <div className="horizontal-line"></div>
 
                     <div className="anamnese_body_components_line">
-                        <span className="anamnese_body_components_line_label">
+                        <span style={{ color: fontcolor[2] }} className="anamnese_body_components_line_label">
                             Puls: *
                         </span>
                         <div className="anamnese_body_components_line_right3">
                             <div className="anamnese_body_components_line_right3_multiselect">
                                 <input
                                     type="checkbox"
+                                    id="anamnese_puls_regelmasessig"
                                     checked={isChecked_puls[0]}
                                     onChange={() => handleOnChange_puls("Regelmaeßig")}
                                 />
-                                <span>Regelmäßig</span>
+                                <label htmlFor="anamnese_puls_regelmasessig">Regelmäßig</label>
                             </div>
                             <div className="anamnese_body_components_line_right3_multiselect">
                                 <input
                                     type="checkbox"
+                                    id="anamnese_puls_unregelmaessig"
                                     checked={isChecked_puls[1]}
                                     onChange={() => handleOnChange_puls("Unregelmaeßig")}
                                 />
-                                <span>Unregelmäßig</span>
+                                <label htmlFor="anamnese_puls_unregelmaessig">Unregelmäßig</label>
                             </div>
                             <div className="anamnese_body_components_line_right3_multiselect">
                                 <input
                                     type="checkbox"
+                                    id="anamnese_puls_gut_tastbar"
                                     checked={isChecked_puls[2]}
                                     onChange={() => handleOnChange_puls("Gut tastbar")}
                                 />
-                                <span>Gut tastbar</span>
+                                <label htmlFor="anamnese_puls_gut_tastbar">Gut tastbar</label>
                             </div>
                             <div className="anamnese_body_components_line_right3_multiselect">
                                 <input
                                     type="checkbox"
+                                    id="anamnese_puls_schlecht_tastbar"
                                     checked={isChecked_puls[3]}
                                     onChange={() => handleOnChange_puls("Schlecht tastbar")}
                                 />
-                                <span>Schlecht tastbar</span>
+                                <label htmlFor="anamnese_puls_schlecht_tastbar">Schlecht tastbar</label>
                             </div>
                             <div className="anamnese_body_components_line_right3_multiselect">
                                 <input
                                     type="checkbox"
+                                    id="anamnese_puls_nicht_tastbar"
                                     checked={isChecked_puls[4]}
                                     onChange={() => handleOnChange_puls("Nicht tastbar")}
                                 />
-                                <span>Nicht tastbar</span>
+                                <label htmlFor="anamnese_puls_nicht_tastbar">Nicht tastbar</label>
                             </div>
 
                         </div>
@@ -297,58 +378,64 @@ export default function Anamnese() {
                     <div className="horizontal-line"></div>
 
                     <div className="anamnese_body_components_line">
-                        <span className="anamnese_body_components_line_label">
+                        <span style={{ color: fontcolor[3] }} className="anamnese_body_components_line_label">
                             Haut: *
                         </span>
                         <div className="anamnese_body_components_line_right3">
                             <div className="anamnese_body_components_line_right3_multiselect">
                                 <input
                                     type="checkbox"
+                                    id="anamnese_haut_rosig"
                                     checked={isChecked_haut[0]}
                                     onChange={() => handleOnChange_haut("Rosig")}
                                 />
-                                <span>Rosig</span>
+                                <label htmlFor="anamnese_haut_rosig">Rosig</label>
                             </div>
                             <div className="anamnese_body_components_line_right3_multiselect">
                                 <input
                                     type="checkbox"
+                                    id="anamnese_haut_blass"
                                     checked={isChecked_haut[1]}
                                     onChange={() => handleOnChange_haut("Blass")}
                                 />
-                                <span>Blass</span>
+                                <label htmlFor="anamnese_haut_blass">Blass</label>
                             </div>
                             <div className="anamnese_body_components_line_right3_multiselect">
                                 <input
                                     type="checkbox"
+                                    id="anamnese_haut_blau"
                                     checked={isChecked_haut[2]}
                                     onChange={() => handleOnChange_haut("Blau")}
                                 />
-                                <span>Blau</span>
+                                <label htmlFor="anamnese_haut_blau">Blau</label>
                             </div>
                             <div className="anamnese_body_components_line_right3_multiselect">
                                 <input
                                     type="checkbox"
+                                    id="anamnese_haut_rot"
                                     checked={isChecked_haut[3]}
                                     onChange={() => handleOnChange_haut("Rot")}
                                 />
-                                <span>Rot</span>
+                                <label htmlFor="anamnese_haut_rot">Rot</label>
                             </div>
                             <div className="anamnese_body_components_line_right3_multiselect">
                                 <input
                                     type="checkbox"
+                                    id="anamnese_haut_warm"
                                     checked={isChecked_haut[4]}
                                     onChange={() => handleOnChange_haut("Warm")}
                                 />
-                                <span>Warm</span>
+                                <label htmlFor="anamnese_haut_warm">Warm</label>
                             </div>
 
                             <div className="anamnese_body_components_line_right3_multiselect">
                                 <input
                                     type="checkbox"
+                                    id="anamnese_haut_kalt"
                                     checked={isChecked_haut[5]}
                                     onChange={() => handleOnChange_haut("Kalt")}
                                 />
-                                <span>Kalt</span>
+                                <label htmlFor="anamnese_haut_kalt">Kalt</label>
                             </div>
 
                         </div>
@@ -357,7 +444,7 @@ export default function Anamnese() {
 
                 <div className="s1_body_buttons">
                     <button onClick={nav_previous} className="s1_body_buttons_btn_back"><ArrowBackIos />Vorherige</button>
-                    <button onClick={nav_next} className="s1_body_buttons_btn_next">nächste<ArrowForwardIos /></button>
+                    <button onClick={nav_next} className="s1_body_buttons_btn_next">Nächste<ArrowForwardIos /></button>
                 </div>
             </div>
         </div>

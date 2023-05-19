@@ -51,6 +51,15 @@
     border-top: 1px solid black;
 }
 
+input[type="checkbox"], input[type="radio"] {
+    cursor: pointer;
+}
+
+label {
+    cursor: pointer;
+}
+
+
 .s1_body_components {
     /*background-color: rgb(240, 239, 239);*/
     display: flex;
@@ -59,7 +68,7 @@
     border: 1px solid black;
     min-height: 500px;
     height: 500px;
-    width: 580px;
+    width: 826px;
 }
 
 .s1_body_components_line {
@@ -76,7 +85,7 @@
     flex: 1;
     display: flex;
     align-items: center;
-    width: 98.6%;
+    width: calc(100% - 6px);
     padding-left: 6px;
 }
 
@@ -94,11 +103,19 @@
     height: 80%;
     border: none;
     font-size: 18px;
-
+    padding-left: 6px;
 }
 
 .s1_body_components_line_right_txt:focus {
     outline: none;
+}
+
+.s1_body_components_line_right_nonr {
+    cursor: pointer;
+}
+
+.s1_body_components_line_right_nonrtxt {
+    cursor: pointer;
 }
 
 /*************************************************************************/
@@ -129,13 +146,13 @@
     border: 2px solid red;
     border-radius: 5px;
     font-weight: 500;
-    font-size: 24px;
+    font-size: 20px;
     background: white;
     color: red;
     display: flex;
     align-items: center;
-    justify-content: flex-start;
-    padding-left: 10px;
+    justify-content: space-around;
+
 }
 
 .s1_body_buttons_btn_back:hover {
@@ -155,13 +172,12 @@
     border: 2px solid red;
     border-radius: 5px;
     font-weight: 500;
-    font-size: 24px;
+    font-size: 20px;
     background: white;
     color: red;
     display: flex;
     align-items: center;
-    justify-content: flex-end;
-    padding-right: 10px;
+    justify-content: space-around;
 }
 
 .s1_body_buttons_btn_next:hover {

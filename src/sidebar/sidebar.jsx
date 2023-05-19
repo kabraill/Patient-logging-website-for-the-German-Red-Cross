@@ -1,7 +1,7 @@
 import "./sidebar.css"
 import {
     MonitorHeart, Dataset, BusAlert, Blind, LocalHospital,
-    HelpCenter, Preview, Cancel, Logout, AssistWalker, EventNote, Psychology, Book
+    Preview, Cancel,  AssistWalker, EventNote, Psychology, Book, Close
 } from "@mui/icons-material";
 
 import { useNavigate } from "react-router-dom";
@@ -20,11 +20,10 @@ export default function Sidebar() {
     }
 
     return (
-        <div id="sidebar_mc_id" className="sidebar_mc">
-            <div className="sidebar_mcc">
-                <a className="sidebar_mc_closebtn" onClick={close_side_bar}>
-                    &times;
-                </a>
+        <div onClick={close_side_bar} id="sidebar_mc_id" className="sidebar_mc">
+            <div onClick={close_side_bar} className="sidebar_mcc">
+                <Close className="sidebar_mc_closebtn" onClick={close_side_bar}/>
+                
                 <a onClick={() => nav("/seite_1")}><Dataset className="sidebar_mc_ico" />Einsatzdaten</a>
                 <a onClick={() => nav("/seite_2")}><BusAlert className="sidebar_mc_ico" />Beteiligte Einsatzkräfte</a>
                 <a onClick={() => nav("/patient")}><Blind className="sidebar_mc_ico" />Patienten</a>
@@ -37,7 +36,6 @@ export default function Sidebar() {
                 <hr></hr>
                 <a><Preview className="sidebar_mc_ico" />Vorschau</a>
                 <a><Cancel className="sidebar_mc_ico" />Abbrechen</a>
-                <a onClick={() => nav("/")}><Logout className="sidebar_mc_ico" />Ausloggen</a>
             
             </div>
         </div>
