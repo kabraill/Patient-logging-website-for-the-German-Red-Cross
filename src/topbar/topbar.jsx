@@ -12,9 +12,9 @@ export default function Topbar() {
         if (userResponse) {
             navigate(page);
         } else {
-            
+
         }
-        
+
     }
 
     const open_side_bar = () => {
@@ -23,12 +23,13 @@ export default function Topbar() {
     }
 
     return (
-        <div className="topbar_mc">
-            <Menu className="topbar_mc_left" onClick={open_side_bar} />
+            <div className="topbar_mc">
+                <Menu className="topbar_mc_left" onClick={open_side_bar} />
 
-            <img className="topbar_mc_middle_logo" src="assets/red_cross.png" />
+                <img className="topbar_mc_middle_logo" src="assets/red_cross.png" />
 
-            <Logout onClick={() => nav("/")} className="topbar_mc_right" />
-        </div>
+                <Logout onClick={() => nav("/")} className="topbar_mc_right" />
+
+            </div>
     );
 }
