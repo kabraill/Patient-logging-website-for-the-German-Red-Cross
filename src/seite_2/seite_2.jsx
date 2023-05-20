@@ -128,7 +128,7 @@ export default function Seite_2() {
 
     return (
         <div className="s2">
-            <Sidebar />
+            <Sidebar currentPage="seite_2"/>
             <Topbar />
             <div onClick={() => {
                 document.getElementById("sidebar_mc_id").style.width = "0px";

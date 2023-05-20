@@ -85,7 +85,7 @@ export default function Messwerte() {
 
     return (
         <div className="messwerte">
-            <Sidebar />
+            <Sidebar currentPage="messwerte"/>
             <Topbar />
             <div onClick={() => {
                 document.getElementById("sidebar_mc_id").style.width = "0px";

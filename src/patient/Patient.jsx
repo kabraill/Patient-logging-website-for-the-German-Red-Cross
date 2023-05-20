@@ -55,7 +55,7 @@ export default function Patient() {
 
     return (
         <div className="patient">
-            <Sidebar />
+            <Sidebar currentPage="patient"/>
             <Topbar />
             <div onClick={() => {
                 document.getElementById("sidebar_mc_id").style.width = "0px";

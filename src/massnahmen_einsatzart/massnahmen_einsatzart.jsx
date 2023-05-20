@@ -243,7 +243,7 @@ export default function Massnahmen_einsatzart() {
 
     return (
         <div className="massnahmen_einsatzart">
-            <Sidebar />
+            <Sidebar currentPage="massnahmen_einsatzart"/>
             <Topbar />
             <div onClick={() => {
                 document.getElementById("sidebar_mc_id").style.width = "0px";

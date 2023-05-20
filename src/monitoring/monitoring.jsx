@@ -135,7 +135,7 @@ export default function Monitoring() {
 
     return (
         <div className="monitoring">
-            <Sidebar />
+            <Sidebar currentPage="monitoring"/>
             <Topbar />
 
             <div onClick={() => {

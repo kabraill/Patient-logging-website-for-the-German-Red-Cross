@@ -195,7 +195,7 @@ export default function Anamnese() {
 
     return (
         <div className="anamnese">
-            <Sidebar />
+            <Sidebar currentPage="anamnese"/>
             <Topbar />
 
             <div onClick={() => {

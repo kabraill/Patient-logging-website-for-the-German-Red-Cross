@@ -316,7 +316,7 @@ export default function Verletzungen() {
 
     return (
         <div className="verletzungen">
-            <Sidebar />
+            <Sidebar currentPage="verletzungen"/>
             <Topbar />
             <div onClick={() => {
                 document.getElementById("sidebar_mc_id").style.width = "0px";

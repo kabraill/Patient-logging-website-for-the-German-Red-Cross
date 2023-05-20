@@ -1,6 +1,6 @@
 .sidebar_mc {
     height: 100%;
-    width: 0px;
+    width: 250px;
     position: fixed;
     z-index: 1;
     top: 47px;
@@ -10,7 +10,7 @@
     transition: 0.5s;
     padding-top: 60px;
     overflow-y: scroll;
-    border: none;
+    border: 2px solid rgb(151, 151, 151);
     cursor: e-resize;
   }
   
@@ -33,7 +33,7 @@
   
   .sidebar_mc a:hover {
     color: white;
-    background-color: red;
+    background-color: rgb(151, 151, 151);
     cursor: pointer;
   }
 
@@ -59,3 +59,10 @@
     margin-bottom: 10px;
     color: white;
   }
+
+  @media only screen and (max-width: 1333px) {
+    .sidebar_mc {
+
+        width: 0px;
+    }
+}

@@ -126,7 +126,7 @@ export default function Neurologie() {
 
     return (
         <div className="neurologie">
-            <Sidebar />
+            <Sidebar currentPage="neurologie"/>
             <Topbar />
             <div onClick={() => {
                 document.getElementById("sidebar_mc_id").style.width = "0px";
