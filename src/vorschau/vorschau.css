@@ -1,0 +1,37 @@
+.vorschau {
+    height: 100vh;
+    width: 100vw;
+    
+    min-height: 738px;
+}
+
+.vorschau_body {
+    /*background-color: aquamarine;*/
+
+    height: calc(100vh - 45px);
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-direction: column;
+    gap: 30px;
+    min-height: 693px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+/************************************************************************/
+
+.vorschau_body_title {
+    font-size: 25px;
+    font-weight: bold;
+    margin-top: 10px;
+    color: red;
+}
+
+@media only screen and (max-width: 1080px) {
+    .vorschau_pdf_viewer {
+
+        width: 100%;
+    }
+}

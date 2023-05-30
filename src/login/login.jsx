@@ -13,7 +13,7 @@ export default function LLogin() {
 
     const nav = () => {
         //window.location.replace('https://codefrontend.com');
-        navigate('/seite_1');
+        navigate('/einstellungen');
     }
 
     const contact = () => {

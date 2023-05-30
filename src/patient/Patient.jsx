@@ -23,7 +23,7 @@ export default function Patient() {
     }
 
     const nav_previous = () => {
-        navigate('/seite_2');
+        navigate('/beteiligte_einsatzkraefte');
     }
 
     function handleOnChange(e) {

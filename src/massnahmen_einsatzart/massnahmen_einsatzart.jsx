@@ -8,7 +8,7 @@ import Sidebar from "../sidebar/sidebar";
 
 
 import {
-    ArrowBackIos
+    ArrowBackIos, ArrowForwardIos
 } from "@mui/icons-material";
 
 
@@ -29,8 +29,13 @@ export default function Massnahmen_einsatzart() {
     const [Uebergabe_an, setUebergabe_an] = useState("");
     const [Freitext, setFreitext] = useState("");
 
+
     const nav_previous = () => {
         navigate('/monitoring');
+    }
+
+    const nav_next = () => {
+        navigate('/vorschau');
     }
 
     const handleInputChange_Freitext = (e) => {
@@ -62,7 +67,7 @@ export default function Massnahmen_einsatzart() {
         setAnzahl_Schocks(e.target.value);
 
         const newFontColor = fontColor.slice();
-        if (e.target.value.match('^([0-9]+)$')) {
+        if (e.target.value.match('^([0-9]+)$') || e.target.value === "") {
             newFontColor[0] = "black";
             setFontColor(newFontColor);
         } else {
@@ -75,7 +80,7 @@ export default function Massnahmen_einsatzart() {
         setGegebene_Liter_min(e.target.value);
 
         const newFontColor = fontColor.slice();
-        if (e.target.value.match('^([0-9]+)$')) {
+        if (e.target.value.match('^([0-9]+)$') || e.target.value === "") {
             newFontColor[1] = "black";
             setFontColor(newFontColor);
         } else {
@@ -243,7 +248,7 @@ export default function Massnahmen_einsatzart() {
 
     return (
         <div className="massnahmen_einsatzart">
-            <Sidebar currentPage="massnahmen_einsatzart"/>
+            <Sidebar currentPage="massnahmen_einsatzart" />
             <Topbar />
             <div onClick={() => {
                 document.getElementById("sidebar_mc_id").style.width = "0px";
@@ -648,8 +653,9 @@ export default function Massnahmen_einsatzart() {
 
                 </div>
 
-                <div className="s1_body_buttons_special">
+                <div className="s1_body_buttons">
                     <button onClick={nav_previous} className="s1_body_buttons_btn_back"><ArrowBackIos />Vorherige</button>
+                    <button onClick={nav_next} className="s1_body_buttons_btn_next">Nächste<ArrowForwardIos /></button>
                 </div>
             </div>
         </div>

@@ -30,7 +30,7 @@ export default function Seite_1() {
     const [einsatzende, setEinsatzende] = useState("");
 
     const nav_next = () => {
-        navigate('/seite_2');
+        navigate('/beteiligte_einsatzkraefte');
     }
 
     const handleChange_einsatzende = (e) => {
@@ -133,7 +133,7 @@ export default function Seite_1() {
     return (
 
         <div className="s1">
-            <Sidebar currentPage="seite_1" />
+            <Sidebar currentPage="einsatzdaten" />
             <Topbar />
             <div onClick={() => {
                 document.getElementById("sidebar_mc_id").style.width = "0px";

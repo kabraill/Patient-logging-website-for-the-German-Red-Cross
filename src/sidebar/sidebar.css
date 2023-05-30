@@ -7,15 +7,15 @@
     left: 0px;
     background: white;
     overflow-x: hidden;
-    transition: 0.5s;
+    transition: 0.4s;
     padding-top: 60px;
     overflow-y: scroll;
     border: 2px solid rgb(151, 151, 151);
-    cursor: e-resize;
+    
   }
   
   .sidebar_mcc{
-    min-height: 640px;
+    min-height: 780px;
     cursor: e-resize;
   }
 
@@ -28,6 +28,7 @@
     display: flex;
     align-items: center;
     justify-content: flex-start;
+    /*border: 1px solid red;*/
     /*transition: 0.3s;*/
   }
   

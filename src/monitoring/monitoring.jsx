@@ -55,7 +55,7 @@ export default function Monitoring() {
         setpuls_1(e.target.value);
 
         const newFontColor = fontColor.slice();
-        if (e.target.value.match('^([0-9]+)$')) {
+        if (e.target.value.match('^([0-9]+)$') || e.target.value === "") {
             newFontColor[1] = "black";
             setFontColor(newFontColor);
         } else {
@@ -68,7 +68,7 @@ export default function Monitoring() {
         setblutdruck_1(e.target.value);
 
         const newFontColor = fontColor.slice();
-        if (e.target.value.match('^[0-9]{1,3}\\/[0-9]{1,3}$')) {
+        if (e.target.value.match('^[0-9]{1,3}\\/[0-9]{1,3}$') || e.target.value === "") {
             newFontColor[2] = "black";
             setFontColor(newFontColor);
         } else {
@@ -81,7 +81,7 @@ export default function Monitoring() {
         setSpO2_1(e.target.value);
 
         const newFontColor = fontColor.slice();
-        if (e.target.value.match('^([0-9]+)$')) {
+        if (e.target.value.match('^([0-9]+)$') || e.target.value === "") {
             newFontColor[3] = "black";
             setFontColor(newFontColor);
         } else {
@@ -98,7 +98,7 @@ export default function Monitoring() {
         setpuls_2(e.target.value);
 
         const newFontColor = fontColor.slice();
-        if (e.target.value.match('^([0-9]+)$')) {
+        if (e.target.value.match('^([0-9]+)$') || e.target.value === "") {
             newFontColor[5] = "black";
             setFontColor(newFontColor);
         } else {
@@ -111,7 +111,7 @@ export default function Monitoring() {
         setblutdruck_2(e.target.value);
 
         const newFontColor = fontColor.slice();
-        if (e.target.value.match('^[0-9]{1,3}\\/[0-9]{1,3}$')) {
+        if (e.target.value.match('^[0-9]{1,3}\\/[0-9]{1,3}$') || e.target.value === "") {
             newFontColor[6] = "black";
             setFontColor(newFontColor);
         } else {
@@ -124,7 +124,7 @@ export default function Monitoring() {
         setSpO2_2(e.target.value);
 
         const newFontColor = fontColor.slice();
-        if (e.target.value.match('^([0-9]+)$')) {
+        if (e.target.value.match('^([0-9]+)$') || e.target.value === "") {
             newFontColor[7] = "black";
             setFontColor(newFontColor);
         } else {

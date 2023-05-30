@@ -1,0 +1,34 @@
+.einstellungen {
+    height: 100vh;
+    width: 100vw;
+
+    /*background-color: aqua;*/
+
+    min-height: 455px;
+}
+
+.einstellungen_body {
+    height: calc(100vh - 45px);
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-direction: column;
+    gap: 30px;
+    min-height: 410px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    /*background-color: antiquewhite;*/
+
+}
+
+/************************************************************************/
+
+.einstellungen_body_title {
+    font-size: 25px;
+    font-weight: bold;
+    margin-top: 10px;
+    color: red;
+}
+
+/***********************************************************************/

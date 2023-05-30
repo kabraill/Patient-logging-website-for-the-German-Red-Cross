@@ -25,7 +25,7 @@ export default function Seite_2() {
     }
 
     const nav_previous = () => {
-        navigate('/seite_1');
+        navigate('/einsatzdaten');
     }
 
     function handleOnChange(type) {
@@ -128,7 +128,7 @@ export default function Seite_2() {
 
     return (
         <div className="s2">
-            <Sidebar currentPage="seite_2"/>
+            <Sidebar currentPage="beteiligte_einsatzkraefte"/>
             <Topbar />
             <div onClick={() => {
                 document.getElementById("sidebar_mc_id").style.width = "0px";
