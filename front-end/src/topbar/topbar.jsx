@@ -15,7 +15,11 @@ export default function Topbar() {
         const userResponse = window.confirm("Sind Sie sicher, dass Sie sich abmelden möchten?");
 
         if (userResponse) {
+            localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_token');
             localStorage.setItem('deutsches_rottes_kreuz_herrenberg_isLoggedIn', 'false');
+            localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_draft_protocol');
+            localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_instance');
+
             navigate('/');
 
         } else {

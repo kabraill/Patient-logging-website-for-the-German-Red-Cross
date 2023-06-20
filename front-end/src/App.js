@@ -15,12 +15,11 @@ import Monitoring from './monitoring/monitoring';
 import Massnahmen_einsatzart from './massnahmen_einsatzart/massnahmen_einsatzart';
 import Vorschau from "./vorschau/vorschau";
 
-//import { useState, useEffect } from "react";
 
 export default function App() {
 
+  //seite1 , messwerte , 
   
-
 
   return (
     <div className="App">

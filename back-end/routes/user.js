@@ -5,7 +5,6 @@ const jwt = require('jsonwebtoken');
 
 // Generate JWT token
 function generateToken(userId) {
-  
   return jwt.sign({ userId }, 'blue-eyes', { expiresIn: '100d' });
 }
 
@@ -18,11 +17,13 @@ function authenticateToken(req, res, next) {
     return res.status(401).json({ message: 'Token not provided' });
   }
 
-  jwt.verify(token, 'blue-eyes', (err, user) => {
+  jwt.verify(token, 'blue-eyes', (err, decodedToken) => {
     if (err) {
       return res.status(403).json({ message: 'Invalid token' });
     }
-    req.user = user;
+    //console.log(decodedToken.userId);
+    //console.log(decodedToken.userId);
+    req.user = decodedToken;
     next();
   });
 }
@@ -58,7 +59,7 @@ router.post("/login", async (req, res) => {
   try {
     const user = await User.findOne({ name: req.body.name });
     if (!user) {
-      return res.status(404).json({ message: "Benutzer nicht gefunden" });
+      return res.status(404).json("Benutzer nicht gefunden");
     }
 
     const passwordMatch = await bcrypt.compare(
@@ -71,7 +72,7 @@ router.post("/login", async (req, res) => {
       const token = generateToken(user._id);
       return res.status(200).json(token);
     } else {
-      return res.status(401).json({ message: "Falsches Kennwort" });
+      return res.status(401).json("Falsches Kennwort");
     }
   } catch (err) {
     return res.status(500).json(err);
@@ -81,8 +82,8 @@ router.post("/login", async (req, res) => {
 // decodeToken
 router.post('/decodeToken', authenticateToken, async (req, res) => {
   const user = req.user;
-  console.log(new Date(user.exp * 1000));
-  console.log(user.userId)
+  //console.log(new Date(user.exp * 1000));
+  //console.log(user.userId)
   //const userId = req.user.userId;
 
   try {
@@ -93,7 +94,7 @@ router.post('/decodeToken', authenticateToken, async (req, res) => {
     }
     */
 
-    
+
     return res.status(200).json(user);
   } catch (error) {
     res.sendStatus(500);
@@ -102,11 +103,12 @@ router.post('/decodeToken', authenticateToken, async (req, res) => {
 
 // decodeToken
 router.post('/encodeToken', async (req, res) => {
-  
+
 
   try {
-    
-    const token = generateToken(req.id);
+
+    const token = generateToken(req.body.id);
+    console.log(req.body.id)
     return res.status(200).json(token);
   } catch (error) {
     res.sendStatus(500);

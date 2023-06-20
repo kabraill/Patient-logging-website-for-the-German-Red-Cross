@@ -1,6 +1,6 @@
 import "./seite_1.css"
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
 import Topbar from "../topbar/topbar";
 import Sidebar from "../sidebar/sidebar";
@@ -19,7 +19,8 @@ export default function Seite_1() {
     const [fontColor, setFontColor] = useState(["red", "red", "black",
         "red", "red", "black", "red"]);
 
-    
+    const special_marking_name = useRef(null);
+    const special_marking_color = useRef(null);
     const [alarmkey, setAlarmkey] = useState("");
     const [auftragsnummer, setAuftragsnummer] = useState("");
     const [isCheckboxChecked, setIsCheckboxChecked] = useState(false);
@@ -30,6 +31,8 @@ export default function Seite_1() {
     const [ankunft_rtw_nef, setAnkunft_rtw_nef] = useState("");
     const [einsatzende, setEinsatzende] = useState("");
     const [pub_token, setPub_token] = useState();
+
+    const [loading, setLoading] = useState(true); // Add loading state
 
     useEffect(() => {
         const fetchData = async () => {
@@ -42,6 +45,9 @@ export default function Seite_1() {
                 if (typeof decodedToken === 'undefined') {
                     localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_token');
                     localStorage.setItem('deutsches_rottes_kreuz_herrenberg_isLoggedIn', 'false');
+                    localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_draft_protocol');
+                    localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_instance');
+                    setLoading(false); // Update loading state
                     navigate('/');
                     return;
                 }
@@ -49,15 +55,16 @@ export default function Seite_1() {
                 console.log("login page isLoggedIn === 'true' && token")
 
 
-                //setLoading(true);
-                //to exdends the time each time the page is loaded
+
                 localStorage.setItem('deutsches_rottes_kreuz_herrenberg_token', await encodeToken(decodedToken.userId));
                 localStorage.setItem('deutsches_rottes_kreuz_herrenberg_isLoggedIn', 'true');
 
                 console.log(localStorage.getItem('deutsches_rottes_kreuz_herrenberg_token'));
                 console.log(localStorage.getItem('deutsches_rottes_kreuz_herrenberg_isLoggedIn'));
+                setLoading(false); // Update loading state
 
             } else {
+                setLoading(false);
                 navigate('/');
             }
         }
@@ -191,10 +198,26 @@ export default function Seite_1() {
 
     }
 
+
+
     useEffect(() => {
-        document.getElementById("s1_keine_nummer").style.background = keineAuftragNummerLabel;
+        if (document.getElementById("s1_keine_nummer") !== null) {
+            document.getElementById("s1_keine_nummer").style.background = keineAuftragNummerLabel;
+        }
+
     }, [keineAuftragNummerLabel]);
 
+    if (loading) {
+        return (<div style={{ pointerEvents: "none" }} className="s1">
+            <Sidebar currentPage="einsatzdaten" />
+            <Topbar />
+            <div className="s1_body">
+                <span className="s1_body_title">
+                    Seite wird geladen
+                </span>
+            </div>
+        </div>);
+    }
 
     return (
 
@@ -209,6 +232,23 @@ export default function Seite_1() {
                     Einsatzdaten
                 </span>
                 <div className="s1_body_components">
+                <div className="s1_body_components_line">
+                        <span className="s1_body_components_line_label">
+                            Special Marking:
+                        </span>
+                        <div className="s1_body_components_line_right">
+                            <input required type="text"
+                                className="s1_body_components_line_right_txt"
+                                ref={special_marking_name}
+                                placeholder="Special Marking Name"
+                            />
+
+                            <input ref={special_marking_color} type="color" defaultValue="#ff0000" />
+                        </div>
+                    </div>
+
+                    <div className="horizontal-line"></div>
+
                     <div className="s1_body_components_line">
                         <span style={{ color: fontColor[0] }} className="s1_body_components_line_label">
                             Alarmschlüssel: *

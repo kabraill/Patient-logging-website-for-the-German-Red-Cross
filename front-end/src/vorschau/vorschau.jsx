@@ -2,10 +2,10 @@ import "./vorschau.css"
 
 import React, { useState, useEffect } from 'react';
 import {
-     PDFViewer, Document, Page, Text, View, StyleSheet,
+    PDFViewer, Document, Page, Text, View, StyleSheet,
     Image
 } from '@react-pdf/renderer';
-import {  useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import Topbar from '../topbar/topbar';
 import Sidebar from '../sidebar/sidebar';
@@ -15,6 +15,8 @@ import axios from "axios";
 export default function Vorschau() {
     const navigate = useNavigate();
     const [pub_token, setPub_token] = useState();
+
+    const [loading, setLoading] = useState(true); // Add loading state
 
     useEffect(() => {
         const fetchData = async () => {
@@ -27,6 +29,9 @@ export default function Vorschau() {
                 if (typeof decodedToken === 'undefined') {
                     localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_token');
                     localStorage.setItem('deutsches_rottes_kreuz_herrenberg_isLoggedIn', 'false');
+                    localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_draft_protocol');
+                    localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_instance');
+                    setLoading(false); // Update loading state
                     navigate('/');
                     return;
                 }
@@ -34,15 +39,16 @@ export default function Vorschau() {
                 console.log("login page isLoggedIn === 'true' && token")
 
 
-                //setLoading(true);
-                //to exdends the time each time the page is loaded
+
                 localStorage.setItem('deutsches_rottes_kreuz_herrenberg_token', await encodeToken(decodedToken.userId));
                 localStorage.setItem('deutsches_rottes_kreuz_herrenberg_isLoggedIn', 'true');
 
                 console.log(localStorage.getItem('deutsches_rottes_kreuz_herrenberg_token'));
                 console.log(localStorage.getItem('deutsches_rottes_kreuz_herrenberg_isLoggedIn'));
+                setLoading(false); // Update loading state
 
             } else {
+                setLoading(false);
                 navigate('/');
             }
         }
@@ -163,6 +169,18 @@ export default function Vorschau() {
 
 
     });
+
+    if (loading) {
+        return (<div style={{ pointerEvents: "none" }} className="vorschau">
+            <Sidebar currentPage="vorschau" />
+            <Topbar />
+            <div className="vorschau_body">
+                <span className="vorschau_body_title">
+                    Seite wird geladen
+                </span>
+            </div>
+        </div>); // Render a loading indicator while fetching data
+    }
 
     return (
         <div className="vorschau">

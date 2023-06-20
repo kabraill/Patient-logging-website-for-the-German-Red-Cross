@@ -1,8 +1,7 @@
 import "./login.css"
-import { useState } from "react";
 
 import { useNavigate } from 'react-router-dom';
-import { useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 import {
     Visibility, Login
@@ -15,29 +14,33 @@ export default function LLogin() {
     const [shown, setShown] = useState(true);
     const [name, setName] = useState("");
     const [password, setPassword] = useState("");
-    
+    const [loading, setLoading] = useState(true);
+
 
     useEffect(() => {
-        //localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_token');
-        //localStorage.setItem('deutsches_rottes_kreuz_herrenberg_isLoggedIn', 'false');
         const fetchData = async () => {
+
             const token = localStorage.getItem('deutsches_rottes_kreuz_herrenberg_token');
             const isLoggedIn = localStorage.getItem('deutsches_rottes_kreuz_herrenberg_isLoggedIn');
 
             if (isLoggedIn === 'true' && token) {
                 const decodedToken = await decodeToken(token);
 
-
                 console.log("login page isLoggedIn === 'true' && token")
                 if (typeof decodedToken === 'undefined') {
                     localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_token');
                     localStorage.setItem('deutsches_rottes_kreuz_herrenberg_isLoggedIn', 'false');
-                    return;
+                    localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_draft_protocol');
+                    localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_instance');
+                    setLoading(false); // Update loading state
+                } else {
+                    navigate('/einstellungen');
                 }
-                //console.log(decodedToken.userId);
-                navigate('/einstellungen');
+            } else {
+                setLoading(false); // Update loading state
             }
-        }
+        };
+
         fetchData();
     }, []);
 
@@ -47,7 +50,7 @@ export default function LLogin() {
             const response = await axios.get("http://localhost:8800/user/time");
             const t = new Date(response.data)
             console.log(t + "    server time");
-
+    
             return t;
         } catch (error) {
             console.log('Error:', error);
@@ -84,7 +87,7 @@ export default function LLogin() {
             localStorage.setItem('deutsches_rottes_kreuz_herrenberg_isLoggedIn', 'true');
             navigate('/einstellungen');
         }).catch((error) => {
-            console.log(error.response.data.message);
+            console.log('Error:', error.response.data);
         });
 
     };
@@ -101,7 +104,9 @@ export default function LLogin() {
         setPassword(e.target.value);
     }
 
-
+    if (loading) {
+        return <div>Seite wird geladen</div>; // Render a loading indicator while fetching data
+    }
 
     return (
         <div className="login">
@@ -139,7 +144,6 @@ export default function LLogin() {
                     <button className="login_body_bottom_button" onClick={nav} ><Login className="login_body_bottom_ico" /> Anmelden </button>
                     <a href="#" className="login_body_bottom_link">Kennwort Vergessen?</a>
                     <a href="#" className="login_body_bottom_link" onClick={contact}>Kontakt</a>
-
                 </div>
             </div>
         </div>
