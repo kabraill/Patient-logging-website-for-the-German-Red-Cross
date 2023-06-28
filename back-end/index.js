@@ -17,7 +17,7 @@ mongoose.connect(process.env.MONGO_URL, {
     .then(() => {
         console.log("Connected to the database");
         // Delete expired draft protocols every hour 3600000
-        setInterval(deleteExpiredDraftProtocols, 10000);
+        setInterval(deleteExpiredDraftProtocols, 3600000);
     })
     .catch((error) => {
         console.error("Error connecting to the database:", error);

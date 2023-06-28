@@ -1,6 +1,6 @@
 import "./massnahmen_einsatzart.css"
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
 import Topbar from "../topbar/topbar";
@@ -17,19 +17,22 @@ export default function Massnahmen_einsatzart() {
 
     const navigate = useNavigate();
 
-    const [fontColor, setFontColor] = useState(["black", "black", "red"])
-    const [ischeckedMassnahmen_value, Setischeckedmassnahmen_value] = useState([false, false, false, false, false, false, false, false,
-        false, false, false, false, false, false, false, false, false, false, false]);
-    const [Anzahl_Schocks, setAnzahl_Schocks] = useState("");
-    const [Gegebene_Liter_min, setGegebene_Liter_min] = useState("");
-    const [ischeckedEinsatzart_value, SetischeckedEinsatzart_value] = useState([false, false, false, false, false, false, false, false,
-        false]);
-    const [sonstigg, setSonstigg] = useState("");
-    const [Weitere_beteiligte_Einsatzkraefte, setWeitere_beteiligte_Einsatzkraefte] = useState([false, false]);
-    const [sonstigg2, setSonstigg2] = useState("");
-    const [Uebergabe_an, setUebergabe_an] = useState("");
-    const [Freitext, setFreitext] = useState("");
-    const [pub_token, setPub_token] = useState();
+    const ischeckedMassnahmen_value = useRef([useRef(), useRef(), useRef(), useRef(), useRef(), useRef(), useRef(), useRef(),
+        useRef(), useRef(), useRef(), useRef(), useRef(), useRef(), useRef(), useRef(), useRef(), useRef(), useRef()]);
+    const Anzahl_Schocks = useRef();
+    const Gegebene_Liter_min = useRef();
+    const ischeckedEinsatzart_value = useRef([useRef(), useRef(), useRef(), useRef(), useRef(), useRef(), useRef(), useRef(),
+        useRef()]);
+    const sonstigg = useRef();
+    const Weitere_beteiligte_Einsatzkraefte = useRef([useRef(), useRef()]);
+    const sonstigg2 = useRef();
+    const Uebergabe_an = useRef();
+    const Freitext = useRef();
+    const pub_token = useRef();
+
+    const Anzahl_Schocks_l = useRef();
+    const Gegebene_Liter_min_l = useRef();
+    const Uebergabe_an_l = useRef();
 
     const [loading, setLoading] = useState(true); // Add loading state
 
@@ -40,7 +43,7 @@ export default function Massnahmen_einsatzart() {
 
             if (isLoggedIn === 'true' && token) {
                 const decodedToken = await decodeToken(token);
-                setPub_token(decodedToken);
+                pub_token.current = decodedToken;
                 if (typeof decodedToken === 'undefined') {
                     localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_token');
                     localStorage.setItem('deutsches_rottes_kreuz_herrenberg_isLoggedIn', 'false');
@@ -108,213 +111,34 @@ export default function Massnahmen_einsatzart() {
         navigate('/vorschau');
     }
 
-    const handleInputChange_Freitext = (e) => {
-        setFreitext(e.target.value);
-    }
-
     const handleInputChange_Uebergabe_an = (e) => {
-        setUebergabe_an(e.target.value);
-
-        const newFontColor = fontColor.slice();
+        
         if (e.target.value === "") {
-            newFontColor[2] = "red";
-            setFontColor(newFontColor);
+            Uebergabe_an_l.current.style.color = "red";
         } else {
-            newFontColor[2] = "black";
-            setFontColor(newFontColor);
+            Uebergabe_an_l.current.style.color = "black";
         }
     }
 
-    const handleInputChange_sonstigg2 = (e) => {
-        setSonstigg2(e.target.value);
-    }
-
-    const handleInputChange_sonstigg = (e) => {
-        setSonstigg(e.target.value);
-    }
-
     const handleInputChange_Anzahl_Schocks = (e) => {
-        setAnzahl_Schocks(e.target.value);
-
-        const newFontColor = fontColor.slice();
+        
         if (e.target.value.match('^([0-9]+)$') || e.target.value === "") {
-            newFontColor[0] = "black";
-            setFontColor(newFontColor);
+            Anzahl_Schocks_l.current.style.color = "black";
         } else {
-            newFontColor[0] = "red";
-            setFontColor(newFontColor);
+            Anzahl_Schocks_l.current.style.color = "red";
         }
     }
 
     const handleInputChange_Gegebene_Liter_min = (e) => {
-        setGegebene_Liter_min(e.target.value);
-
-        const newFontColor = fontColor.slice();
+        
         if (e.target.value.match('^([0-9]+)$') || e.target.value === "") {
-            newFontColor[1] = "black";
-            setFontColor(newFontColor);
+            Gegebene_Liter_min_l.current.style.color = "black";
         } else {
-            newFontColor[1] = "red";
-            setFontColor(newFontColor);
+            Gegebene_Liter_min_l.current.style.color = "red";
         }
     }
 
-    const handleOnChange_Weitere_beteiligte_Einsatzkraefte = (type) => {
-        if (type === "Feuerwehr") {
-            const newIsChecked = Weitere_beteiligte_Einsatzkraefte.slice();
-            newIsChecked[0] = !newIsChecked[0];
-            setWeitere_beteiligte_Einsatzkraefte(newIsChecked);
-
-        } else if (type === "Polizei") {
-            const newIsChecked = Weitere_beteiligte_Einsatzkraefte.slice();
-            newIsChecked[1] = !newIsChecked[1];
-            setWeitere_beteiligte_Einsatzkraefte(newIsChecked);
-
-        }
-    }
-
-    const handleOnChange_massnahmen = (type) => {
-        if (type === "Atemwege freimachen") {
-            const newIsChecked = ischeckedMassnahmen_value.slice();
-            newIsChecked[0] = !newIsChecked[0];
-            Setischeckedmassnahmen_value(newIsChecked);
-
-        } else if (type === "Larynxtubus") {
-            const newIsChecked = ischeckedMassnahmen_value.slice();
-            newIsChecked[1] = !newIsChecked[1];
-            Setischeckedmassnahmen_value(newIsChecked);
-
-        } else if (type === "O2 Gabe") {
-            const newIsChecked = ischeckedMassnahmen_value.slice();
-            newIsChecked[2] = !newIsChecked[2];
-            Setischeckedmassnahmen_value(newIsChecked);
-
-        } else if (type === "Brille/Maske/Beutel") {
-            const newIsChecked = ischeckedMassnahmen_value.slice();
-            newIsChecked[3] = !newIsChecked[3];
-            Setischeckedmassnahmen_value(newIsChecked);
-
-        } else if (type === "sonstiges ...siehe Text") {
-            const newIsChecked = ischeckedMassnahmen_value.slice();
-            newIsChecked[4] = !newIsChecked[4];
-            Setischeckedmassnahmen_value(newIsChecked);
-
-        } else if (type === "Herzdruckmassage") {
-            const newIsChecked = ischeckedMassnahmen_value.slice();
-            newIsChecked[5] = !newIsChecked[5];
-            Setischeckedmassnahmen_value(newIsChecked);
-
-        } else if (type === "AED") {
-            const newIsChecked = ischeckedMassnahmen_value.slice();
-            newIsChecked[6] = !newIsChecked[6];
-            Setischeckedmassnahmen_value(newIsChecked);
-        } else if (type === "Wundversorgung") {
-            const newIsChecked = ischeckedMassnahmen_value.slice();
-            newIsChecked[7] = !newIsChecked[7];
-            Setischeckedmassnahmen_value(newIsChecked);
-
-        } else if (type === "HWS Fixierung") {
-            const newIsChecked = ischeckedMassnahmen_value.slice();
-            newIsChecked[8] = !newIsChecked[8];
-            Setischeckedmassnahmen_value(newIsChecked);
-
-        } else if (type === "NA Nachforderung") {
-            const newIsChecked = ischeckedMassnahmen_value.slice();
-            newIsChecked[9] = !newIsChecked[9];
-            Setischeckedmassnahmen_value(newIsChecked);
-
-        } else if (type === "Seitenlage") {
-            const newIsChecked = ischeckedMassnahmen_value.slice();
-            newIsChecked[10] = !newIsChecked[10];
-            Setischeckedmassnahmen_value(newIsChecked);
-        } else if (type === "Oberkoerper hoch/sitzend") {
-            const newIsChecked = ischeckedMassnahmen_value.slice();
-            newIsChecked[11] = !newIsChecked[11];
-            Setischeckedmassnahmen_value(newIsChecked);
-
-        } else if (type === "Flachlagerung") {
-            const newIsChecked = ischeckedMassnahmen_value.slice();
-            newIsChecked[12] = !newIsChecked[12];
-            Setischeckedmassnahmen_value(newIsChecked);
-
-        } else if (type === "Schocklage") {
-            const newIsChecked = ischeckedMassnahmen_value.slice();
-            newIsChecked[13] = !newIsChecked[13];
-            Setischeckedmassnahmen_value(newIsChecked);
-
-        } else if (type === "Ruhigstellung") {
-            const newIsChecked = ischeckedMassnahmen_value.slice();
-            newIsChecked[14] = !newIsChecked[14];
-            Setischeckedmassnahmen_value(newIsChecked);
-        } else if (type === "Absicherung") {
-            const newIsChecked = ischeckedMassnahmen_value.slice();
-            newIsChecked[15] = !newIsChecked[15];
-            Setischeckedmassnahmen_value(newIsChecked);
-
-        } else if (type === "Einweisung RD") {
-            const newIsChecked = ischeckedMassnahmen_value.slice();
-            newIsChecked[16] = !newIsChecked[16];
-            Setischeckedmassnahmen_value(newIsChecked);
-
-        } else if (type === "Unterstuetzung RD") {
-            const newIsChecked = ischeckedMassnahmen_value.slice();
-            newIsChecked[17] = !newIsChecked[17];
-            Setischeckedmassnahmen_value(newIsChecked);
-
-        } else if (type === "NND abwartend") {
-            const newIsChecked = ischeckedMassnahmen_value.slice();
-            newIsChecked[18] = !newIsChecked[18];
-            Setischeckedmassnahmen_value(newIsChecked);
-        }
-    };
-
-    const handleOnChange_einsatzart = (type) => {
-        if (type === "Verkehrsunfall") {
-            const newIsChecked = ischeckedEinsatzart_value.slice();
-            newIsChecked[0] = !newIsChecked[0];
-            SetischeckedEinsatzart_value(newIsChecked);
-
-        } else if (type === "Chirurgischer Notfall") {
-            const newIsChecked = ischeckedEinsatzart_value.slice();
-            newIsChecked[1] = !newIsChecked[1];
-            SetischeckedEinsatzart_value(newIsChecked);
-
-        } else if (type === "Internistischer Notfall") {
-            const newIsChecked = ischeckedEinsatzart_value.slice();
-            newIsChecked[2] = !newIsChecked[2];
-            SetischeckedEinsatzart_value(newIsChecked);
-
-        } else if (type === "Reanimation") {
-            const newIsChecked = ischeckedEinsatzart_value.slice();
-            newIsChecked[3] = !newIsChecked[3];
-            SetischeckedEinsatzart_value(newIsChecked);
-
-        } else if (type === "Infektionseinsatz") {
-            const newIsChecked = ischeckedEinsatzart_value.slice();
-            newIsChecked[4] = !newIsChecked[4];
-            SetischeckedEinsatzart_value(newIsChecked);
-
-        } else if (type === "Paediatrischer Notfall") {
-            const newIsChecked = ischeckedEinsatzart_value.slice();
-            newIsChecked[5] = !newIsChecked[5];
-            SetischeckedEinsatzart_value(newIsChecked);
-
-        } else if (type === "Arbeitsunfall") {
-            const newIsChecked = ischeckedEinsatzart_value.slice();
-            newIsChecked[6] = !newIsChecked[6];
-            SetischeckedEinsatzart_value(newIsChecked);
-        } else if (type === "Gynaekologischer Notfall") {
-            const newIsChecked = ischeckedEinsatzart_value.slice();
-            newIsChecked[7] = !newIsChecked[7];
-            SetischeckedEinsatzart_value(newIsChecked);
-
-        } else if (type === "Fehleinsatz ..siehe Protokoll Fehleinsatz..") {
-            const newIsChecked = ischeckedEinsatzart_value.slice();
-            newIsChecked[8] = !newIsChecked[8];
-            SetischeckedEinsatzart_value(newIsChecked);
-
-        }
-    };
+    
 
     if (loading) {
         return (<div style={{ pointerEvents: "none" }} className="massnahmen_einsatzart">
@@ -350,8 +174,7 @@ export default function Massnahmen_einsatzart() {
                                 <input
                                     type="checkbox"
                                     id="massnahmen_einsatzart_massnahmen_atemwege_freimachen"
-                                    checked={ischeckedMassnahmen_value[0]}
-                                    onChange={() => handleOnChange_massnahmen("Atemwege freimachen")}
+                                    ref={ischeckedMassnahmen_value.current[0]}
                                 />
                                 <label htmlFor="massnahmen_einsatzart_massnahmen_atemwege_freimachen">Atemwege freimachen</label>
                             </div>
@@ -359,8 +182,7 @@ export default function Massnahmen_einsatzart() {
                                 <input
                                     type="checkbox"
                                     id="massnahmen_einsatzart_massnahmen_larynxtubus"
-                                    checked={ischeckedMassnahmen_value[1]}
-                                    onChange={() => handleOnChange_massnahmen("Larynxtubus")}
+                                    ref={ischeckedMassnahmen_value.current[1]}
                                 />
                                 <label htmlFor="massnahmen_einsatzart_massnahmen_larynxtubus">Larynxtubus</label>
                             </div>
@@ -368,8 +190,7 @@ export default function Massnahmen_einsatzart() {
                                 <input
                                     type="checkbox"
                                     id="massnahmen_einsatzart_massnahmen_o2_gabe"
-                                    checked={ischeckedMassnahmen_value[2]}
-                                    onChange={() => handleOnChange_massnahmen("O2 Gabe")}
+                                    ref={ischeckedMassnahmen_value.current[2]}
                                 />
                                 <label htmlFor="massnahmen_einsatzart_massnahmen_o2_gabe">O2 Gabe</label>
                             </div>
@@ -377,8 +198,7 @@ export default function Massnahmen_einsatzart() {
                                 <input
                                     type="checkbox"
                                     id="massnahmen_einsatzart_massnahmen_brille_maske_beutel"
-                                    checked={ischeckedMassnahmen_value[3]}
-                                    onChange={() => handleOnChange_massnahmen("Brille/Maske/Beutel")}
+                                    ref={ischeckedMassnahmen_value.current[3]}
                                 />
                                 <label htmlFor="massnahmen_einsatzart_massnahmen_brille_maske_beutel">Brille/Maske/Beutel</label>
                             </div>
@@ -386,8 +206,7 @@ export default function Massnahmen_einsatzart() {
                                 <input
                                     type="checkbox"
                                     id="massnahmen_einsatzart_massnahmen_sonstiges_siehe_text"
-                                    checked={ischeckedMassnahmen_value[4]}
-                                    onChange={() => handleOnChange_massnahmen("sonstiges ...siehe Text")}
+                                    ref={ischeckedMassnahmen_value.current[4]}
                                 />
                                 <label htmlFor="massnahmen_einsatzart_massnahmen_sonstiges_siehe_text">sonstiges ...siehe Text</label>
                             </div>
@@ -396,8 +215,7 @@ export default function Massnahmen_einsatzart() {
                                 <input
                                     type="checkbox"
                                     id="massnahmen_einsatzart_massnahmen_herzdruckmassage"
-                                    checked={ischeckedMassnahmen_value[5]}
-                                    onChange={() => handleOnChange_massnahmen("Herzdruckmassage")}
+                                    ref={ischeckedMassnahmen_value.current[5]}
                                 />
                                 <label htmlFor="massnahmen_einsatzart_massnahmen_herzdruckmassage">Herzdruckmassage</label>
                             </div>
@@ -406,8 +224,7 @@ export default function Massnahmen_einsatzart() {
                                 <input
                                     type="checkbox"
                                     id="massnahmen_einsatzart_massnahmen_aed"
-                                    checked={ischeckedMassnahmen_value[6]}
-                                    onChange={() => handleOnChange_massnahmen("AED")}
+                                    ref={ischeckedMassnahmen_value.current[6]}
                                 />
                                 <label htmlFor="massnahmen_einsatzart_massnahmen_aed">AED</label>
                             </div>
@@ -416,8 +233,7 @@ export default function Massnahmen_einsatzart() {
                                 <input
                                     type="checkbox"
                                     id="massnahmen_einsatzart_massnahmen_wunderversorgung"
-                                    checked={ischeckedMassnahmen_value[7]}
-                                    onChange={() => handleOnChange_massnahmen("Wundversorgung")}
+                                    ref={ischeckedMassnahmen_value.current[7]}
                                 />
                                 <label htmlFor="massnahmen_einsatzart_massnahmen_wunderversorgung">Wundversorgung</label>
                             </div>
@@ -426,8 +242,7 @@ export default function Massnahmen_einsatzart() {
                                 <input
                                     type="checkbox"
                                     id="massnahmen_einsatzart_massnahmen_hws_fixierung"
-                                    checked={ischeckedMassnahmen_value[8]}
-                                    onChange={() => handleOnChange_massnahmen("HWS Fixierung")}
+                                    ref={ischeckedMassnahmen_value.current[8]}
                                 />
                                 <label htmlFor="massnahmen_einsatzart_massnahmen_hws_fixierung">HWS Fixierung</label>
                             </div>
@@ -436,8 +251,7 @@ export default function Massnahmen_einsatzart() {
                                 <input
                                     type="checkbox"
                                     id="massnahmen_einsatzart_massnahmen_na_nachforderung"
-                                    checked={ischeckedMassnahmen_value[9]}
-                                    onChange={() => handleOnChange_massnahmen("NA Nachforderung")}
+                                    ref={ischeckedMassnahmen_value.current[9]}
                                 />
                                 <label htmlFor="massnahmen_einsatzart_massnahmen_na_nachforderung">NA Nachforderung</label>
                             </div>
@@ -446,8 +260,7 @@ export default function Massnahmen_einsatzart() {
                                 <input
                                     type="checkbox"
                                     id="massnahmen_einsatzart_massnahmen_seitenlage"
-                                    checked={ischeckedMassnahmen_value[10]}
-                                    onChange={() => handleOnChange_massnahmen("Seitenlage")}
+                                    ref={ischeckedMassnahmen_value.current[10]}
                                 />
                                 <label htmlFor="massnahmen_einsatzart_massnahmen_seitenlage">Seitenlage</label>
                             </div>
@@ -456,8 +269,7 @@ export default function Massnahmen_einsatzart() {
                                 <input
                                     type="checkbox"
                                     id="massnahmen_einsatzart_massnahmen_oberkorper_hoch_sitzend"
-                                    checked={ischeckedMassnahmen_value[11]}
-                                    onChange={() => handleOnChange_massnahmen("Oberkoerper hoch/sitzend")}
+                                    ref={ischeckedMassnahmen_value.current[11]}
                                 />
                                 <label htmlFor="massnahmen_einsatzart_massnahmen_oberkorper_hoch_sitzend">Oberkörper hoch/sitzend</label>
                             </div>
@@ -466,8 +278,7 @@ export default function Massnahmen_einsatzart() {
                                 <input
                                     type="checkbox"
                                     id="massnahmen_einsatzart_massnahmen_flachlagerung"
-                                    checked={ischeckedMassnahmen_value[12]}
-                                    onChange={() => handleOnChange_massnahmen("Flachlagerung")}
+                                    ref={ischeckedMassnahmen_value.current[12]}
                                 />
                                 <label htmlFor="massnahmen_einsatzart_massnahmen_flachlagerung">Flachlagerung</label>
                             </div>
@@ -476,8 +287,7 @@ export default function Massnahmen_einsatzart() {
                                 <input
                                     type="checkbox"
                                     id="massnahmen_einsatzart_massnahmen_schocklage"
-                                    checked={ischeckedMassnahmen_value[13]}
-                                    onChange={() => handleOnChange_massnahmen("Schocklage")}
+                                    ref={ischeckedMassnahmen_value.current[13]}
                                 />
                                 <label htmlFor="massnahmen_einsatzart_massnahmen_schocklage">Schocklage</label>
                             </div>
@@ -486,8 +296,7 @@ export default function Massnahmen_einsatzart() {
                                 <input
                                     type="checkbox"
                                     id="massnahmen_einsatzart_massnahmen_ruhigstellung"
-                                    checked={ischeckedMassnahmen_value[14]}
-                                    onChange={() => handleOnChange_massnahmen("Ruhigstellung")}
+                                    ref={ischeckedMassnahmen_value.current[14]}
                                 />
                                 <label htmlFor="massnahmen_einsatzart_massnahmen_ruhigstellung">Ruhigstellung</label>
                             </div>
@@ -496,8 +305,7 @@ export default function Massnahmen_einsatzart() {
                                 <input
                                     type="checkbox"
                                     id="massnahmen_einsatzart_massnahmen_absicherung"
-                                    checked={ischeckedMassnahmen_value[15]}
-                                    onChange={() => handleOnChange_massnahmen("Absicherung")}
+                                    ref={ischeckedMassnahmen_value.current[15]}
                                 />
                                 <label htmlFor="massnahmen_einsatzart_massnahmen_absicherung">Absicherung</label>
                             </div>
@@ -506,8 +314,7 @@ export default function Massnahmen_einsatzart() {
                                 <input
                                     type="checkbox"
                                     id="massnahmen_einsatzart_massnahmen_einweisung_rd"
-                                    checked={ischeckedMassnahmen_value[16]}
-                                    onChange={() => handleOnChange_massnahmen("Einweisung RD")}
+                                    ref={ischeckedMassnahmen_value.current[16]}
                                 />
                                 <label htmlFor="massnahmen_einsatzart_massnahmen_einweisung_rd">Einweisung RD</label>
                             </div>
@@ -516,8 +323,7 @@ export default function Massnahmen_einsatzart() {
                                 <input
                                     type="checkbox"
                                     id="massnahmen_einsatzart_massnahmen_unterstutzung_rd"
-                                    checked={ischeckedMassnahmen_value[17]}
-                                    onChange={() => handleOnChange_massnahmen("Unterstuetzung RD")}
+                                    ref={ischeckedMassnahmen_value.current[17]}
                                 />
                                 <label htmlFor="massnahmen_einsatzart_massnahmen_unterstutzung_rd">Unterstützung RD</label>
                             </div>
@@ -526,8 +332,7 @@ export default function Massnahmen_einsatzart() {
                                 <input
                                     type="checkbox"
                                     id="massnahmen_einsatzart_massnahmen_nnd_abwartend"
-                                    checked={ischeckedMassnahmen_value[18]}
-                                    onChange={() => handleOnChange_massnahmen("NND abwartend")}
+                                    ref={ischeckedMassnahmen_value.current[18]}
                                 />
                                 <label htmlFor="massnahmen_einsatzart_massnahmen_nnd_abwartend">NND abwartend</label>
                             </div>
@@ -539,13 +344,13 @@ export default function Massnahmen_einsatzart() {
                     <div className="horizontal-line"></div>
 
                     <div className="massnahmen_einsatzart_body_components_line">
-                        <span style={{ color: fontColor[0] }} className="massnahmen_einsatzart_body_components_line_label">
+                        <span ref={Anzahl_Schocks_l} className="massnahmen_einsatzart_body_components_line_label">
                             Bei AED: Anzahl Schocks:
                         </span>
                         <div className="massnahmen_einsatzart_body_components_line_right">
                             <input type="text"
                                 className="massnahmen_einsatzart_body_components_line_right_txt"
-                                value={Anzahl_Schocks}
+                                ref={Anzahl_Schocks}
                                 onChange={handleInputChange_Anzahl_Schocks}
                                 placeholder="Z.B 2"
                             />
@@ -555,13 +360,13 @@ export default function Massnahmen_einsatzart() {
                     <div className="horizontal-line"></div>
 
                     <div className="massnahmen_einsatzart_body_components_line">
-                        <span style={{ color: fontColor[1] }} className="massnahmen_einsatzart_body_components_line_label">
+                        <span ref={Gegebene_Liter_min_l} className="massnahmen_einsatzart_body_components_line_label">
                             Bei O2: Gegebene Liter/min:
                         </span>
                         <div className="massnahmen_einsatzart_body_components_line_right">
                             <input type="text"
                                 className="massnahmen_einsatzart_body_components_line_right_txt"
-                                value={Gegebene_Liter_min}
+                                ref={Gegebene_Liter_min}
                                 onChange={handleInputChange_Gegebene_Liter_min}
                                 placeholder="Z.B 4"
                             />
@@ -580,8 +385,7 @@ export default function Massnahmen_einsatzart() {
                                     <input
                                         type="checkbox"
                                         id="massnahmen_einsatzart_einsatzart_verkehrsunfall"
-                                        checked={ischeckedEinsatzart_value[0]}
-                                        onChange={() => handleOnChange_einsatzart("Verkehrsunfall")}
+                                        ref={ischeckedEinsatzart_value.current[0]}
                                     />
                                     <label htmlFor="massnahmen_einsatzart_einsatzart_verkehrsunfall">Verkehrsunfall</label>
                                 </div>
@@ -589,8 +393,7 @@ export default function Massnahmen_einsatzart() {
                                     <input
                                         type="checkbox"
                                         id="massnahmen_einsatzart_einsatzart_chirurgischer_notfall"
-                                        checked={ischeckedEinsatzart_value[1]}
-                                        onChange={() => handleOnChange_einsatzart("Chirurgischer Notfall")}
+                                        ref={ischeckedEinsatzart_value.current[1]}
                                     />
                                     <label htmlFor="massnahmen_einsatzart_einsatzart_chirurgischer_notfall">Chirurgischer Notfall</label>
                                 </div>
@@ -598,8 +401,7 @@ export default function Massnahmen_einsatzart() {
                                     <input
                                         type="checkbox"
                                         id="massnahmen_einsatzart_einsatzart_internistischer_notfall"
-                                        checked={ischeckedEinsatzart_value[2]}
-                                        onChange={() => handleOnChange_einsatzart("Internistischer Notfall")}
+                                        ref={ischeckedEinsatzart_value.current[2]}
                                     />
                                     <label htmlFor="massnahmen_einsatzart_einsatzart_internistischer_notfall">Internistischer Notfall</label>
                                 </div>
@@ -607,8 +409,7 @@ export default function Massnahmen_einsatzart() {
                                     <input
                                         type="checkbox"
                                         id="massnahmen_einsatzart_einsatzart_reanimation"
-                                        checked={ischeckedEinsatzart_value[3]}
-                                        onChange={() => handleOnChange_einsatzart("Reanimation")}
+                                        ref={ischeckedEinsatzart_value.current[3]}
                                     />
                                     <label htmlFor="massnahmen_einsatzart_einsatzart_reanimation">Reanimation</label>
                                 </div>
@@ -616,8 +417,7 @@ export default function Massnahmen_einsatzart() {
                                     <input
                                         type="checkbox"
                                         id="massnahmen_einsatzart_einsatzart_infektionseinsatz"
-                                        checked={ischeckedEinsatzart_value[4]}
-                                        onChange={() => handleOnChange_einsatzart("Infektionseinsatz")}
+                                        ref={ischeckedEinsatzart_value.current[4]}
                                     />
                                     <label htmlFor="massnahmen_einsatzart_einsatzart_infektionseinsatz">Infektionseinsatz</label>
                                 </div>
@@ -625,8 +425,7 @@ export default function Massnahmen_einsatzart() {
                                     <input
                                         type="checkbox"
                                         id="massnahmen_einsatzart_einsatzart_paediatrischer_notfall"
-                                        checked={ischeckedEinsatzart_value[5]}
-                                        onChange={() => handleOnChange_einsatzart("Paediatrischer Notfall")}
+                                        ref={ischeckedEinsatzart_value.current[5]}
                                     />
                                     <label htmlFor="massnahmen_einsatzart_einsatzart_paediatrischer_notfall">Paediatrischer Notfall</label>
                                 </div>
@@ -634,8 +433,7 @@ export default function Massnahmen_einsatzart() {
                                     <input
                                         type="checkbox"
                                         id="massnahmen_einsatzart_einsatzart_arbeitsunfall"
-                                        checked={ischeckedEinsatzart_value[6]}
-                                        onChange={() => handleOnChange_einsatzart("Arbeitsunfall")}
+                                        ref={ischeckedEinsatzart_value.current[6]}
                                     />
                                     <label htmlFor="massnahmen_einsatzart_einsatzart_arbeitsunfall">Arbeitsunfall</label>
                                 </div>
@@ -643,8 +441,7 @@ export default function Massnahmen_einsatzart() {
                                     <input
                                         type="checkbox"
                                         id="massnahmen_einsatzart_einsatzart_gynaekologischer_notfall"
-                                        checked={ischeckedEinsatzart_value[7]}
-                                        onChange={() => handleOnChange_einsatzart("Gynaekologischer Notfall")}
+                                        ref={ischeckedEinsatzart_value.current[7]}
                                     />
                                     <label htmlFor="massnahmen_einsatzart_einsatzart_gynaekologischer_notfall">Gynäkologischer Notfall</label>
                                 </div>
@@ -652,8 +449,7 @@ export default function Massnahmen_einsatzart() {
                                     <input
                                         type="checkbox"
                                         id="massnahmen_einsatzart_einsatzart_fehleinsatz_siehe_protokoll_fehleinsatz"
-                                        checked={ischeckedEinsatzart_value[8]}
-                                        onChange={() => handleOnChange_einsatzart("Fehleinsatz ..siehe Protokoll Fehleinsatz..")}
+                                        ref={ischeckedEinsatzart_value.current[8]}
                                     />
                                     <label htmlFor="massnahmen_einsatzart_einsatzart_fehleinsatz_siehe_protokoll_fehleinsatz">Fehleinsatz ..siehe Protokoll Fehleinsatz..</label>
                                 </div>
@@ -663,8 +459,7 @@ export default function Massnahmen_einsatzart() {
                                 className="massnahmen_einsatzart_body_components_line_right2_txt"
                                 placeholder="Sonstiges"
                                 title="Sonstiges"
-                                value={sonstigg}
-                                onChange={handleInputChange_sonstigg}
+                                ref={sonstigg}
                             />
                         </div>
                     </div>
@@ -679,8 +474,7 @@ export default function Massnahmen_einsatzart() {
                                     <input
                                         id="massnahmen_einsatzart_weitere_beteiligte_einsatzkraefte_feuerwehr"
                                         type="checkbox"
-                                        checked={Weitere_beteiligte_Einsatzkraefte[0]}
-                                        onChange={() => handleOnChange_Weitere_beteiligte_Einsatzkraefte("Feuerwehr")}
+                                        ref={Weitere_beteiligte_Einsatzkraefte.current[0]}
                                     />
                                     <label htmlFor="massnahmen_einsatzart_weitere_beteiligte_einsatzkraefte_feuerwehr">Feuerwehr</label>
                                 </div>
@@ -688,8 +482,7 @@ export default function Massnahmen_einsatzart() {
                                     <input
                                         type="checkbox"
                                         id="massnahmen_einsatzart_weitere_beteiligte_einsatzkraefte_polizei"
-                                        checked={Weitere_beteiligte_Einsatzkraefte[1]}
-                                        onChange={() => handleOnChange_Weitere_beteiligte_Einsatzkraefte("Polizei")}
+                                        ref={Weitere_beteiligte_Einsatzkraefte.current[1]}
                                     />
                                     <label htmlFor="massnahmen_einsatzart_weitere_beteiligte_einsatzkraefte_polizei">Polizei</label>
                                 </div>
@@ -699,20 +492,19 @@ export default function Massnahmen_einsatzart() {
                                 className="massnahmen_einsatzart_body_components_line_right2_txt"
                                 placeholder="Sonstiges"
                                 title="Sonstiges"
-                                value={sonstigg2}
-                                onChange={handleInputChange_sonstigg2}
+                                ref={sonstigg2}
                             />
                         </div>
                     </div>
                     <div className="horizontal-line"></div>
                     <div className="massnahmen_einsatzart_body_components_line">
-                        <span style={{ color: fontColor[2] }} className="massnahmen_einsatzart_body_components_line_label">
+                        <span ref={Uebergabe_an_l} className="massnahmen_einsatzart_body_components_line_label">
                             Übergabe an: *
                         </span>
                         <div className="massnahmen_einsatzart_body_components_line_right">
                             <input type="text"
                                 className="massnahmen_einsatzart_body_components_line_right_txt"
-                                value={Uebergabe_an}
+                                ref={Uebergabe_an}
                                 onChange={handleInputChange_Uebergabe_an}
                             />
                         </div>
@@ -727,8 +519,7 @@ export default function Massnahmen_einsatzart() {
                         <div className="massnahmen_einsatzart_body_components_line_right">
                             <textarea type="text"
                                 className="massnahmen_einsatzart_body_components_line_right_txt"
-                                value={Freitext}
-                                onChange={handleInputChange_Freitext}
+                                ref={Freitext}
                             />
                         </div>
                     </div>

@@ -17,13 +17,16 @@ function authenticateToken(req, res, next) {
     return res.status(401).json({ message: 'Token not provided' });
   }
 
-  jwt.verify(token, 'blue-eyes', (err, decodedToken) => {
+  jwt.verify(token, 'blue-eyes', (err, decodedUser) => {
     if (err) {
       return res.status(403).json({ message: 'Invalid token' });
     }
     //console.log(decodedToken.userId);
     //console.log(decodedToken.userId);
-    req.user = decodedToken;
+    req.decodedUser = decodedUser;
+    console.log("req decoded user : " + req.decodedUser);
+    console.log("decoded user : " + decodedUser);
+    console.log("token for encode : " + token);
     next();
   });
 }
@@ -57,6 +60,7 @@ router.post("/register", async (req, res) => {
 // LOGIN
 router.post("/login", async (req, res) => {
   try {
+    
     const user = await User.findOne({ name: req.body.name });
     if (!user) {
       return res.status(404).json("Benutzer nicht gefunden");
@@ -70,6 +74,7 @@ router.post("/login", async (req, res) => {
     if (passwordMatch) {
       await user.save();
       const token = generateToken(user._id);
+      //console.log(typeof(user._id))
       return res.status(200).json(token);
     } else {
       return res.status(401).json("Falsches Kennwort");
@@ -81,7 +86,8 @@ router.post("/login", async (req, res) => {
 
 // decodeToken
 router.post('/decodeToken', authenticateToken, async (req, res) => {
-  const user = req.user;
+  const decodedUser = req.decodedUser;
+  console.log("decodetoken : " + decodedUser);
   //console.log(new Date(user.exp * 1000));
   //console.log(user.userId)
   //const userId = req.user.userId;
@@ -95,20 +101,19 @@ router.post('/decodeToken', authenticateToken, async (req, res) => {
     */
 
 
-    return res.status(200).json(user);
+    return res.status(200).json(decodedUser);
   } catch (error) {
     res.sendStatus(500);
   }
 });
 
-// decodeToken
+// encodeToken
 router.post('/encodeToken', async (req, res) => {
 
 
   try {
 
     const token = generateToken(req.body.id);
-    console.log(req.body.id)
     return res.status(200).json(token);
   } catch (error) {
     res.sendStatus(500);

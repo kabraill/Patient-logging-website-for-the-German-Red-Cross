@@ -1,6 +1,6 @@
 import "./Patient.css"
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
 import Topbar from "../topbar/topbar";
@@ -15,10 +15,15 @@ import {
 export default function Patient() {
 
     const navigate = useNavigate();
-    const [fontColor, setFontColor] = useState(["red", "red"]);
-    const [gender, setGender] = useState("unbekannt");
-    const [alter, setAlter] = useState("");
-    const [pub_token, setPub_token] = useState();
+    
+    const gender = useRef("unbekannt");
+    const alter = useRef("");
+
+    const gender_l = useRef();
+    const alter_l = useRef();
+
+    const pub_token = useRef();
+    const pub_draft_protocol_token = useRef();
 
     const [loading, setLoading] = useState(true); // Add loading state
 
@@ -29,7 +34,7 @@ export default function Patient() {
 
             if (isLoggedIn === 'true' && token) {
                 const decodedToken = await decodeToken(token);
-                setPub_token(decodedToken);
+                pub_token.current = decodedToken;
                 if (typeof decodedToken === 'undefined') {
                     localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_token');
                     localStorage.setItem('deutsches_rottes_kreuz_herrenberg_isLoggedIn', 'false');
@@ -50,14 +55,119 @@ export default function Patient() {
                 console.log(localStorage.getItem('deutsches_rottes_kreuz_herrenberg_token'));
                 console.log(localStorage.getItem('deutsches_rottes_kreuz_herrenberg_isLoggedIn'));
                 setLoading(false); // Update loading state
+                const draft_protocol_token = localStorage.getItem('deutsches_rottes_kreuz_herrenberg_draft_protocol');
+                const draft_protocol_instance = localStorage.getItem('deutsches_rottes_kreuz_herrenberg_instance');
+                //console.log("load before protcol -----------------------------------------------------------------------------------------");
+                if (draft_protocol_token && draft_protocol_instance) {
 
+                    const decoded_object_a = await decode_object(draft_protocol_token);
+                    pub_draft_protocol_token.current = decoded_object_a;
+                    //console.log("pub_draft_protocol_tokennnnnnnnnnnnnnnnnnnnnn obj : " + pub_draft_protocol_token.current)
+                    const datas = await get_datas();
+
+                    if (typeof datas === 'undefined') {
+                        localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_draft_protocol');
+                        localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_instance');
+                        navigate('/einstellungen');
+                        return;
+                    }
+
+                    console.log("datasssssssssssssssssssssssss : " + datas);
+
+                    if (datas.patient.geschlecht !== null) {
+                        gender.current.value = datas.patient.geschlecht;
+
+                        if (datas.patient.geschlecht === "unbekannt") {
+                            gender_l.current.style.color = "red";
+                        } else {
+                            gender_l.current.style.color = "black";
+                        }
+                    } else {
+                        gender_l.current.style.color = "red";
+                    }
+
+                    if (datas.patient.alter !== null) {
+                        alter.current.value = datas.patient.alter;
+
+                        if (datas.patient.alter.match('^([0-9]+)$')) {
+                            alter_l.current.style.color = "black";
+                        } else {
+                            alter_l.current.style.color = "red";
+                        }
+                    } else {
+                        alter_l.current.style.color = "red";
+                    }
+
+                } else {
+                    navigate('/einstellungen');
+                }
             } else {
                 setLoading(false);
                 navigate('/');
             }
-        }
+
+
+        };
         fetchData();
     }, []);
+
+    const save_datas_patient = async () => {
+
+        try {
+            const response = await axios.put(
+                "http://localhost:8800/protocol_draft/save_datas_patient",
+                {
+                    id: pub_draft_protocol_token.current.obj,
+                    instance_index: parseInt(localStorage.getItem('deutsches_rottes_kreuz_herrenberg_instance')),
+                    geschlecht_a: gender.current.value,
+                    alter_a: alter.current.value
+                }
+            );
+
+            console.log("beteiligte_einsatzkraefte : -------------------------------------------------------------------------------------------------------------------" + response.data);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const decode_object = async (token) => {
+        try {
+            const response = await axios.post(
+                "http://localhost:8800/protocol_draft/decodedObject",
+                {},
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+
+            return response.data;
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const get_datas = async () => {
+        const draft_protocol_id = pub_draft_protocol_token.current.obj;
+        const instance = parseInt(localStorage.getItem('deutsches_rottes_kreuz_herrenberg_instance'));
+        console.log("draft_pro_id : " + pub_draft_protocol_token.current.obj);
+        console.log("instanceid : " + instance);
+        try {
+            const response = await axios.post(
+                "http://localhost:8800/protocol_draft/get_datas",
+                {
+                    id: draft_protocol_id,
+                    instance_index: instance
+                }
+            );
+
+            return response.data;
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     const encodeToken = async (userId) => {
         try {
@@ -89,37 +199,36 @@ export default function Patient() {
         }
     };
 
-    const nav_next = () => {
+    const nav_next = async () => {
+        const save = async () => {
+            await save_datas_patient();
+        }
+        await save();
         navigate('/anamnese');
     }
 
-    const nav_previous = () => {
+    const nav_previous = async () => {
+        const save = async () => {
+            await save_datas_patient();
+        }
+        await save();
         navigate('/beteiligte_einsatzkraefte');
     }
 
     function handleOnChange(e) {
-        setGender(e.target.value);
-
-        const copy_fontcolor = fontColor.slice();
+        
         if (e.target.value === "unbekannt") {
-            copy_fontcolor[0] = "red";
-            setFontColor(copy_fontcolor);
+            gender_l.current.style.color = "red";
         } else {
-            copy_fontcolor[0] = "black";
-            setFontColor(copy_fontcolor);
+            gender_l.current.style.color = "black";
         }
     }
 
     function handleChangeAlter(e) {
-        setAlter(e.target.value);
-
-        const copy_fontcolor = fontColor.slice();
         if (e.target.value.match('^([0-9]+)$')) {
-            copy_fontcolor[1] = "black";
-            setFontColor(copy_fontcolor);
+            alter_l.current.style.color = "black";
         } else {
-            copy_fontcolor[1] = "red";
-            setFontColor(copy_fontcolor);
+            alter_l.current.style.color = "red";
         }
     }
 
@@ -150,11 +259,11 @@ export default function Patient() {
                 <div className="patient_body_components">
                     <div className="patient_body_components_line">
 
-                        <span style={{ color: fontColor[0] }} className="patient_body_components_line_label">
+                        <span ref={gender_l} className="patient_body_components_line_label">
                             Geschlecht: *
                         </span>
                         <div className="patient_body_components_line_right">
-                            <select value={gender}
+                            <select ref={gender}
                                 onChange={handleOnChange} id="select_custom" className="patient_body_components_line_right_dropdown">
                                 <option id="option_custom" className="patient_body_components_line_right_choice" value="unbekannt">unbekannt</option>
                                 <option id="option_custom" className="patient_body_components_line_right_choice" value="maennlich">männlich</option>
@@ -165,13 +274,13 @@ export default function Patient() {
                     </div>
                     <div className="horizontal-line"></div>
                     <div className="patient_body_components_line">
-                        <span style={{ color: fontColor[1] }} className="patient_body_components_line_label">
+                        <span ref={alter_l} className="patient_body_components_line_label">
                             Alter: *
                         </span>
                         <div className="patient_body_components_line_right">
                             <input required type="text"
                                 className="patient_body_components_line_right_txt"
-                                value={alter}
+                                ref={alter}
                                 onChange={handleChangeAlter}
                                 placeholder="Z.B 60"
                                 title="Alter"

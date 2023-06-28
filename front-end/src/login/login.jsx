@@ -1,7 +1,7 @@
 import "./login.css"
 
 import { useNavigate } from 'react-router-dom';
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 
 import {
     Visibility, Login
@@ -19,6 +19,12 @@ export default function LLogin() {
 
     useEffect(() => {
         const fetchData = async () => {
+            /*
+            localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_token');
+            localStorage.setItem('deutsches_rottes_kreuz_herrenberg_isLoggedIn', 'false');
+            localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_draft_protocol');
+            localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_instance');
+            */
 
             const token = localStorage.getItem('deutsches_rottes_kreuz_herrenberg_token');
             const isLoggedIn = localStorage.getItem('deutsches_rottes_kreuz_herrenberg_isLoggedIn');
@@ -50,7 +56,7 @@ export default function LLogin() {
             const response = await axios.get("http://localhost:8800/user/time");
             const t = new Date(response.data)
             console.log(t + "    server time");
-    
+
             return t;
         } catch (error) {
             console.log('Error:', error);

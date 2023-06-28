@@ -1,6 +1,6 @@
 import "./messwerte.css"
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
 import Topbar from "../topbar/topbar";
@@ -17,13 +17,16 @@ export default function Messwerte() {
 
     const navigate = useNavigate();
 
-    const [fontColor, setFontColor] = useState(["black", "black", "black"]);
-    const [kein_color, setKein_color] = useState("rgb(255, 255, 255)");
-    const [PulsValue, setPuls] = useState("");
-    const [BlutdruckValue, setBlutdruck] = useState("");
-    const [SPo2Value, setSPo2] = useState("");
+    
+    const PulsValue = useRef();
+    const BlutdruckValue = useRef();
+    const SPo2Value = useRef();
     const [KeineMesswerteValue, setKeineMesswerte] = useState(false);
-    const [pub_token, setPub_token] = useState();
+    const pub_token = useRef();
+
+    const PulsValue_l = useRef();
+    const BlutdruckValue_l = useRef();
+    const SPo2Value_l = useRef();
 
     const [loading, setLoading] = useState(true); // Add loading state
 
@@ -34,7 +37,7 @@ export default function Messwerte() {
 
             if (isLoggedIn === 'true' && token) {
                 const decodedToken = await decodeToken(token);
-                setPub_token(decodedToken);
+                pub_token.current = decodedToken;
                 if (typeof decodedToken === 'undefined') {
                     localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_token');
                     localStorage.setItem('deutsches_rottes_kreuz_herrenberg_isLoggedIn', 'false');
@@ -103,60 +106,43 @@ export default function Messwerte() {
     }
 
     const handleInputChange_Puls = (e) => {
-        setPuls(e.target.value);
-
-        const copy_fontcolor = fontColor.slice();
+    
         if (e.target.value.match("^([0-9]+)$") || e.target.value === "") {
-            copy_fontcolor[0] = "black";
-            setFontColor(copy_fontcolor);
+            PulsValue_l.current.style.color = "black";
         } else {
-            copy_fontcolor[0] = "red";
-            setFontColor(copy_fontcolor);
+            PulsValue_l.current.style.color = "red";
         }
     }
 
     const handleInputChange_Blutdruck = (e) => {
-        setBlutdruck(e.target.value);
-
-        const copy_fontcolor = fontColor.slice();
+    
         if (e.target.value.match('^[0-9]{2,3}\\/[0-9]{2,3}$') || e.target.value === "") {
-            copy_fontcolor[1] = "black";
-            setFontColor(copy_fontcolor);
+            BlutdruckValue_l.current.style.color = "black";
         } else {
-            copy_fontcolor[1] = "red";
-            setFontColor(copy_fontcolor);
+            BlutdruckValue_l.current.style.color = "red";
         }
     }
 
     const handleInputChange_SPo2Value = (e) => {
-        setSPo2(e.target.value);
-
-        const copy_fontcolor = fontColor.slice();
+        
         if (e.target.value.match("^([0-9]+)$") || e.target.value === "") {
-            copy_fontcolor[2] = "black";
-            setFontColor(copy_fontcolor);
+            SPo2Value_l.current.style.color = "black";
         } else {
-            copy_fontcolor[2] = "red";
-            setFontColor(copy_fontcolor);
+            SPo2Value_l.current.style.color = "red";
         }
     }
 
     const handleCheckboxChange_KeineMesswerte = (event) => {
         setKeineMesswerte(event.target.checked);
 
-        if (kein_color === "rgb(255, 255, 255)") {
-            setKein_color("rgb(220, 220, 220)");
+        if (event.target.checked === true) {
+            document.getElementById("messwerte_keine_messwerte_label").style.background = "rgb(220, 220, 220)";
         } else {
-            setKein_color("rgb(255, 255, 255)");
+            document.getElementById("messwerte_keine_messwerte_label").style.background = "rgb(255, 255, 255)";
         }
     }
 
-    useEffect(() => {
-        if (document.getElementById("messwerte_keine_messwerte_label") !== null) {
-            document.getElementById("messwerte_keine_messwerte_label").style.background = kein_color;
-        }
-
-    }, [kein_color]);
+    
 
     if (loading) {
         return (<div style={{ pointerEvents: "none" }} className="messwerte">
@@ -184,13 +170,13 @@ export default function Messwerte() {
 
                 <div className="messwerte_body_components">
                     <div className="messwerte_body_components_line">
-                        <span style={{ color: fontColor[0] }} className="messwerte_body_components_line_label">
+                        <span ref={PulsValue_l} className="messwerte_body_components_line_label">
                             Puls:
                         </span>
                         <div className="messwerte_body_components_line_right">
                             <input type="text"
                                 className="messwerte_body_components_line_right_txt"
-                                value={PulsValue}
+                                ref={PulsValue}
                                 onChange={handleInputChange_Puls}
                                 placeholder="Z.B 72"
                                 disabled={KeineMesswerteValue}
@@ -201,13 +187,13 @@ export default function Messwerte() {
                     <div className="horizontal-line"></div>
 
                     <div className="messwerte_body_components_line">
-                        <span style={{ color: fontColor[1] }} className="messwerte_body_components_line_label">
+                        <span ref={BlutdruckValue_l} className="messwerte_body_components_line_label">
                             Blutdruck:
                         </span>
                         <div className="messwerte_body_components_line_right">
                             <input type="text"
                                 className="messwerte_body_components_line_right_txt"
-                                value={BlutdruckValue}
+                                ref={BlutdruckValue}
                                 onChange={handleInputChange_Blutdruck}
                                 placeholder="Z.B 120/80"
                                 disabled={KeineMesswerteValue}
@@ -218,13 +204,13 @@ export default function Messwerte() {
                     <div className="horizontal-line"></div>
 
                     <div className="messwerte_body_components_line">
-                        <span style={{ color: fontColor[2] }} className="messwerte_body_components_line_label">
+                        <span ref={SPo2Value_l} className="messwerte_body_components_line_label">
                             SpO2:
                         </span>
                         <div className="messwerte_body_components_line_right">
                             <input type="text"
                                 className="messwerte_body_components_line_right_txt"
-                                value={SPo2Value}
+                                ref={SPo2Value}
                                 onChange={handleInputChange_SPo2Value}
                                 placeholder="Z.B 98"
                                 disabled={KeineMesswerteValue}

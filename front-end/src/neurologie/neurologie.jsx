@@ -1,6 +1,6 @@
 import "./neurologie.css"
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
 import Topbar from "../topbar/topbar";
@@ -14,14 +14,18 @@ import {
 export default function Neurologie() {
 
     const navigate = useNavigate();
-    const [fontColor, setFontColor] = useState(["black", "black"])
-    const [Bewusstsein, setBewusstsein] = useState("orientiert");
-    const [Blutzucker, setBlutzucker] = useState("");
-    const [isChecked_PupilleLinks, setIsChecked_PupilleLinks] = useState([false, false, false, false, false]);
-    const [isChecked_PupilleRechts, setIsChecked_PupilleRechts] = useState([false, false, false, false, false]);
-    const [Schmerzen, setSchmerzen] = useState("keine");
-    const [Schmerzskala, setSchmerzskala] = useState("");
-    const [pub_token, setPub_token] = useState();
+    
+    const Bewusstsein = useRef("orientiert");
+    const Blutzucker = useRef();
+    const isChecked_PupilleLinks = useRef([useRef(), useRef(), useRef(), useRef(), useRef()]);
+    const isChecked_PupilleRechts = useRef([useRef(), useRef(), useRef(), useRef(), useRef()]);
+    const Schmerzen = useRef("keine");
+    const Schmerzskala = useRef();
+
+    const Blutzucker_l = useRef();
+    const Schmerzskala_l = useRef();
+
+    const pub_token = useRef();
 
     const [loading, setLoading] = useState(true); // Add loading state
 
@@ -32,7 +36,7 @@ export default function Neurologie() {
 
             if (isLoggedIn === 'true' && token) {
                 const decodedToken = await decodeToken(token);
-                setPub_token(decodedToken);
+                pub_token.current = decodedToken;
                 if (typeof decodedToken === 'undefined') {
                     localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_token');
                     localStorage.setItem('deutsches_rottes_kreuz_herrenberg_isLoggedIn', 'false');
@@ -100,98 +104,22 @@ export default function Neurologie() {
         navigate('/messwerte');
     }
 
-    function handleOnChange_Bewusstsein(event) {
-        setBewusstsein(event.target.value);
-    }
-
-    function handleOnChange_Schmerzen(event) {
-        setSchmerzen(event.target.value);
-    }
-
     const handleInputChange_Blutzucker = (e) => {
-        setBlutzucker(e.target.value);
-
-        const copy_fontcolor = fontColor.slice();
+        
         if (e.target.value.match("^([0-9]+|low|high)$") || e.target.value === "") {
-            copy_fontcolor[0] = "black";
-            setFontColor(copy_fontcolor);
+            Blutzucker_l.current.style.color = "black";
         } else {
-            copy_fontcolor[0] = "red";
-            setFontColor(copy_fontcolor);
+            Blutzucker_l.current.style.color = "red";
         }
     }
 
     const handleInputChange_Schmerzskala = (e) => {
-        setSchmerzskala(e.target.value);
-
-        const copy_fontcolor = fontColor.slice();
+        
         if (e.target.value.match("^([0-9]|10)$") || e.target.value === "") {
-            copy_fontcolor[1] = "black";
-            setFontColor(copy_fontcolor);
+            Schmerzskala_l.current.style.color = "black";
         } else {
-            copy_fontcolor[1] = "red";
-            setFontColor(copy_fontcolor);
+            Schmerzskala_l.current.style.color = "red";
         }
-    }
-
-    function handleOnChange_PupilleLinks(type) {
-        if (type === "Eng") {
-            const newIsChecked = isChecked_PupilleLinks.slice();
-            newIsChecked[0] = !newIsChecked[0];
-            setIsChecked_PupilleLinks(newIsChecked);
-
-        } else if (type === "Mittel") {
-            const newIsChecked = isChecked_PupilleLinks.slice();
-            newIsChecked[1] = !newIsChecked[1];
-            setIsChecked_PupilleLinks(newIsChecked);
-
-        } else if (type === "Weit") {
-            const newIsChecked = isChecked_PupilleLinks.slice();
-            newIsChecked[2] = !newIsChecked[2];
-            setIsChecked_PupilleLinks(newIsChecked);
-
-        } else if (type === "keine Lichtreflexe") {
-            const newIsChecked = isChecked_PupilleLinks.slice();
-            newIsChecked[3] = !newIsChecked[3];
-            setIsChecked_PupilleLinks(newIsChecked);
-
-        } else if (type === "Entrundet") {
-            const newIsChecked = isChecked_PupilleLinks.slice();
-            newIsChecked[4] = !newIsChecked[4];
-            setIsChecked_PupilleLinks(newIsChecked);
-
-        }
-
-    }
-
-    function handleOnChange_PupilleRechts(type) {
-        if (type === "Eng") {
-            const newIsChecked = isChecked_PupilleRechts.slice();
-            newIsChecked[0] = !newIsChecked[0];
-            setIsChecked_PupilleRechts(newIsChecked);
-
-        } else if (type === "Mittel") {
-            const newIsChecked = isChecked_PupilleRechts.slice();
-            newIsChecked[1] = !newIsChecked[1];
-            setIsChecked_PupilleRechts(newIsChecked);
-
-        } else if (type === "Weit") {
-            const newIsChecked = isChecked_PupilleRechts.slice();
-            newIsChecked[2] = !newIsChecked[2];
-            setIsChecked_PupilleRechts(newIsChecked);
-
-        } else if (type === "keine Lichtreflexe") {
-            const newIsChecked = isChecked_PupilleRechts.slice();
-            newIsChecked[3] = !newIsChecked[3];
-            setIsChecked_PupilleRechts(newIsChecked);
-
-        } else if (type === "Entrundet") {
-            const newIsChecked = isChecked_PupilleRechts.slice();
-            newIsChecked[4] = !newIsChecked[4];
-            setIsChecked_PupilleRechts(newIsChecked);
-
-        }
-
     }
 
     if (loading) {
@@ -224,8 +152,8 @@ export default function Neurologie() {
                             Bewusstsein: *
                         </span>
                         <div className="neurologie_body_components_line_right1">
-                            <select id="select_custom" value={Bewusstsein}
-                                onChange={handleOnChange_Bewusstsein} className="neurologie_body_components_line_right_singleselect">
+                            <select id="select_custom" ref={Bewusstsein}
+                                className="neurologie_body_components_line_right_singleselect">
                                 <option id="option_custom" value="orientiert">Orientiert</option>
                                 <option id="option_custom" value="desorientiert">Desorientiert</option>
                                 <option id="option_custom" value="getruebt">getrübt</option>
@@ -235,13 +163,13 @@ export default function Neurologie() {
                     </div>
                     <div className="horizontal-line"></div>
                     <div className="neurologie_body_components_line">
-                        <span style={{ color: fontColor[0] }} className="neurologie_body_components_line_label">
+                        <span ref={Blutzucker_l} className="neurologie_body_components_line_label">
                             Blutzucker:
                         </span>
                         <div className="neurologie_body_components_line_right1">
                             <input type="text"
                                 className="neurologie_body_components_line_right1_txt"
-                                value={Blutzucker}
+                                ref={Blutzucker}
                                 onChange={handleInputChange_Blutzucker}
                                 placeholder="Z.B 80 "
                             />
@@ -259,8 +187,7 @@ export default function Neurologie() {
                                 <input
                                     id="neurologie_pupille_links_eng"
                                     type="checkbox"
-                                    checked={isChecked_PupilleLinks[0]}
-                                    onChange={() => handleOnChange_PupilleLinks("Eng")}
+                                    ref={isChecked_PupilleLinks.current[0]}
                                 />
                                 <label htmlFor="neurologie_pupille_links_eng">Eng</label>
                             </div>
@@ -268,8 +195,7 @@ export default function Neurologie() {
                                 <input
                                     id="neurologie_pupille_links_mittel"
                                     type="checkbox"
-                                    checked={isChecked_PupilleLinks[1]}
-                                    onChange={() => handleOnChange_PupilleLinks("Mittel")}
+                                    ref={isChecked_PupilleLinks.current[1]}
                                 />
                                 <label htmlFor="neurologie_pupille_links_mittel">Mittel</label>
                             </div>
@@ -277,8 +203,7 @@ export default function Neurologie() {
                                 <input
                                     id="neurologie_pupille_links_weit"
                                     type="checkbox"
-                                    checked={isChecked_PupilleLinks[2]}
-                                    onChange={() => handleOnChange_PupilleLinks("Weit")}
+                                    ref={isChecked_PupilleLinks.current[2]}
                                 />
                                 <label htmlFor="neurologie_pupille_links_weit">Weit</label>
                             </div>
@@ -286,8 +211,7 @@ export default function Neurologie() {
                                 <input
                                     id="neurologie_pupille_links_keine_lichtreflexe"
                                     type="checkbox"
-                                    checked={isChecked_PupilleLinks[3]}
-                                    onChange={() => handleOnChange_PupilleLinks("keine Lichtreflexe")}
+                                    ref={isChecked_PupilleLinks.current[3]}
                                 />
                                 <label htmlFor="neurologie_pupille_links_keine_lichtreflexe">keine Lichtreflexe</label>
                             </div>
@@ -295,8 +219,7 @@ export default function Neurologie() {
                                 <input
                                     id="neurologie_pupille_links_entrundet"
                                     type="checkbox"
-                                    checked={isChecked_PupilleLinks[4]}
-                                    onChange={() => handleOnChange_PupilleLinks("Entrundet")}
+                                    ref={isChecked_PupilleLinks.current[4]}
                                 />
                                 <label htmlFor="neurologie_pupille_links_entrundet">Entrundet</label>
                             </div>
@@ -315,8 +238,7 @@ export default function Neurologie() {
                                 <input
                                     id="neurologie_pupille_rechts_eng"
                                     type="checkbox"
-                                    checked={isChecked_PupilleRechts[0]}
-                                    onChange={() => handleOnChange_PupilleRechts("Eng")}
+                                    ref={isChecked_PupilleRechts.current[0]}
                                 />
                                 <label htmlFor="neurologie_pupille_rechts_eng">Eng</label>
                             </div>
@@ -324,8 +246,7 @@ export default function Neurologie() {
                                 <input
                                     id="neurologie_pupille_rechts_mittel"
                                     type="checkbox"
-                                    checked={isChecked_PupilleRechts[1]}
-                                    onChange={() => handleOnChange_PupilleRechts("Mittel")}
+                                    ref={isChecked_PupilleRechts.current[1]}
                                 />
                                 <label htmlFor="neurologie_pupille_rechts_mittel">Mittel</label>
                             </div>
@@ -333,8 +254,7 @@ export default function Neurologie() {
                                 <input
                                     id="neurologie_pupille_rechts_weit"
                                     type="checkbox"
-                                    checked={isChecked_PupilleRechts[2]}
-                                    onChange={() => handleOnChange_PupilleRechts("Weit")}
+                                    ref={isChecked_PupilleRechts.current[2]}
                                 />
                                 <label htmlFor="neurologie_pupille_rechts_weit">Weit</label>
                             </div>
@@ -342,8 +262,7 @@ export default function Neurologie() {
                                 <input
                                     id="neurologie_pupille_rechts_keine_lichtreflexe"
                                     type="checkbox"
-                                    checked={isChecked_PupilleRechts[3]}
-                                    onChange={() => handleOnChange_PupilleRechts("keine Lichtreflexe")}
+                                    ref={isChecked_PupilleRechts.current[3]}
                                 />
                                 <label htmlFor="neurologie_pupille_rechts_keine_lichtreflexe">keine Lichtreflexe</label>
                             </div>
@@ -351,8 +270,7 @@ export default function Neurologie() {
                                 <input
                                     id="neurologie_pupille_rechts_entrundet"
                                     type="checkbox"
-                                    checked={isChecked_PupilleRechts[4]}
-                                    onChange={() => handleOnChange_PupilleRechts("Entrundet")}
+                                    ref={isChecked_PupilleRechts.current[4]}
                                 />
                                 <label htmlFor="neurologie_pupille_rechts_entrundet">Entrundet</label>
                             </div>
@@ -366,8 +284,8 @@ export default function Neurologie() {
                             Schmerzen:
                         </span>
                         <div className="neurologie_body_components_line_right1">
-                            <select id="select_custom" value={Schmerzen}
-                                onChange={handleOnChange_Schmerzen} className="neurologie_body_components_line_right_singleselect">
+                            <select id="select_custom" ref={Schmerzen}
+                                className="neurologie_body_components_line_right_singleselect">
                                 <option id="option_custom" value="keine">Keine</option>
                                 <option id="option_custom" value="leicht">Leicht</option>
                                 <option id="option_custom" value="mittel">Mittel</option>
@@ -378,13 +296,13 @@ export default function Neurologie() {
                     </div>
                     <div className="horizontal-line"></div>
                     <div className="neurologie_body_components_line">
-                        <span style={{ color: fontColor[1] }} className="neurologie_body_components_line_label">
+                        <span ref={Schmerzskala_l} className="neurologie_body_components_line_label">
                             Schmerzskala 0-10:
                         </span>
                         <div className="neurologie_body_components_line_right1">
                             <input type="text"
                                 className="neurologie_body_components_line_right1_txt"
-                                value={Schmerzskala}
+                                ref={Schmerzskala}
                                 onChange={handleInputChange_Schmerzskala}
                                 placeholder="0 - 10"
                             />

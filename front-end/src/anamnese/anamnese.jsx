@@ -1,6 +1,6 @@
 import "./anamnese.css"
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
 import Topbar from "../topbar/topbar";
@@ -14,15 +14,20 @@ import {
 export default function Anamnese() {
 
     const navigate = useNavigate();
-    const [fontcolor, setFontcolor] = useState(["red", "red", "red", "red"]);
-    const [page_load, setPage_load] = useState(0);
 
-    const [atemwege, setAtemwege] = useState("");
-    const [isChecked_belueftung, setIsChecked_belueftung] = useState([false, false, false, false, false, false, false]);
-    const [isChecked_puls, setIsChecked_puls] = useState([false, false, false, false, false]);
-    const [isChecked_haut, setIsChecked_haut] = useState([false, false, false, false, false, false]);
-    const [SonstigValue, setSonstigValue] = useState("");
-    const [pub_token, setPub_token] = useState();
+    const atemwege = useRef("");
+    const isChecked_belueftung = useRef([useRef(), useRef(), useRef(), useRef(), useRef(), useRef(), useRef()]);
+    const isChecked_puls = useRef([useRef(), useRef(), useRef(), useRef(), useRef()]);
+    const isChecked_haut = useRef([useRef(), useRef(), useRef(), useRef(), useRef(), useRef()]);
+    const SonstigValue = useRef();
+
+    const atemwege_l = useRef();
+    const belueftung_l = useRef();
+    const puls_l = useRef();
+    const haut_l = useRef();
+
+    const pub_token = useRef();
+    const pub_draft_protocol_token = useRef();
 
     const [loading, setLoading] = useState(true); // Add loading state
 
@@ -33,7 +38,7 @@ export default function Anamnese() {
 
             if (isLoggedIn === 'true' && token) {
                 const decodedToken = await decodeToken(token);
-                setPub_token(decodedToken);
+                pub_token.current = decodedToken;
                 if (typeof decodedToken === 'undefined') {
                     localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_token');
                     localStorage.setItem('deutsches_rottes_kreuz_herrenberg_isLoggedIn', 'false');
@@ -54,14 +59,273 @@ export default function Anamnese() {
                 console.log(localStorage.getItem('deutsches_rottes_kreuz_herrenberg_token'));
                 console.log(localStorage.getItem('deutsches_rottes_kreuz_herrenberg_isLoggedIn'));
                 setLoading(false); // Update loading state
+                const draft_protocol_token = localStorage.getItem('deutsches_rottes_kreuz_herrenberg_draft_protocol');
+                const draft_protocol_instance = localStorage.getItem('deutsches_rottes_kreuz_herrenberg_instance');
+                //console.log("load before protcol -----------------------------------------------------------------------------------------");
+                if (draft_protocol_token && draft_protocol_instance) {
 
+                    const decoded_object_a = await decode_object(draft_protocol_token);
+                    pub_draft_protocol_token.current = decoded_object_a;
+                    //console.log("pub_draft_protocol_tokennnnnnnnnnnnnnnnnnnnnn obj : " + pub_draft_protocol_token.current)
+                    const datas = await get_datas();
+
+                    if (typeof datas === 'undefined') {
+                        localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_draft_protocol');
+                        localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_instance');
+                        navigate('/einstellungen');
+                        return;
+                    }
+                    //console.log("datasssssssssssssssssssssssss : " + datas.anamnese.atemwege);
+                    if (datas.anamnese.atemwege !== null) {
+                        atemwege.current = datas.anamnese.atemwege
+                        if (atemwege.current === "frei"){
+                            document.getElementById("anamnese_atemwege_frei").checked = true;
+                        } else if (atemwege.current === "verlegt"){
+                            document.getElementById("anamnese_atemwege_verlegt").checked = true;
+                        } else {
+
+                        }
+
+                        console.log("atemwege : " + datas.anamnese.atemwege)
+                        if (datas.anamnese.atemwege !== "") {
+                            atemwege_l.current.style.color = "black";
+                        } else {
+                            atemwege_l.current.style.color = "red";
+                        }
+                    } else {
+                        atemwege_l.current.style.color = "red";
+                    }
+                    //////////////////////////////////////////////////////////////////////////////////
+                    
+
+                    if (datas.anamnese.belueftung.unauffaellig !== null) {
+                        
+                        isChecked_belueftung.current[0].current.checked = datas.anamnese.belueftung.unauffaellig;
+                        console.log("belueftung.unauffaellig : " + isChecked_belueftung.current[0].current.checked)
+                    }
+
+                    if (datas.anamnese.belueftung.zyanose !== null) {
+                        console.log("zyanose : " + datas.anamnese.belueftung.zyanose)
+                        isChecked_belueftung.current[1].current.checked = datas.anamnese.belueftung.zyanose;
+                    }
+
+                    if (datas.anamnese.belueftung.rasseln !== null) {
+                        console.log("rasseln : " + datas.anamnese.belueftung.rasseln)
+                        isChecked_belueftung.current[2].current.checked = datas.anamnese.belueftung.rasseln;
+                    }
+
+                    if (datas.anamnese.belueftung.schnappatmung !== null) {
+                        console.log("schnappatmung : " + datas.anamnese.belueftung.schnappatmung)
+                        isChecked_belueftung.current[3].current.checked = datas.anamnese.belueftung.schnappatmung;
+                    }
+
+                    if (datas.anamnese.belueftung.atemnot !== null) {
+                        console.log("belueftung.atemnot : " + datas.anamnese.belueftung.atemnot)
+                        isChecked_belueftung.current[4].current.checked = datas.anamnese.belueftung.atemnot;
+                    }
+
+                    if (datas.anamnese.belueftung.hyperventillation !== null) {
+                        console.log("belueftung.hyperventillation : " + datas.anamnese.belueftung.hyperventillation)
+                        isChecked_belueftung.current[5].current.checked = datas.anamnese.belueftung.hyperventillation;
+                    }
+
+                    if (datas.anamnese.belueftung.atemstillstand !== null) {
+                        console.log("belueftung.atemstillstand : " + datas.anamnese.belueftung.atemstillstand)
+                        isChecked_belueftung.current[6].current.checked = datas.anamnese.belueftung.atemstillstand;
+                    }
+                    
+                    if (datas.anamnese.belueftung.sonstiges !== null) {
+                        SonstigValue.current.value = datas.anamnese.belueftung.sonstiges;
+                    }
+
+                    
+                    const map_array1 = Object.values(datas.anamnese.belueftung);
+                    
+
+                    console.log("ttttttttttttttttttttttttt : " + map_array1.length)
+                    console.log("ttttttttttttttttttttttttt : " + datas.anamnese.belueftung.sonstiges)
+                    
+                    if(map_array1.includes(null)){
+                        belueftung_l.current.style.color = "red";
+                    } else {
+                        if (map_array1.includes(true) || datas.anamnese.belueftung.sonstiges !== "") {
+                            belueftung_l.current.style.color = "black"
+                        } else {
+                            belueftung_l.current.style.color = "red"
+                        }
+                    }
+
+
+                    ////////////////////////////////////////////////////////////////////////////////////////////
+
+                    if (datas.anamnese.puls.regelmaessig !== null) {
+                        isChecked_puls.current[0].current.checked = datas.anamnese.puls.regelmaessig;
+                    }
+
+                    if (datas.anamnese.puls.unregelmaessig !== null) {
+                        isChecked_puls.current[1].current.checked = datas.anamnese.puls.unregelmaessig;
+                    }
+
+                    if (datas.anamnese.puls.gut_tastbar !== null) {
+                        isChecked_puls.current[2].current.checked = datas.anamnese.puls.gut_tastbar;
+                    }
+
+                    if (datas.anamnese.puls.schlecht_tastbar !== null) {
+                        isChecked_puls.current[3].current.checked = datas.anamnese.puls.schlecht_tastbar;
+                    }
+
+                    if (datas.anamnese.puls.nicht_tastbar !== null) {
+                        isChecked_puls.current[4].current.checked = datas.anamnese.puls.nicht_tastbar;
+                    }
+
+                    const map_array2 = Object.values(datas.anamnese.puls);
+
+                    if(map_array2.includes(null)){
+                        puls_l.current.style.color = "red";
+                    } else {
+                        if (map_array2.includes(true)) {
+                            puls_l.current.style.color = "black"
+                        } else {
+                            puls_l.current.style.color = "red"
+                        }
+                    }
+
+                    ////////////////////////////////////////////////////////////////////////////////////////////
+
+                    if (datas.anamnese.haut.rosig !== null) {
+                        isChecked_haut.current[0].current.checked = datas.anamnese.haut.rosig;
+                    }
+
+                    if (datas.anamnese.haut.blass !== null) {
+                        isChecked_haut.current[1].current.checked = datas.anamnese.haut.blass;
+                    }
+
+                    if (datas.anamnese.haut.blau !== null) {
+                        isChecked_haut.current[2].current.checked = datas.anamnese.haut.blau;
+                    }
+
+                    if (datas.anamnese.haut.rot !== null) {
+                        isChecked_haut.current[3].current.checked = datas.anamnese.haut.rot;
+                    }
+
+                    if (datas.anamnese.haut.warm !== null) {
+                        isChecked_haut.current[4].current.checked = datas.anamnese.haut.warm;
+                    }
+
+                    if (datas.anamnese.haut.kalt !== null) {
+                        isChecked_haut.current[5].current.checked = datas.anamnese.haut.kalt;
+                    }
+
+                    const map_array3 = Object.values(datas.anamnese.haut);
+
+                    if(map_array3.includes(null)){
+                        haut_l.current.style.color = "red";
+                    } else {
+                        if (map_array3.includes(true)) {
+                            haut_l.current.style.color = "black"
+                        } else {
+                            haut_l.current.style.color = "red"
+                        }
+                    }
+
+                } else {
+                    navigate('/einstellungen');
+                    
+                }
             } else {
                 setLoading(false);
                 navigate('/');
             }
-        }
+
+        };
+
+        
+
         fetchData();
+
+        
+
     }, []);
+
+    const save_datas_anamnese = async () => {
+
+        try {
+            const response = await axios.put(
+                "http://localhost:8800/protocol_draft/save_datas_anamnese",
+                {
+                    id: pub_draft_protocol_token.current.obj,
+                    instance_index: parseInt(localStorage.getItem('deutsches_rottes_kreuz_herrenberg_instance')),
+
+                    atemwege_a: atemwege.current,
+
+                    belueftung_unauffaellig_a: isChecked_belueftung.current[0].current.checked,
+                    belueftung_zyanose_a: isChecked_belueftung.current[1].current.checked,
+                    belueftung_rasseln_a: isChecked_belueftung.current[2].current.checked,
+                    belueftung_schnappatmung_a: isChecked_belueftung.current[3].current.checked,
+                    belueftung_atemnot_a: isChecked_belueftung.current[4].current.checked,
+                    belueftung_hyperventillation_a: isChecked_belueftung.current[5].current.checked,
+                    belueftung_atemstillstand_a: isChecked_belueftung.current[6].current.checked,
+                    belueftung_sonstiges_a: SonstigValue.current.value,
+                    /////////////////////////////////////////////////////
+                    puls_regelmaessig_a: isChecked_puls.current[0].current.checked,
+                    puls_unregelmaessig_a: isChecked_puls.current[1].current.checked,
+                    puls_gut_tastbar_a: isChecked_puls.current[2].current.checked,
+                    puls_schlecht_tastbar_a: isChecked_puls.current[3].current.checked,
+                    puls_nicht_tastbar_a: isChecked_puls.current[4].current.checked,
+                    /////////////////////////////////////////////////////
+                    haut_rosig_a: isChecked_haut.current[0].current.checked,
+                    haut_blass_a: isChecked_haut.current[1].current.checked,
+                    haut_blau_a: isChecked_haut.current[2].current.checked,
+                    haut_rot_a: isChecked_haut.current[3].current.checked,
+                    haut_warm_a: isChecked_haut.current[4].current.checked,
+                    haut_kalt_a: isChecked_haut.current[5].current.checked
+                }
+            );
+
+            console.log("anamnese : -------------------------------------------------------------------------------------------------------------------" + response.data);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const decode_object = async (token) => {
+        try {
+            const response = await axios.post(
+                "http://localhost:8800/protocol_draft/decodedObject",
+                {},
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+
+            return response.data;
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const get_datas = async () => {
+        const draft_protocol_id = pub_draft_protocol_token.current.obj;
+        const instance = parseInt(localStorage.getItem('deutsches_rottes_kreuz_herrenberg_instance'));
+        console.log("draft_pro_id : " + pub_draft_protocol_token.current.obj);
+        console.log("instanceid : " + instance);
+        try {
+            const response = await axios.post(
+                "http://localhost:8800/protocol_draft/get_datas",
+                {
+                    id: draft_protocol_id,
+                    instance_index: instance
+                }
+            );
+
+            return response.data;
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     const encodeToken = async (userId) => {
         try {
@@ -93,174 +357,108 @@ export default function Anamnese() {
         }
     };
 
-    const nav_next = () => {
+    const nav_next = async () => {
+        const save = async () => {
+            await save_datas_anamnese();
+        }
+
+        await save();
         navigate('/messwerte');
     }
 
-    const nav_previous = () => {
+    const nav_previous = async () => {
+        const save = async () => {
+            await save_datas_anamnese();
+        }
+
+        await save();
         navigate('/patient');
     }
 
     const handleInputChange_SonstigValue = (event) => {
-        setSonstigValue(event.target.value);
+        let a = false;
+
+        for (let i = 0; i < isChecked_belueftung.current.length; i += 1) {
+            if (isChecked_belueftung.current[i].current.checked == true) {
+                a = true;
+                break;
+            }
+        }
+
+        if (a == true || event.target.value !== "") {
+            belueftung_l.current.style.color = "black"
+        } else {
+            belueftung_l.current.style.color = "red"
+        }
     }
 
     function handleOnChange(event) {
-        setAtemwege(event.target.value);
-
-        const copy_fontcolor = fontcolor.slice();
-        copy_fontcolor[0] = "black";
-        setFontcolor(copy_fontcolor);
-
+        atemwege.current = event.target.value;
+        atemwege_l.current.style.color = "black";
     }
 
-    function handleOnChange_belueftng(type) {
-        if (type === "Unauffaellig") {
-            const newIsChecked = isChecked_belueftung.slice();
-            newIsChecked[0] = !newIsChecked[0];
-            setIsChecked_belueftung(newIsChecked);
+    function handleOnChange_belueftng(e, type) {
 
-        } else if (type === "Zyanose") {
-            const newIsChecked = isChecked_belueftung.slice();
-            newIsChecked[1] = !newIsChecked[1];
-            setIsChecked_belueftung(newIsChecked);
+        let a = false;
 
-        } else if (type === "Rasseln") {
-            const newIsChecked = isChecked_belueftung.slice();
-            newIsChecked[2] = !newIsChecked[2];
-            setIsChecked_belueftung(newIsChecked);
-
-        } else if (type === "Schnappatmung") {
-            const newIsChecked = isChecked_belueftung.slice();
-            newIsChecked[3] = !newIsChecked[3];
-            setIsChecked_belueftung(newIsChecked);
-
-        } else if (type === "Atemnot") {
-            const newIsChecked = isChecked_belueftung.slice();
-            newIsChecked[4] = !newIsChecked[4];
-            setIsChecked_belueftung(newIsChecked);
-
-        } else if (type === "Hyperventillation") {
-            const newIsChecked = isChecked_belueftung.slice();
-            newIsChecked[5] = !newIsChecked[5];
-            setIsChecked_belueftung(newIsChecked);
-
-        } else if (type === "Atemstillstand") {
-            const newIsChecked = isChecked_belueftung.slice();
-            newIsChecked[6] = !newIsChecked[6];
-            setIsChecked_belueftung(newIsChecked);
-        }
-
-    }
-
-    useEffect(() => {
-
-        if (page_load == 0) {
-            setPage_load(page_load + 1);
-        } else {
-            const fontcolor_copy = fontcolor.slice();
-            if (isChecked_belueftung.includes(true) || SonstigValue !== "") {
-                fontcolor_copy[1] = "black"
-                setFontcolor(fontcolor_copy);
-            } else {
-                fontcolor_copy[1] = "red"
-                setFontcolor(fontcolor_copy);
+        for (let i = 0; i < isChecked_belueftung.current.length; i += 1) {
+            if (isChecked_belueftung.current[i].current.checked == true) {
+                a = true;
+                break;
             }
         }
 
-    }, [isChecked_belueftung, SonstigValue]);
-
-    function handleOnChange_puls(type) {
-        if (type === "Regelmaeßig") {
-            const newIsChecked = isChecked_puls.slice();
-            newIsChecked[0] = !newIsChecked[0];
-            setIsChecked_puls(newIsChecked);
-
-        } else if (type === "Unregelmaeßig") {
-            const newIsChecked = isChecked_puls.slice();
-            newIsChecked[1] = !newIsChecked[1];
-            setIsChecked_puls(newIsChecked);
-
-        } else if (type === "Gut tastbar") {
-            const newIsChecked = isChecked_puls.slice();
-            newIsChecked[2] = !newIsChecked[2];
-            setIsChecked_puls(newIsChecked);
-        } else if (type === "Schlecht tastbar") {
-            const newIsChecked = isChecked_puls.slice();
-            newIsChecked[3] = !newIsChecked[3];
-            setIsChecked_puls(newIsChecked);
-
-        } else if (type === "Nicht tastbar") {
-            const newIsChecked = isChecked_puls.slice();
-            newIsChecked[4] = !newIsChecked[4];
-            setIsChecked_puls(newIsChecked);
+        if (a == true || SonstigValue.current.value !== "") {
+            belueftung_l.current.style.color = "black"
+        } else {
+            belueftung_l.current.style.color = "red"
         }
+
+        console.log(type);
+
     }
 
-    useEffect(() => {
-        if (page_load == 0) {
-            setPage_load(page_load + 1);
-        } else {
-            const fontcolor_copy = fontcolor.slice();
-            if (!isChecked_puls.includes(true)) {
-                fontcolor_copy[2] = "red"
-                setFontcolor(fontcolor_copy);
-            } else {
-                fontcolor_copy[2] = "black"
-                setFontcolor(fontcolor_copy);
+    function handleOnChange_puls(e, type) {
+        let a = false;
+
+        for (let i = 0; i < isChecked_puls.current.length; i += 1) {
+            if (isChecked_puls.current[i].current.checked == true) {
+                a = true;
+                break;
             }
         }
 
-    }, [isChecked_puls]);
-
-    function handleOnChange_haut(type) {
-        if (type === "Rosig") {
-            const newIsChecked = isChecked_haut.slice();
-            newIsChecked[0] = !newIsChecked[0];
-            setIsChecked_haut(newIsChecked);
-
-        } else if (type === "Blass") {
-            const newIsChecked = isChecked_haut.slice();
-            newIsChecked[1] = !newIsChecked[1];
-            setIsChecked_haut(newIsChecked);
-
-        } else if (type === "Blau") {
-            const newIsChecked = isChecked_haut.slice();
-            newIsChecked[2] = !newIsChecked[2];
-            setIsChecked_haut(newIsChecked);
-
-        } else if (type === "Rot") {
-            const newIsChecked = isChecked_haut.slice();
-            newIsChecked[3] = !newIsChecked[3];
-            setIsChecked_haut(newIsChecked);
-
-        } else if (type === "Warm") {
-            const newIsChecked = isChecked_haut.slice();
-            newIsChecked[4] = !newIsChecked[4];
-            setIsChecked_haut(newIsChecked);
-
-        } else if (type === "Kalt") {
-            const newIsChecked = isChecked_haut.slice();
-            newIsChecked[5] = !newIsChecked[5];
-            setIsChecked_haut(newIsChecked);
+        if (a == true) {
+            puls_l.current.style.color = "black"
+        } else {
+            puls_l.current.style.color = "red"
         }
+
+        console.log(type);
     }
 
-    useEffect(() => {
-        if (page_load == 0) {
-            setPage_load(page_load + 1);
-        } else {
-            const fontcolor_copy = fontcolor.slice();
-            if (!isChecked_haut.includes(true)) {
-                fontcolor_copy[3] = "red"
-                setFontcolor(fontcolor_copy);
-            } else {
-                fontcolor_copy[3] = "black"
-                setFontcolor(fontcolor_copy);
+    
+
+    function handleOnChange_haut(e, type) {
+        
+        let a = false;
+
+        for (let i = 0; i < isChecked_haut.current.length; i += 1) {
+            if (isChecked_haut.current[i].current.checked == true) {
+                a = true;
+                break;
             }
         }
 
-    }, [isChecked_haut]);
+        if (a == true) {
+            haut_l.current.style.color = "black"
+        } else {
+            haut_l.current.style.color = "red"
+        }
+
+        console.log(type);
+    }
+
 
     if (loading) {
         return (<div style={{ pointerEvents: "none" }} className="anamnese">
@@ -282,13 +480,14 @@ export default function Anamnese() {
             <div onClick={() => {
                 document.getElementById("sidebar_mc_id").style.width = "0px";
                 document.getElementById("sidebar_mc_id").style.border = "none";
+
             }} className="anamnese_body">
                 <span className="anamnese_body_title">
                     Anamnese
                 </span>
                 <div className="anamnese_body_components">
                     <div className="anamnese_body_components_line">
-                        <span style={{ color: fontcolor[0] }} className="anamnese_body_components_line_label">
+                        <span ref={atemwege_l} className="anamnese_body_components_line_label">
                             Atemwege: *
                         </span>
                         <div className="anamnese_body_components_line_right3">
@@ -320,7 +519,7 @@ export default function Anamnese() {
                     <div className="horizontal-line"></div>
 
                     <div className="anamnese_body_components_line">
-                        <span style={{ color: fontcolor[1] }} className="anamnese_body_components_line_label">
+                        <span ref={belueftung_l} className="anamnese_body_components_line_label">
                             Belüftung: *
                         </span>
                         <div className="anamnese_body_components_line_right2">
@@ -329,8 +528,8 @@ export default function Anamnese() {
                                     <input
                                         type="checkbox"
                                         id="anamnese_beluftung_unauffaellig"
-                                        checked={isChecked_belueftung[0]}
-                                        onChange={() => handleOnChange_belueftng("Unauffaellig")}
+                                        ref={isChecked_belueftung.current[0]}
+                                        onChange={(e) => handleOnChange_belueftng(e, "Unauffaellig")}
                                     />
                                     <label htmlFor="anamnese_beluftung_unauffaellig">Unauffällig</label>
                                 </div>
@@ -338,8 +537,8 @@ export default function Anamnese() {
                                     <input
                                         type="checkbox"
                                         id="anamnese_beluftung_zyanose"
-                                        checked={isChecked_belueftung[1]}
-                                        onChange={() => handleOnChange_belueftng("Zyanose")}
+                                        ref={isChecked_belueftung.current[1]}
+                                        onChange={(e) => handleOnChange_belueftng(e, "Zyanose")}
                                     />
                                     <label htmlFor="anamnese_beluftung_zyanose">Zyanose</label>
                                 </div>
@@ -347,8 +546,8 @@ export default function Anamnese() {
                                     <input
                                         type="checkbox"
                                         id="anamnese_beluftung_rasseln"
-                                        checked={isChecked_belueftung[2]}
-                                        onChange={() => handleOnChange_belueftng("Rasseln")}
+                                        ref={isChecked_belueftung.current[2]}
+                                        onChange={(e) => handleOnChange_belueftng(e, "Rasseln")}
                                     />
                                     <label htmlFor="anamnese_beluftung_rasseln">Rasseln</label>
                                 </div>
@@ -356,8 +555,8 @@ export default function Anamnese() {
                                     <input
                                         type="checkbox"
                                         id="anamnese_beluftung_schnappatmung"
-                                        checked={isChecked_belueftung[3]}
-                                        onChange={() => handleOnChange_belueftng("Schnappatmung")}
+                                        ref={isChecked_belueftung.current[3]}
+                                        onChange={(e) => handleOnChange_belueftng(e, "Schnappatmung")}
                                     />
                                     <label htmlFor="anamnese_beluftung_schnappatmung">Schnappatmung</label>
                                 </div>
@@ -365,8 +564,8 @@ export default function Anamnese() {
                                     <input
                                         type="checkbox"
                                         id="anamnese_beluftung_atemnot"
-                                        checked={isChecked_belueftung[4]}
-                                        onChange={() => handleOnChange_belueftng("Atemnot")}
+                                        ref={isChecked_belueftung.current[4]}
+                                        onChange={(e) => handleOnChange_belueftng(e, "Atemnot")}
                                     />
                                     <label htmlFor="anamnese_beluftung_atemnot">Atemnot</label>
                                 </div>
@@ -374,8 +573,8 @@ export default function Anamnese() {
                                     <input
                                         type="checkbox"
                                         id="anamnese_beluftung_hyperventillation"
-                                        checked={isChecked_belueftung[5]}
-                                        onChange={() => handleOnChange_belueftng("Hyperventillation")}
+                                        ref={isChecked_belueftung.current[5]}
+                                        onChange={(e) => handleOnChange_belueftng(e, "Hyperventillation")}
                                     />
                                     <label htmlFor="anamnese_beluftung_hyperventillation">Hyperventillation</label>
                                 </div>
@@ -383,18 +582,18 @@ export default function Anamnese() {
                                     <input
                                         type="checkbox"
                                         id="anamnese_beluftung_atemstillstand"
-                                        checked={isChecked_belueftung[6]}
-                                        onChange={() => handleOnChange_belueftng("Atemstillstand")}
+                                        ref={isChecked_belueftung.current[6]}
+                                        onChange={(e) => handleOnChange_belueftng(e, "Atemstillstand")}
                                     />
                                     <label htmlFor="anamnese_beluftung_atemstillstand">Atemstillstand</label>
                                 </div>
                             </div>
 
                             <input type="text"
+                                ref={SonstigValue}
                                 className="anamnese_body_components_line_right2_txt"
                                 placeholder="Sonstiges"
                                 title="Sonstiges"
-                                value={SonstigValue}
                                 onChange={handleInputChange_SonstigValue}
                             />
                         </div>
@@ -403,7 +602,7 @@ export default function Anamnese() {
                     <div className="horizontal-line"></div>
 
                     <div className="anamnese_body_components_line">
-                        <span style={{ color: fontcolor[2] }} className="anamnese_body_components_line_label">
+                        <span ref={puls_l} className="anamnese_body_components_line_label">
                             Puls: *
                         </span>
                         <div className="anamnese_body_components_line_right3">
@@ -411,8 +610,8 @@ export default function Anamnese() {
                                 <input
                                     type="checkbox"
                                     id="anamnese_puls_regelmasessig"
-                                    checked={isChecked_puls[0]}
-                                    onChange={() => handleOnChange_puls("Regelmaeßig")}
+                                    ref={isChecked_puls.current[0]}
+                                    onChange={(e) => handleOnChange_puls(e, "Regelmaeßig")}
                                 />
                                 <label htmlFor="anamnese_puls_regelmasessig">Regelmäßig</label>
                             </div>
@@ -420,8 +619,8 @@ export default function Anamnese() {
                                 <input
                                     type="checkbox"
                                     id="anamnese_puls_unregelmaessig"
-                                    checked={isChecked_puls[1]}
-                                    onChange={() => handleOnChange_puls("Unregelmaeßig")}
+                                    ref={isChecked_puls.current[1]}
+                                    onChange={(e) => handleOnChange_puls(e, "Unregelmaeßig")}
                                 />
                                 <label htmlFor="anamnese_puls_unregelmaessig">Unregelmäßig</label>
                             </div>
@@ -429,8 +628,8 @@ export default function Anamnese() {
                                 <input
                                     type="checkbox"
                                     id="anamnese_puls_gut_tastbar"
-                                    checked={isChecked_puls[2]}
-                                    onChange={() => handleOnChange_puls("Gut tastbar")}
+                                    ref={isChecked_puls.current[2]}
+                                    onChange={(e) => handleOnChange_puls(e, "Gut tastbar")}
                                 />
                                 <label htmlFor="anamnese_puls_gut_tastbar">Gut tastbar</label>
                             </div>
@@ -438,8 +637,8 @@ export default function Anamnese() {
                                 <input
                                     type="checkbox"
                                     id="anamnese_puls_schlecht_tastbar"
-                                    checked={isChecked_puls[3]}
-                                    onChange={() => handleOnChange_puls("Schlecht tastbar")}
+                                    ref={isChecked_puls.current[3]}
+                                    onChange={(e) => handleOnChange_puls(e, "Schlecht tastbar")}
                                 />
                                 <label htmlFor="anamnese_puls_schlecht_tastbar">Schlecht tastbar</label>
                             </div>
@@ -447,8 +646,8 @@ export default function Anamnese() {
                                 <input
                                     type="checkbox"
                                     id="anamnese_puls_nicht_tastbar"
-                                    checked={isChecked_puls[4]}
-                                    onChange={() => handleOnChange_puls("Nicht tastbar")}
+                                    ref={isChecked_puls.current[4]}
+                                    onChange={(e) => handleOnChange_puls(e, "Nicht tastbar")}
                                 />
                                 <label htmlFor="anamnese_puls_nicht_tastbar">Nicht tastbar</label>
                             </div>
@@ -459,7 +658,7 @@ export default function Anamnese() {
                     <div className="horizontal-line"></div>
 
                     <div className="anamnese_body_components_line">
-                        <span style={{ color: fontcolor[3] }} className="anamnese_body_components_line_label">
+                        <span ref={haut_l} className="anamnese_body_components_line_label">
                             Haut: *
                         </span>
                         <div className="anamnese_body_components_line_right3">
@@ -467,8 +666,8 @@ export default function Anamnese() {
                                 <input
                                     type="checkbox"
                                     id="anamnese_haut_rosig"
-                                    checked={isChecked_haut[0]}
-                                    onChange={() => handleOnChange_haut("Rosig")}
+                                    ref={isChecked_haut.current[0]}
+                                    onChange={(e) => handleOnChange_haut(e, "Rosig")}
                                 />
                                 <label htmlFor="anamnese_haut_rosig">Rosig</label>
                             </div>
@@ -476,8 +675,8 @@ export default function Anamnese() {
                                 <input
                                     type="checkbox"
                                     id="anamnese_haut_blass"
-                                    checked={isChecked_haut[1]}
-                                    onChange={() => handleOnChange_haut("Blass")}
+                                    ref={isChecked_haut.current[1]}
+                                    onChange={(e) => handleOnChange_haut(e, "Blass")}
                                 />
                                 <label htmlFor="anamnese_haut_blass">Blass</label>
                             </div>
@@ -485,8 +684,8 @@ export default function Anamnese() {
                                 <input
                                     type="checkbox"
                                     id="anamnese_haut_blau"
-                                    checked={isChecked_haut[2]}
-                                    onChange={() => handleOnChange_haut("Blau")}
+                                    ref={isChecked_haut.current[2]}
+                                    onChange={(e) => handleOnChange_haut(e, "Blau")}
                                 />
                                 <label htmlFor="anamnese_haut_blau">Blau</label>
                             </div>
@@ -494,8 +693,8 @@ export default function Anamnese() {
                                 <input
                                     type="checkbox"
                                     id="anamnese_haut_rot"
-                                    checked={isChecked_haut[3]}
-                                    onChange={() => handleOnChange_haut("Rot")}
+                                    ref={isChecked_haut.current[3]}
+                                    onChange={(e) => handleOnChange_haut(e, "Rot")}
                                 />
                                 <label htmlFor="anamnese_haut_rot">Rot</label>
                             </div>
@@ -503,8 +702,8 @@ export default function Anamnese() {
                                 <input
                                     type="checkbox"
                                     id="anamnese_haut_warm"
-                                    checked={isChecked_haut[4]}
-                                    onChange={() => handleOnChange_haut("Warm")}
+                                    ref={isChecked_haut.current[4]}
+                                    onChange={(e) => handleOnChange_haut(e, "Warm")}
                                 />
                                 <label htmlFor="anamnese_haut_warm">Warm</label>
                             </div>
@@ -513,8 +712,8 @@ export default function Anamnese() {
                                 <input
                                     type="checkbox"
                                     id="anamnese_haut_kalt"
-                                    checked={isChecked_haut[5]}
-                                    onChange={() => handleOnChange_haut("Kalt")}
+                                    ref={isChecked_haut.current[5]}
+                                    onChange={(e) => handleOnChange_haut(e, "Kalt")}
                                 />
                                 <label htmlFor="anamnese_haut_kalt">Kalt</label>
                             </div>

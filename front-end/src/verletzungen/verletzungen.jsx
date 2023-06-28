@@ -1,6 +1,6 @@
 import "./verletzungen.css"
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
 import Topbar from "../topbar/topbar";
@@ -15,17 +15,17 @@ import {
 export default function Verletzungen() {
 
     const navigate = useNavigate();
-    const [isChecked_Schaedel_Hirn, setIsChecked_Schaedel_Hirn] = useState([false, false, false, false, false]);
-    const [isChecked_Gesicht, setIsChecked_Gesicht] = useState([false, false, false, false, false]);
-    const [isChecked_HWS, setIsChecked_HWS] = useState([false, false, false, false, false]);
-    const [isChecked_Thorax, setIsChecked_Thorax] = useState([false, false, false, false, false]);
-    const [isChecked_Abdomen, setIsChecked_Abdomen] = useState([false, false, false, false, false]);
-    const [isChecked_BWS_LWS, setIsChecked_BWS_LWS] = useState([false, false, false, false, false]);
-    const [isChecked_Becken, setIsChecked_Becken] = useState([false, false, false, false, false]);
-    const [isChecked_Obere_Extremitaeten, setIsChecked_Obere_Extremitaeten] = useState([false, false, false, false, false]);
-    const [isChecked_Untere_Extremitaeten, setIsChecked_Untere_Extremitaeten] = useState([false, false, false, false, false]);
-    const [isChecked_Weichteile, setIsChecked_Weichteile] = useState([false, false, false, false, false]);
-    const [pub_token, setPub_token] = useState();
+    const isChecked_Schaedel_Hirn = useRef([useRef(), useRef(), useRef(), useRef(), useRef()]);
+    const isChecked_Gesicht = useRef([useRef(), useRef(), useRef(), useRef(), useRef()]);
+    const isChecked_HWS = useRef([useRef(), useRef(), useRef(), useRef(), useRef()]);
+    const isChecked_Thorax = useRef([useRef(), useRef(), useRef(), useRef(), useRef()]);
+    const isChecked_Abdomen = useRef([useRef(), useRef(), useRef(), useRef(), useRef()]);
+    const isChecked_BWS_LWS = useRef([useRef(), useRef(), useRef(), useRef(), useRef()]);
+    const isChecked_Becken = useRef([useRef(), useRef(), useRef(), useRef(), useRef()]);
+    const isChecked_Obere_Extremitaeten = useRef([useRef(), useRef(), useRef(), useRef(), useRef()]);
+    const isChecked_Untere_Extremitaeten = useRef([useRef(), useRef(), useRef(), useRef(), useRef()]);
+    const isChecked_Weichteile = useRef([useRef(), useRef(), useRef(), useRef(), useRef()]);
+    const pub_token = useRef();
 
     const [loading, setLoading] = useState(true); // Add loading state
 
@@ -36,7 +36,7 @@ export default function Verletzungen() {
 
             if (isLoggedIn === 'true' && token) {
                 const decodedToken = await decodeToken(token);
-                setPub_token(decodedToken);
+                pub_token.current = decodedToken;
                 if (typeof decodedToken === 'undefined') {
                     localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_token');
                     localStorage.setItem('deutsches_rottes_kreuz_herrenberg_isLoggedIn', 'false');
@@ -104,286 +104,6 @@ export default function Verletzungen() {
         navigate('/neurologie');
     }
 
-    function handleOnChange_Schaedel_Hirn(type) {
-        if (type === "Offen") {
-            const newIsChecked = isChecked_Schaedel_Hirn.slice();
-            newIsChecked[0] = !newIsChecked[0];
-            setIsChecked_Schaedel_Hirn(newIsChecked);
-
-        } else if (type === "Geschlossen") {
-            const newIsChecked = isChecked_Schaedel_Hirn.slice();
-            newIsChecked[1] = !newIsChecked[1];
-            setIsChecked_Schaedel_Hirn(newIsChecked);
-
-        } else if (type === "Leicht") {
-            const newIsChecked = isChecked_Schaedel_Hirn.slice();
-            newIsChecked[2] = !newIsChecked[2];
-            setIsChecked_Schaedel_Hirn(newIsChecked);
-        } else if (type === "Mittel") {
-            const newIsChecked = isChecked_Schaedel_Hirn.slice();
-            newIsChecked[3] = !newIsChecked[3];
-            setIsChecked_Schaedel_Hirn(newIsChecked);
-
-        } else if (type === "Schwer") {
-            const newIsChecked = isChecked_Schaedel_Hirn.slice();
-            newIsChecked[4] = !newIsChecked[4];
-            setIsChecked_Schaedel_Hirn(newIsChecked);
-        }
-    }
-
-    function handleOnChange_Gesicht(type) {
-        if (type === "Offen") {
-            const newIsChecked = isChecked_Gesicht.slice();
-            newIsChecked[0] = !newIsChecked[0];
-            setIsChecked_Gesicht(newIsChecked);
-
-        } else if (type === "Geschlossen") {
-            const newIsChecked = isChecked_Gesicht.slice();
-            newIsChecked[1] = !newIsChecked[1];
-            setIsChecked_Gesicht(newIsChecked);
-
-        } else if (type === "Leicht") {
-            const newIsChecked = isChecked_Gesicht.slice();
-            newIsChecked[2] = !newIsChecked[2];
-            setIsChecked_Gesicht(newIsChecked);
-
-        } else if (type === "Mittel") {
-            const newIsChecked = isChecked_Gesicht.slice();
-            newIsChecked[3] = !newIsChecked[3];
-            setIsChecked_Gesicht(newIsChecked);
-
-        } else if (type === "Schwer") {
-            const newIsChecked = isChecked_Gesicht.slice();
-            newIsChecked[4] = !newIsChecked[4];
-            setIsChecked_Gesicht(newIsChecked);
-        }
-    }
-
-    function handleOnChange_HWS(type) {
-        if (type === "Offen") {
-            const newIsChecked = isChecked_HWS.slice();
-            newIsChecked[0] = !newIsChecked[0];
-            setIsChecked_HWS(newIsChecked);
-
-        } else if (type === "Geschlossen") {
-            const newIsChecked = isChecked_HWS.slice();
-            newIsChecked[1] = !newIsChecked[1];
-            setIsChecked_HWS(newIsChecked);
-
-        } else if (type === "Leicht") {
-            const newIsChecked = isChecked_HWS.slice();
-            newIsChecked[2] = !newIsChecked[2];
-            setIsChecked_HWS(newIsChecked);
-
-        } else if (type === "Mittel") {
-            const newIsChecked = isChecked_HWS.slice();
-            newIsChecked[3] = !newIsChecked[3];
-            setIsChecked_HWS(newIsChecked);
-
-        } else if (type === "Schwer") {
-            const newIsChecked = isChecked_HWS.slice();
-            newIsChecked[4] = !newIsChecked[4];
-            setIsChecked_HWS(newIsChecked);
-        }
-    }
-
-    function handleOnChange_Thorax(type) {
-        if (type === "Offen") {
-            const newIsChecked = isChecked_Thorax.slice();
-            newIsChecked[0] = !newIsChecked[0];
-            setIsChecked_Thorax(newIsChecked);
-
-        } else if (type === "Geschlossen") {
-            const newIsChecked = isChecked_Thorax.slice();
-            newIsChecked[1] = !newIsChecked[1];
-            setIsChecked_Thorax(newIsChecked);
-
-        } else if (type === "Leicht") {
-            const newIsChecked = isChecked_Thorax.slice();
-            newIsChecked[2] = !newIsChecked[2];
-            setIsChecked_Thorax(newIsChecked);
-
-        } else if (type === "Mittel") {
-            const newIsChecked = isChecked_Thorax.slice();
-            newIsChecked[3] = !newIsChecked[3];
-            setIsChecked_Thorax(newIsChecked);
-
-        } else if (type === "Schwer") {
-            const newIsChecked = isChecked_Thorax.slice();
-            newIsChecked[4] = !newIsChecked[4];
-            setIsChecked_Thorax(newIsChecked);
-        }
-    }
-
-    function handleOnChange_Abdomen(type) {
-        if (type === "Offen") {
-            const newIsChecked = isChecked_Abdomen.slice();
-            newIsChecked[0] = !newIsChecked[0];
-            setIsChecked_Abdomen(newIsChecked);
-
-        } else if (type === "Geschlossen") {
-            const newIsChecked = isChecked_Abdomen.slice();
-            newIsChecked[1] = !newIsChecked[1];
-            setIsChecked_Abdomen(newIsChecked);
-
-        } else if (type === "Leicht") {
-            const newIsChecked = isChecked_Abdomen.slice();
-            newIsChecked[2] = !newIsChecked[2];
-            setIsChecked_Abdomen(newIsChecked);
-
-        } else if (type === "Mittel") {
-            const newIsChecked = isChecked_Abdomen.slice();
-            newIsChecked[3] = !newIsChecked[3];
-            setIsChecked_Abdomen(newIsChecked);
-
-        } else if (type === "Schwer") {
-            const newIsChecked = isChecked_Abdomen.slice();
-            newIsChecked[4] = !newIsChecked[4];
-            setIsChecked_Abdomen(newIsChecked);
-        }
-    }
-
-    function handleOnChange_BWS_LWS(type) {
-        if (type === "Offen") {
-            const newIsChecked = isChecked_BWS_LWS.slice();
-            newIsChecked[0] = !newIsChecked[0];
-            setIsChecked_BWS_LWS(newIsChecked);
-
-        } else if (type === "Geschlossen") {
-            const newIsChecked = isChecked_BWS_LWS.slice();
-            newIsChecked[1] = !newIsChecked[1];
-            setIsChecked_BWS_LWS(newIsChecked);
-
-        } else if (type === "Leicht") {
-            const newIsChecked = isChecked_BWS_LWS.slice();
-            newIsChecked[2] = !newIsChecked[2];
-            setIsChecked_BWS_LWS(newIsChecked);
-
-        } else if (type === "Mittel") {
-            const newIsChecked = isChecked_BWS_LWS.slice();
-            newIsChecked[3] = !newIsChecked[3];
-            setIsChecked_BWS_LWS(newIsChecked);
-
-        } else if (type === "Schwer") {
-            const newIsChecked = isChecked_BWS_LWS.slice();
-            newIsChecked[4] = !newIsChecked[4];
-            setIsChecked_BWS_LWS(newIsChecked);
-        }
-    }
-
-    function handleOnChange_Becken(type) {
-        if (type === "Offen") {
-            const newIsChecked = isChecked_Becken.slice();
-            newIsChecked[0] = !newIsChecked[0];
-            setIsChecked_Becken(newIsChecked);
-
-        } else if (type === "Geschlossen") {
-            const newIsChecked = isChecked_Becken.slice();
-            newIsChecked[1] = !newIsChecked[1];
-            setIsChecked_Becken(newIsChecked);
-
-        } else if (type === "Leicht") {
-            const newIsChecked = isChecked_Becken.slice();
-            newIsChecked[2] = !newIsChecked[2];
-            setIsChecked_Becken(newIsChecked);
-
-        } else if (type === "Mittel") {
-            const newIsChecked = isChecked_Becken.slice();
-            newIsChecked[3] = !newIsChecked[3];
-            setIsChecked_Becken(newIsChecked);
-
-        } else if (type === "Schwer") {
-            const newIsChecked = isChecked_Becken.slice();
-            newIsChecked[4] = !newIsChecked[4];
-            setIsChecked_Becken(newIsChecked);
-        }
-    }
-
-
-    function handleOnChange_Obere_Extremitaeten(type) {
-        if (type === "Offen") {
-            const newIsChecked = isChecked_Obere_Extremitaeten.slice();
-            newIsChecked[0] = !newIsChecked[0];
-            setIsChecked_Obere_Extremitaeten(newIsChecked);
-
-        } else if (type === "Geschlossen") {
-            const newIsChecked = isChecked_Obere_Extremitaeten.slice();
-            newIsChecked[1] = !newIsChecked[1];
-            setIsChecked_Obere_Extremitaeten(newIsChecked);
-
-        } else if (type === "Leicht") {
-            const newIsChecked = isChecked_Obere_Extremitaeten.slice();
-            newIsChecked[2] = !newIsChecked[2];
-            setIsChecked_Obere_Extremitaeten(newIsChecked);
-
-        } else if (type === "Mittel") {
-            const newIsChecked = isChecked_Obere_Extremitaeten.slice();
-            newIsChecked[3] = !newIsChecked[3];
-            setIsChecked_Obere_Extremitaeten(newIsChecked);
-
-        } else if (type === "Schwer") {
-            const newIsChecked = isChecked_Obere_Extremitaeten.slice();
-            newIsChecked[4] = !newIsChecked[4];
-            setIsChecked_Obere_Extremitaeten(newIsChecked);
-        }
-    }
-
-    function handleOnChange_Untere_Extremitaeten(type) {
-        if (type === "Offen") {
-            const newIsChecked = isChecked_Untere_Extremitaeten.slice();
-            newIsChecked[0] = !newIsChecked[0];
-            setIsChecked_Untere_Extremitaeten(newIsChecked);
-
-        } else if (type === "Geschlossen") {
-            const newIsChecked = isChecked_Untere_Extremitaeten.slice();
-            newIsChecked[1] = !newIsChecked[1];
-            setIsChecked_Untere_Extremitaeten(newIsChecked);
-
-        } else if (type === "Leicht") {
-            const newIsChecked = isChecked_Untere_Extremitaeten.slice();
-            newIsChecked[2] = !newIsChecked[2];
-            setIsChecked_Untere_Extremitaeten(newIsChecked);
-
-        } else if (type === "Mittel") {
-            const newIsChecked = isChecked_Untere_Extremitaeten.slice();
-            newIsChecked[3] = !newIsChecked[3];
-            setIsChecked_Untere_Extremitaeten(newIsChecked);
-
-        } else if (type === "Schwer") {
-            const newIsChecked = isChecked_Untere_Extremitaeten.slice();
-            newIsChecked[4] = !newIsChecked[4];
-            setIsChecked_Untere_Extremitaeten(newIsChecked);
-        }
-    }
-
-    function handleOnChange_Weichteile(type) {
-        if (type === "Offen") {
-            const newIsChecked = isChecked_Weichteile.slice();
-            newIsChecked[0] = !newIsChecked[0];
-            setIsChecked_Weichteile(newIsChecked);
-
-        } else if (type === "Geschlossen") {
-            const newIsChecked = isChecked_Weichteile.slice();
-            newIsChecked[1] = !newIsChecked[1];
-            setIsChecked_Weichteile(newIsChecked);
-
-        } else if (type === "Leicht") {
-            const newIsChecked = isChecked_Weichteile.slice();
-            newIsChecked[2] = !newIsChecked[2];
-            setIsChecked_Weichteile(newIsChecked);
-
-        } else if (type === "Mittel") {
-            const newIsChecked = isChecked_Weichteile.slice();
-            newIsChecked[3] = !newIsChecked[3];
-            setIsChecked_Weichteile(newIsChecked);
-
-        } else if (type === "Schwer") {
-            const newIsChecked = isChecked_Weichteile.slice();
-            newIsChecked[4] = !newIsChecked[4];
-            setIsChecked_Weichteile(newIsChecked);
-        }
-    }
-
     if (loading) {
         return (<div style={{ pointerEvents: "none" }} className="verletzungen">
             <Sidebar currentPage="verletzungen" />
@@ -419,8 +139,7 @@ export default function Verletzungen() {
                                 <input
                                     type="checkbox"
                                     id="verletzungen_schaedel_hirn_offen"
-                                    checked={isChecked_Schaedel_Hirn[0]}
-                                    onChange={() => handleOnChange_Schaedel_Hirn("Offen")}
+                                    ref={isChecked_Schaedel_Hirn.current[0]}
                                 />
                                 <label htmlFor="verletzungen_schaedel_hirn_offen">Offen</label>
                             </div>
@@ -428,8 +147,7 @@ export default function Verletzungen() {
                                 <input
                                     type="checkbox"
                                     id="verletzungen_schaedel_hirn_geschlossen"
-                                    checked={isChecked_Schaedel_Hirn[1]}
-                                    onChange={() => handleOnChange_Schaedel_Hirn("Geschlossen")}
+                                    ref={isChecked_Schaedel_Hirn.current[1]}
                                 />
                                 <label htmlFor="verletzungen_schaedel_hirn_geschlossen">Geschlossen</label>
                             </div>
@@ -437,8 +155,7 @@ export default function Verletzungen() {
                                 <input
                                     type="checkbox"
                                     id="verletzungen_schaedel_hirn_leicht"
-                                    checked={isChecked_Schaedel_Hirn[2]}
-                                    onChange={() => handleOnChange_Schaedel_Hirn("Leicht")}
+                                    ref={isChecked_Schaedel_Hirn.current[2]}
                                 />
                                 <label htmlFor="verletzungen_schaedel_hirn_leicht">Leicht</label>
                             </div>
@@ -446,8 +163,7 @@ export default function Verletzungen() {
                                 <input
                                     type="checkbox"
                                     id="verletzungen_schaedel_hirn_mittel"
-                                    checked={isChecked_Schaedel_Hirn[3]}
-                                    onChange={() => handleOnChange_Schaedel_Hirn("Mittel")}
+                                    ref={isChecked_Schaedel_Hirn.current[3]}
                                 />
                                 <label htmlFor="verletzungen_schaedel_hirn_mittel">Mittel</label>
                             </div>
@@ -455,8 +171,7 @@ export default function Verletzungen() {
                                 <input
                                     type="checkbox"
                                     id="verletzungen_schaedel_hirn_schwer"
-                                    checked={isChecked_Schaedel_Hirn[4]}
-                                    onChange={() => handleOnChange_Schaedel_Hirn("Schwer")}
+                                    ref={isChecked_Schaedel_Hirn.current[4]}
                                 />
                                 <label htmlFor="verletzungen_schaedel_hirn_schwer">Schwer</label>
                             </div>
@@ -473,8 +188,7 @@ export default function Verletzungen() {
                                 <input
                                     type="checkbox"
                                     id="verletzungen_gesicht_offen"
-                                    checked={isChecked_Gesicht[0]}
-                                    onChange={() => handleOnChange_Gesicht("Offen")}
+                                    ref={isChecked_Gesicht.current[0]}
                                 />
                                 <label htmlFor="verletzungen_gesicht_offen">Offen</label>
                             </div>
@@ -482,8 +196,7 @@ export default function Verletzungen() {
                                 <input
                                     type="checkbox"
                                     id="verletzungen_gesicht_geschlossen"
-                                    checked={isChecked_Gesicht[1]}
-                                    onChange={() => handleOnChange_Gesicht("Geschlossen")}
+                                    ref={isChecked_Gesicht.current[1]}
                                 />
                                 <label htmlFor="verletzungen_gesicht_geschlossen">Geschlossen</label>
                             </div>
@@ -491,8 +204,7 @@ export default function Verletzungen() {
                                 <input
                                     type="checkbox"
                                     id="verletzungen_gesicht_leicht"
-                                    checked={isChecked_Gesicht[2]}
-                                    onChange={() => handleOnChange_Gesicht("Leicht")}
+                                    ref={isChecked_Gesicht.current[2]}
                                 />
                                 <label htmlFor="verletzungen_gesicht_leicht">Leicht</label>
                             </div>
@@ -500,8 +212,7 @@ export default function Verletzungen() {
                                 <input
                                     type="checkbox"
                                     id="verletzungen_gesicht_mittel"
-                                    checked={isChecked_Gesicht[3]}
-                                    onChange={() => handleOnChange_Gesicht("Mittel")}
+                                    ref={isChecked_Gesicht.current[3]}
                                 />
                                 <label htmlFor="verletzungen_gesicht_mittel">Mittel</label>
                             </div>
@@ -509,8 +220,7 @@ export default function Verletzungen() {
                                 <input
                                     type="checkbox"
                                     id="verletzungen_gesicht_schwer"
-                                    checked={isChecked_Gesicht[4]}
-                                    onChange={() => handleOnChange_Gesicht("Schwer")}
+                                    ref={isChecked_Gesicht.current[4]}
                                 />
                                 <label htmlFor="verletzungen_gesicht_schwer">Schwer</label>
                             </div>
@@ -527,8 +237,7 @@ export default function Verletzungen() {
                                 <input
                                     type="checkbox"
                                     id="verletzungen_hws_offen"
-                                    checked={isChecked_HWS[0]}
-                                    onChange={() => handleOnChange_HWS("Offen")}
+                                    ref={isChecked_HWS.current[0]}
                                 />
                                 <label htmlFor="verletzungen_hws_offen">Offen</label>
                             </div>
@@ -536,8 +245,7 @@ export default function Verletzungen() {
                                 <input
                                     type="checkbox"
                                     id="verletzungen_hws_geschlossen"
-                                    checked={isChecked_HWS[1]}
-                                    onChange={() => handleOnChange_HWS("Geschlossen")}
+                                    ref={isChecked_HWS.current[1]}
                                 />
                                 <label htmlFor="verletzungen_hws_geschlossen">Geschlossen</label>
                             </div>
@@ -545,8 +253,7 @@ export default function Verletzungen() {
                                 <input
                                     type="checkbox"
                                     id="verletzungen_hws_leicht"
-                                    checked={isChecked_HWS[2]}
-                                    onChange={() => handleOnChange_HWS("Leicht")}
+                                    ref={isChecked_HWS.current[2]}
                                 />
                                 <label htmlFor="verletzungen_hws_leicht">Leicht</label>
                             </div>
@@ -554,8 +261,7 @@ export default function Verletzungen() {
                                 <input
                                     type="checkbox"
                                     id="verletzungen_hws_mittel"
-                                    checked={isChecked_HWS[3]}
-                                    onChange={() => handleOnChange_HWS("Mittel")}
+                                    ref={isChecked_HWS.current[3]}
                                 />
                                 <label htmlFor="verletzungen_hws_mittel">Mittel</label>
                             </div>
@@ -563,8 +269,7 @@ export default function Verletzungen() {
                                 <input
                                     type="checkbox"
                                     id="verletzungen_hws_schwer"
-                                    checked={isChecked_HWS[4]}
-                                    onChange={() => handleOnChange_HWS("Schwer")}
+                                    ref={isChecked_HWS.current[4]}
                                 />
                                 <label htmlFor="verletzungen_hws_schwer">Schwer</label>
                             </div>
@@ -581,8 +286,7 @@ export default function Verletzungen() {
                                 <input
                                     type="checkbox"
                                     id="verletzungen_thorax_offen"
-                                    checked={isChecked_Thorax[0]}
-                                    onChange={() => handleOnChange_Thorax("Offen")}
+                                    ref={isChecked_Thorax.current[0]}
                                 />
                                 <label htmlFor="verletzungen_thorax_offen">Offen</label>
                             </div>
@@ -590,8 +294,7 @@ export default function Verletzungen() {
                                 <input
                                     type="checkbox"
                                     id="verletzungen_thorax_geschlossen"
-                                    checked={isChecked_Thorax[1]}
-                                    onChange={() => handleOnChange_Thorax("Geschlossen")}
+                                    ref={isChecked_Thorax.current[1]}
                                 />
                                 <label htmlFor="verletzungen_thorax_geschlossen">Geschlossen</label>
                             </div>
@@ -599,8 +302,7 @@ export default function Verletzungen() {
                                 <input
                                     type="checkbox"
                                     id="verletzungen_thorax_leicht"
-                                    checked={isChecked_Thorax[2]}
-                                    onChange={() => handleOnChange_Thorax("Leicht")}
+                                    ref={isChecked_Thorax.current[2]}
                                 />
                                 <label htmlFor="verletzungen_thorax_leicht">Leicht</label>
                             </div>
@@ -608,8 +310,7 @@ export default function Verletzungen() {
                                 <input
                                     type="checkbox"
                                     id="verletzungen_thorax_mittel"
-                                    checked={isChecked_Thorax[3]}
-                                    onChange={() => handleOnChange_Thorax("Mittel")}
+                                    ref={isChecked_Thorax.current[3]}
                                 />
                                 <label htmlFor="verletzungen_thorax_mittel">Mittel</label>
                             </div>
@@ -617,8 +318,7 @@ export default function Verletzungen() {
                                 <input
                                     type="checkbox"
                                     id="verletzungen_thorax_schwer"
-                                    checked={isChecked_Thorax[4]}
-                                    onChange={() => handleOnChange_Thorax("Schwer")}
+                                    ref={isChecked_Thorax.current[4]}
                                 />
                                 <label htmlFor="verletzungen_thorax_schwer">Schwer</label>
                             </div>
@@ -635,8 +335,7 @@ export default function Verletzungen() {
                                 <input
                                     type="checkbox"
                                     id="verletzungen_abdomen_offen"
-                                    checked={isChecked_Abdomen[0]}
-                                    onChange={() => handleOnChange_Abdomen("Offen")}
+                                    ref={isChecked_Abdomen.current[0]}
                                 />
                                 <label htmlFor="verletzungen_abdomen_offen">Offen</label>
                             </div>
@@ -644,8 +343,7 @@ export default function Verletzungen() {
                                 <input
                                     type="checkbox"
                                     id="verletzungen_abdomen_geschlossen"
-                                    checked={isChecked_Abdomen[1]}
-                                    onChange={() => handleOnChange_Abdomen("Geschlossen")}
+                                    ref={isChecked_Abdomen.current[1]}
                                 />
                                 <label htmlFor="verletzungen_abdomen_geschlossen">Geschlossen</label>
                             </div>
@@ -653,8 +351,7 @@ export default function Verletzungen() {
                                 <input
                                     type="checkbox"
                                     id="verletzungen_abdomen_leicht"
-                                    checked={isChecked_Abdomen[2]}
-                                    onChange={() => handleOnChange_Abdomen("Leicht")}
+                                    ref={isChecked_Abdomen.current[2]}
                                 />
                                 <label htmlFor="verletzungen_abdomen_leicht">Leicht</label>
                             </div>
@@ -662,8 +359,7 @@ export default function Verletzungen() {
                                 <input
                                     type="checkbox"
                                     id="verletzungen_abdomen_mittel"
-                                    checked={isChecked_Abdomen[3]}
-                                    onChange={() => handleOnChange_Abdomen("Mittel")}
+                                    ref={isChecked_Abdomen.current[3]}
                                 />
                                 <label htmlFor="verletzungen_abdomen_mittel">Mittel</label>
                             </div>
@@ -671,8 +367,7 @@ export default function Verletzungen() {
                                 <input
                                     type="checkbox"
                                     id="verletzungen_abdomen_schwer"
-                                    checked={isChecked_Abdomen[4]}
-                                    onChange={() => handleOnChange_Abdomen("Schwer")}
+                                    ref={isChecked_Abdomen.current[4]}
                                 />
                                 <label htmlFor="verletzungen_abdomen_schwer">Schwer</label>
                             </div>
@@ -689,8 +384,7 @@ export default function Verletzungen() {
                                 <input
                                     type="checkbox"
                                     id="verletzungen_bws_lws_offen"
-                                    checked={isChecked_BWS_LWS[0]}
-                                    onChange={() => handleOnChange_BWS_LWS("Offen")}
+                                    ref={isChecked_BWS_LWS.current[0]}
                                 />
                                 <label htmlFor="verletzungen_bws_lws_offen">Offen</label>
                             </div>
@@ -698,8 +392,7 @@ export default function Verletzungen() {
                                 <input
                                     type="checkbox"
                                     id="verletzungen_bws_lws_geschlossen"
-                                    checked={isChecked_BWS_LWS[1]}
-                                    onChange={() => handleOnChange_BWS_LWS("Geschlossen")}
+                                    ref={isChecked_BWS_LWS.current[1]}
                                 />
                                 <label htmlFor="verletzungen_bws_lws_geschlossen">Geschlossen</label>
                             </div>
@@ -707,8 +400,7 @@ export default function Verletzungen() {
                                 <input
                                     type="checkbox"
                                     id="verletzungen_bws_lws_leicht"
-                                    checked={isChecked_BWS_LWS[2]}
-                                    onChange={() => handleOnChange_BWS_LWS("Leicht")}
+                                    ref={isChecked_BWS_LWS.current[2]}
                                 />
                                 <label htmlFor="verletzungen_bws_lws_leicht">Leicht</label>
                             </div>
@@ -716,8 +408,7 @@ export default function Verletzungen() {
                                 <input
                                     type="checkbox"
                                     id="verletzungen_bws_lws_mittel"
-                                    checked={isChecked_BWS_LWS[3]}
-                                    onChange={() => handleOnChange_BWS_LWS("Mittel")}
+                                    ref={isChecked_BWS_LWS.current[3]}
                                 />
                                 <label htmlFor="verletzungen_bws_lws_mittel">Mittel</label>
                             </div>
@@ -725,8 +416,7 @@ export default function Verletzungen() {
                                 <input
                                     type="checkbox"
                                     id="verletzungen_bws_lws_schwer"
-                                    checked={isChecked_BWS_LWS[4]}
-                                    onChange={() => handleOnChange_BWS_LWS("Schwer")}
+                                    ref={isChecked_BWS_LWS.current[4]}
                                 />
                                 <label htmlFor="verletzungen_bws_lws_schwer">Schwer</label>
                             </div>
@@ -743,8 +433,7 @@ export default function Verletzungen() {
                                 <input
                                     type="checkbox"
                                     id="verletzungen_becken_offen"
-                                    checked={isChecked_Becken[0]}
-                                    onChange={() => handleOnChange_Becken("Offen")}
+                                    ref={isChecked_Becken.current[0]}
                                 />
                                 <label htmlFor="verletzungen_becken_offen">Offen</label>
                             </div>
@@ -752,8 +441,7 @@ export default function Verletzungen() {
                                 <input
                                     type="checkbox"
                                     id="verletzungen_becken_geschlossen"
-                                    checked={isChecked_Becken[1]}
-                                    onChange={() => handleOnChange_Becken("Geschlossen")}
+                                    ref={isChecked_Becken.current[1]}
                                 />
                                 <label htmlFor="verletzungen_becken_geschlossen">Geschlossen</label>
                             </div>
@@ -761,8 +449,7 @@ export default function Verletzungen() {
                                 <input
                                     type="checkbox"
                                     id="verletzungen_becken_leicht"
-                                    checked={isChecked_Becken[2]}
-                                    onChange={() => handleOnChange_Becken("Leicht")}
+                                    ref={isChecked_Becken.current[2]}
                                 />
                                 <label htmlFor="verletzungen_becken_leicht">Leicht</label>
                             </div>
@@ -770,8 +457,7 @@ export default function Verletzungen() {
                                 <input
                                     type="checkbox"
                                     id="verletzungen_becken_mittel"
-                                    checked={isChecked_Becken[3]}
-                                    onChange={() => handleOnChange_Becken("Mittel")}
+                                    ref={isChecked_Becken.current[3]}
                                 />
                                 <label htmlFor="verletzungen_becken_mittel">Mittel</label>
                             </div>
@@ -779,8 +465,7 @@ export default function Verletzungen() {
                                 <input
                                     type="checkbox"
                                     id="verletzungen_becken_schwer"
-                                    checked={isChecked_Becken[4]}
-                                    onChange={() => handleOnChange_Becken("Schwer")}
+                                    ref={isChecked_Becken.current[4]}
                                 />
                                 <label htmlFor="verletzungen_becken_schwer">Schwer</label>
                             </div>
@@ -797,8 +482,7 @@ export default function Verletzungen() {
                                 <input
                                     type="checkbox"
                                     id="verletzungen_obere_extremitaeten_offen"
-                                    checked={isChecked_Obere_Extremitaeten[0]}
-                                    onChange={() => handleOnChange_Obere_Extremitaeten("Offen")}
+                                    ref={isChecked_Obere_Extremitaeten.current[0]}
                                 />
                                 <label htmlFor="verletzungen_obere_extremitaeten_offen">Offen</label>
                             </div>
@@ -806,8 +490,7 @@ export default function Verletzungen() {
                                 <input
                                     type="checkbox"
                                     id="verletzungen_obere_extremitaeten_geschlossen"
-                                    checked={isChecked_Obere_Extremitaeten[1]}
-                                    onChange={() => handleOnChange_Obere_Extremitaeten("Geschlossen")}
+                                    ref={isChecked_Obere_Extremitaeten.current[1]}
                                 />
                                 <label htmlFor="verletzungen_obere_extremitaeten_geschlossen">Geschlossen</label>
                             </div>
@@ -815,8 +498,7 @@ export default function Verletzungen() {
                                 <input
                                     type="checkbox"
                                     id="verletzungen_obere_extremitaeten_leicht"
-                                    checked={isChecked_Obere_Extremitaeten[2]}
-                                    onChange={() => handleOnChange_Obere_Extremitaeten("Leicht")}
+                                    ref={isChecked_Obere_Extremitaeten.current[2]}
                                 />
                                 <label htmlFor="verletzungen_obere_extremitaeten_leicht">Leicht</label>
                             </div>
@@ -824,8 +506,7 @@ export default function Verletzungen() {
                                 <input
                                     type="checkbox"
                                     id="verletzungen_obere_extremitaeten_mittel"
-                                    checked={isChecked_Obere_Extremitaeten[3]}
-                                    onChange={() => handleOnChange_Obere_Extremitaeten("Mittel")}
+                                    ref={isChecked_Obere_Extremitaeten.current[3]}
                                 />
                                 <label htmlFor="verletzungen_obere_extremitaeten_mittel">Mittel</label>
                             </div>
@@ -833,8 +514,7 @@ export default function Verletzungen() {
                                 <input
                                     type="checkbox"
                                     id="verletzungen_obere_extremitaeten_schwer"
-                                    checked={isChecked_Obere_Extremitaeten[4]}
-                                    onChange={() => handleOnChange_Obere_Extremitaeten("Schwer")}
+                                    ref={isChecked_Obere_Extremitaeten.current[4]}
                                 />
                                 <label htmlFor="verletzungen_obere_extremitaeten_schwer">Schwer</label>
                             </div>
@@ -851,8 +531,7 @@ export default function Verletzungen() {
                                 <input
                                     type="checkbox"
                                     id="verletzungen_untere_extremitaeten_offen"
-                                    checked={isChecked_Untere_Extremitaeten[0]}
-                                    onChange={() => handleOnChange_Untere_Extremitaeten("Offen")}
+                                    ref={isChecked_Untere_Extremitaeten.current[0]}
                                 />
                                 <label htmlFor="verletzungen_untere_extremitaeten_offen">Offen</label>
                             </div>
@@ -860,8 +539,7 @@ export default function Verletzungen() {
                                 <input
                                     type="checkbox"
                                     id="verletzungen_untere_extremitaeten_geschlossen"
-                                    checked={isChecked_Untere_Extremitaeten[1]}
-                                    onChange={() => handleOnChange_Untere_Extremitaeten("Geschlossen")}
+                                    ref={isChecked_Untere_Extremitaeten.current[1]}
                                 />
                                 <label htmlFor="verletzungen_untere_extremitaeten_geschlossen">Geschlossen</label>
                             </div>
@@ -869,8 +547,7 @@ export default function Verletzungen() {
                                 <input
                                     type="checkbox"
                                     id="verletzungen_untere_extremitaeten_leicht"
-                                    checked={isChecked_Untere_Extremitaeten[2]}
-                                    onChange={() => handleOnChange_Untere_Extremitaeten("Leicht")}
+                                    ref={isChecked_Untere_Extremitaeten.current[2]}
                                 />
                                 <label htmlFor="verletzungen_untere_extremitaeten_leicht">Leicht</label>
                             </div>
@@ -878,8 +555,7 @@ export default function Verletzungen() {
                                 <input
                                     type="checkbox"
                                     id="verletzungen_untere_extremitaeten_mittel"
-                                    checked={isChecked_Untere_Extremitaeten[3]}
-                                    onChange={() => handleOnChange_Untere_Extremitaeten("Mittel")}
+                                    ref={isChecked_Untere_Extremitaeten.current[3]}
                                 />
                                 <label htmlFor="verletzungen_untere_extremitaeten_mittel">Mittel</label>
                             </div>
@@ -887,8 +563,7 @@ export default function Verletzungen() {
                                 <input
                                     type="checkbox"
                                     id="verletzungen_untere_extremitaeten_schwer"
-                                    checked={isChecked_Untere_Extremitaeten[4]}
-                                    onChange={() => handleOnChange_Untere_Extremitaeten("Schwer")}
+                                    ref={isChecked_Untere_Extremitaeten.current[4]}
                                 />
                                 <label htmlFor="verletzungen_untere_extremitaeten_schwer">Schwer</label>
                             </div>
@@ -905,8 +580,7 @@ export default function Verletzungen() {
                                 <input
                                     type="checkbox"
                                     id="verletzungen_weichteile_offen"
-                                    checked={isChecked_Weichteile[0]}
-                                    onChange={() => handleOnChange_Weichteile("Offen")}
+                                    ref={isChecked_Weichteile.current[0]}
                                 />
                                 <label htmlFor="verletzungen_weichteile_offen">Offen</label>
                             </div>
@@ -914,8 +588,7 @@ export default function Verletzungen() {
                                 <input
                                     type="checkbox"
                                     id="verletzungen_weichteile_geschlossen"
-                                    checked={isChecked_Weichteile[1]}
-                                    onChange={() => handleOnChange_Weichteile("Geschlossen")}
+                                    ref={isChecked_Weichteile.current[1]}
                                 />
                                 <label htmlFor="verletzungen_weichteile_geschlossen">Geschlossen</label>
                             </div>
@@ -923,8 +596,7 @@ export default function Verletzungen() {
                                 <input
                                     type="checkbox"
                                     id="verletzungen_weichteile_leicht"
-                                    checked={isChecked_Weichteile[2]}
-                                    onChange={() => handleOnChange_Weichteile("Leicht")}
+                                    ref={isChecked_Weichteile.current[2]}
                                 />
                                 <label htmlFor="verletzungen_weichteile_leicht">Leicht</label>
                             </div>
@@ -932,8 +604,7 @@ export default function Verletzungen() {
                                 <input
                                     type="checkbox"
                                     id="verletzungen_weichteile_mittel"
-                                    checked={isChecked_Weichteile[3]}
-                                    onChange={() => handleOnChange_Weichteile("Mittel")}
+                                    ref={isChecked_Weichteile.current[3]}
                                 />
                                 <label htmlFor="verletzungen_weichteile_mittel">Mittel</label>
                             </div>
@@ -941,8 +612,7 @@ export default function Verletzungen() {
                                 <input
                                     type="checkbox"
                                     id="verletzungen_weichteile_schwer"
-                                    checked={isChecked_Weichteile[4]}
-                                    onChange={() => handleOnChange_Weichteile("Schwer")}
+                                    ref={isChecked_Weichteile.current[4]}
                                 />
                                 <label htmlFor="verletzungen_weichteile_schwer">Schwer</label>
                             </div>

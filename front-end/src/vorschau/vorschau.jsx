@@ -1,6 +1,6 @@
 import "./vorschau.css"
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
     PDFViewer, Document, Page, Text, View, StyleSheet,
     Image
@@ -14,7 +14,7 @@ import axios from "axios";
 
 export default function Vorschau() {
     const navigate = useNavigate();
-    const [pub_token, setPub_token] = useState();
+    const pub_token = useRef();
 
     const [loading, setLoading] = useState(true); // Add loading state
 
@@ -25,7 +25,7 @@ export default function Vorschau() {
 
             if (isLoggedIn === 'true' && token) {
                 const decodedToken = await decodeToken(token);
-                setPub_token(decodedToken);
+                pub_token.current = decodedToken;
                 if (typeof decodedToken === 'undefined') {
                     localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_token');
                     localStorage.setItem('deutsches_rottes_kreuz_herrenberg_isLoggedIn', 'false');
