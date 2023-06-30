@@ -15,6 +15,7 @@ import {
 export default function Verletzungen() {
 
     const navigate = useNavigate();
+
     const isChecked_Schaedel_Hirn = useRef([useRef(), useRef(), useRef(), useRef(), useRef()]);
     const isChecked_Gesicht = useRef([useRef(), useRef(), useRef(), useRef(), useRef()]);
     const isChecked_HWS = useRef([useRef(), useRef(), useRef(), useRef(), useRef()]);
@@ -25,7 +26,9 @@ export default function Verletzungen() {
     const isChecked_Obere_Extremitaeten = useRef([useRef(), useRef(), useRef(), useRef(), useRef()]);
     const isChecked_Untere_Extremitaeten = useRef([useRef(), useRef(), useRef(), useRef(), useRef()]);
     const isChecked_Weichteile = useRef([useRef(), useRef(), useRef(), useRef(), useRef()]);
+
     const pub_token = useRef();
+    const pub_draft_protocol_token = useRef();
 
     const [loading, setLoading] = useState(true); // Add loading state
 
@@ -57,14 +60,374 @@ export default function Verletzungen() {
                 console.log(localStorage.getItem('deutsches_rottes_kreuz_herrenberg_token'));
                 console.log(localStorage.getItem('deutsches_rottes_kreuz_herrenberg_isLoggedIn'));
                 setLoading(false); // Update loading state
+                const draft_protocol_token = localStorage.getItem('deutsches_rottes_kreuz_herrenberg_draft_protocol');
+                const draft_protocol_instance = localStorage.getItem('deutsches_rottes_kreuz_herrenberg_instance');
+                //console.log("load before protcol -----------------------------------------------------------------------------------------");
+                if (draft_protocol_token && draft_protocol_instance) {
 
+                    const decoded_object_a = await decode_object(draft_protocol_token);
+                    pub_draft_protocol_token.current = decoded_object_a;
+                    //console.log("pub_draft_protocol_tokennnnnnnnnnnnnnnnnnnnnn obj : " + pub_draft_protocol_token.current)
+                    const datas = await get_datas();
+
+                    if (typeof datas === 'undefined') {
+                        localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_draft_protocol');
+                        localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_instance');
+                        navigate('/einstellungen');
+                        return;
+                    }
+
+                    console.log("datasssssssssssssssssssssssss : " + datas);
+
+                    if (datas.verletzungen.Schaedel_Hirn.offen !== null) {
+                        isChecked_Schaedel_Hirn.current[0].current.checked = datas.verletzungen.Schaedel_Hirn.offen;
+                    }
+
+                    if (datas.verletzungen.Schaedel_Hirn.geschlossen !== null) {
+                        isChecked_Schaedel_Hirn.current[1].current.checked = datas.verletzungen.Schaedel_Hirn.geschlossen;
+                    }
+
+                    if (datas.verletzungen.Schaedel_Hirn.leicht !== null) {
+                        isChecked_Schaedel_Hirn.current[2].current.checked = datas.verletzungen.Schaedel_Hirn.leicht;
+                    }
+
+                    if (datas.verletzungen.Schaedel_Hirn.mittel !== null) {
+                        isChecked_Schaedel_Hirn.current[3].current.checked = datas.verletzungen.Schaedel_Hirn.mittel;
+                    }
+
+                    if (datas.verletzungen.Schaedel_Hirn.schwer !== null) {
+                        isChecked_Schaedel_Hirn.current[4].current.checked = datas.verletzungen.Schaedel_Hirn.schwer;
+                    }
+
+                    ///////////////////////////////////
+
+                    if (datas.verletzungen.gesicht.offen !== null) {
+                        isChecked_Gesicht.current[0].current.checked = datas.verletzungen.gesicht.offen;
+                    }
+
+                    if (datas.verletzungen.gesicht.geschlossen !== null) {
+                        isChecked_Gesicht.current[1].current.checked = datas.verletzungen.gesicht.geschlossen;
+                    }
+
+                    if (datas.verletzungen.gesicht.leicht !== null) {
+                        isChecked_Gesicht.current[2].current.checked = datas.verletzungen.gesicht.leicht;
+                    }
+
+                    if (datas.verletzungen.gesicht.mittel !== null) {
+                        isChecked_Gesicht.current[3].current.checked = datas.verletzungen.gesicht.mittel;
+                    }
+
+                    if (datas.verletzungen.gesicht.schwer !== null) {
+                        isChecked_Gesicht.current[4].current.checked = datas.verletzungen.gesicht.schwer;
+                    }
+
+                    ///////////////////////////////////
+
+                    if (datas.verletzungen.hws.offen !== null) {
+                        isChecked_HWS.current[0].current.checked = datas.verletzungen.hws.offen;
+                    }
+
+                    if (datas.verletzungen.hws.geschlossen !== null) {
+                        isChecked_HWS.current[1].current.checked = datas.verletzungen.hws.geschlossen;
+                    }
+
+                    if (datas.verletzungen.hws.leicht !== null) {
+                        isChecked_HWS.current[2].current.checked = datas.verletzungen.hws.leicht;
+                    }
+
+                    if (datas.verletzungen.hws.mittel !== null) {
+                        isChecked_HWS.current[3].current.checked = datas.verletzungen.hws.mittel;
+                    }
+
+                    if (datas.verletzungen.hws.schwer !== null) {
+                        isChecked_HWS.current[4].current.checked = datas.verletzungen.hws.schwer;
+                    }
+
+                    ///////////////////////////////////
+
+                    if (datas.verletzungen.thorax.offen !== null) {
+                        isChecked_Thorax.current[0].current.checked = datas.verletzungen.thorax.offen;
+                    }
+
+                    if (datas.verletzungen.thorax.geschlossen !== null) {
+                        isChecked_Thorax.current[1].current.checked = datas.verletzungen.thorax.geschlossen;
+                    }
+
+                    if (datas.verletzungen.thorax.leicht !== null) {
+                        isChecked_Thorax.current[2].current.checked = datas.verletzungen.thorax.leicht;
+                    }
+
+                    if (datas.verletzungen.thorax.mittel !== null) {
+                        isChecked_Thorax.current[3].current.checked = datas.verletzungen.thorax.mittel;
+                    }
+
+                    if (datas.verletzungen.thorax.schwer !== null) {
+                        isChecked_Thorax.current[4].current.checked = datas.verletzungen.thorax.schwer;
+                    }
+
+                    ///////////////////////////////////
+
+                    if (datas.verletzungen.abdomen.offen !== null) {
+                        isChecked_Abdomen.current[0].current.checked = datas.verletzungen.abdomen.offen;
+                    }
+
+                    if (datas.verletzungen.abdomen.geschlossen !== null) {
+                        isChecked_Abdomen.current[1].current.checked = datas.verletzungen.abdomen.geschlossen;
+                    }
+
+                    if (datas.verletzungen.abdomen.leicht !== null) {
+                        isChecked_Abdomen.current[2].current.checked = datas.verletzungen.abdomen.leicht;
+                    }
+
+                    if (datas.verletzungen.abdomen.mittel !== null) {
+                        isChecked_Abdomen.current[3].current.checked = datas.verletzungen.abdomen.mittel;
+                    }
+
+                    if (datas.verletzungen.abdomen.schwer !== null) {
+                        isChecked_Abdomen.current[4].current.checked = datas.verletzungen.abdomen.schwer;
+                    }
+
+                    ///////////////////////////////////
+
+                    if (datas.verletzungen.bws_lws.offen !== null) {
+                        isChecked_BWS_LWS.current[0].current.checked = datas.verletzungen.bws_lws.offen;
+                    }
+
+                    if (datas.verletzungen.bws_lws.geschlossen !== null) {
+                        isChecked_BWS_LWS.current[1].current.checked = datas.verletzungen.bws_lws.geschlossen;
+                    }
+
+                    if (datas.verletzungen.bws_lws.leicht !== null) {
+                        isChecked_BWS_LWS.current[2].current.checked = datas.verletzungen.bws_lws.leicht;
+                    }
+
+                    if (datas.verletzungen.bws_lws.mittel !== null) {
+                        isChecked_BWS_LWS.current[3].current.checked = datas.verletzungen.bws_lws.mittel;
+                    }
+
+                    if (datas.verletzungen.bws_lws.schwer !== null) {
+                        isChecked_BWS_LWS.current[4].current.checked = datas.verletzungen.bws_lws.schwer;
+                    }
+
+                    ///////////////////////////////////
+
+                    if (datas.verletzungen.becken.offen !== null) {
+                        isChecked_Becken.current[0].current.checked = datas.verletzungen.becken.offen;
+                    }
+
+                    if (datas.verletzungen.becken.geschlossen !== null) {
+                        isChecked_Becken.current[1].current.checked = datas.verletzungen.becken.geschlossen;
+                    }
+
+                    if (datas.verletzungen.becken.leicht !== null) {
+                        isChecked_Becken.current[2].current.checked = datas.verletzungen.becken.leicht;
+                    }
+
+                    if (datas.verletzungen.becken.mittel !== null) {
+                        isChecked_Becken.current[3].current.checked = datas.verletzungen.becken.mittel;
+                    }
+
+                    if (datas.verletzungen.becken.schwer !== null) {
+                        isChecked_Becken.current[4].current.checked = datas.verletzungen.becken.schwer;
+                    }
+
+                    ///////////////////////////////////
+
+                    if (datas.verletzungen.obere_extremitaeten.offen !== null) {
+                        isChecked_Obere_Extremitaeten.current[0].current.checked = datas.verletzungen.obere_extremitaeten.offen;
+                    }
+
+                    if (datas.verletzungen.obere_extremitaeten.geschlossen !== null) {
+                        isChecked_Obere_Extremitaeten.current[1].current.checked = datas.verletzungen.obere_extremitaeten.geschlossen;
+                    }
+
+                    if (datas.verletzungen.obere_extremitaeten.leicht !== null) {
+                        isChecked_Obere_Extremitaeten.current[2].current.checked = datas.verletzungen.obere_extremitaeten.leicht;
+                    }
+
+                    if (datas.verletzungen.obere_extremitaeten.mittel !== null) {
+                        isChecked_Obere_Extremitaeten.current[3].current.checked = datas.verletzungen.obere_extremitaeten.mittel;
+                    }
+
+                    if (datas.verletzungen.obere_extremitaeten.schwer !== null) {
+                        isChecked_Obere_Extremitaeten.current[4].current.checked = datas.verletzungen.obere_extremitaeten.schwer;
+                    }
+
+                    ///////////////////////////////////
+
+                    if (datas.verletzungen.untere_extremitaeten.offen !== null) {
+                        isChecked_Untere_Extremitaeten.current[0].current.checked = datas.verletzungen.untere_extremitaeten.offen;
+                    }
+
+                    if (datas.verletzungen.untere_extremitaeten.geschlossen !== null) {
+                        isChecked_Untere_Extremitaeten.current[1].current.checked = datas.verletzungen.untere_extremitaeten.geschlossen;
+                    }
+
+                    if (datas.verletzungen.untere_extremitaeten.leicht !== null) {
+                        isChecked_Untere_Extremitaeten.current[2].current.checked = datas.verletzungen.untere_extremitaeten.leicht;
+                    }
+
+                    if (datas.verletzungen.untere_extremitaeten.mittel !== null) {
+                        isChecked_Untere_Extremitaeten.current[3].current.checked = datas.verletzungen.untere_extremitaeten.mittel;
+                    }
+
+                    if (datas.verletzungen.untere_extremitaeten.schwer !== null) {
+                        isChecked_Untere_Extremitaeten.current[4].current.checked = datas.verletzungen.untere_extremitaeten.schwer;
+                    }
+
+                    ///////////////////////////////////
+
+                    if (datas.verletzungen.weichteile.offen !== null) {
+                        isChecked_Weichteile.current[0].current.checked = datas.verletzungen.weichteile.offen;
+                    }
+
+                    if (datas.verletzungen.weichteile.geschlossen !== null) {
+                        isChecked_Weichteile.current[1].current.checked = datas.verletzungen.weichteile.geschlossen;
+                    }
+
+                    if (datas.verletzungen.weichteile.leicht !== null) {
+                        isChecked_Weichteile.current[2].current.checked = datas.verletzungen.weichteile.leicht;
+                    }
+
+                    if (datas.verletzungen.weichteile.mittel !== null) {
+                        isChecked_Weichteile.current[3].current.checked = datas.verletzungen.weichteile.mittel;
+                    }
+
+                    if (datas.verletzungen.weichteile.schwer !== null) {
+                        isChecked_Weichteile.current[4].current.checked = datas.verletzungen.weichteile.schwer;
+                    }
+
+
+                } else {
+                    navigate('/einstellungen');
+                }
             } else {
                 setLoading(false);
                 navigate('/');
             }
-        }
+
+
+        };
         fetchData();
     }, []);
+
+    const save_datas_verletzungen = async () => {
+
+        try {
+            const response = await axios.put(
+                "http://localhost:8800/protocol_draft/save_datas_verletzungen",
+                {
+                    id: pub_draft_protocol_token.current.obj,
+                    instance_index: parseInt(localStorage.getItem('deutsches_rottes_kreuz_herrenberg_instance')),
+                    /////////////////////////////////////////////////////////////
+                    offen_a: isChecked_Schaedel_Hirn.current[0].current.checked,
+                    geschlossen_a: isChecked_Schaedel_Hirn.current[1].current.checked,
+                    leicht_a: isChecked_Schaedel_Hirn.current[2].current.checked,
+                    mittel_a: isChecked_Schaedel_Hirn.current[3].current.checked,
+                    schwer_a: isChecked_Schaedel_Hirn.current[4].current.checked,
+                    /////////////////////////////////////////////////////////////
+                    offen_b: isChecked_Gesicht.current[0].current.checked,
+                    geschlossen_b: isChecked_Gesicht.current[1].current.checked,
+                    leicht_b: isChecked_Gesicht.current[2].current.checked,
+                    mittel_b: isChecked_Gesicht.current[3].current.checked,
+                    schwer_b: isChecked_Gesicht.current[4].current.checked,
+                    //////////////////////////////////////////////////////////
+                    offen_c: isChecked_HWS.current[0].current.checked,
+                    geschlossen_c: isChecked_HWS.current[1].current.checked,
+                    leicht_c: isChecked_HWS.current[2].current.checked,
+                    mittel_c: isChecked_HWS.current[3].current.checked,
+                    schwer_c: isChecked_HWS.current[4].current.checked,
+                    //////////////////////////////////////////////////////////
+                    offen_d: isChecked_Thorax.current[0].current.checked,
+                    geschlossen_d: isChecked_Thorax.current[1].current.checked,
+                    leicht_d: isChecked_Thorax.current[2].current.checked,
+                    mittel_d: isChecked_Thorax.current[3].current.checked,
+                    schwer_d: isChecked_Thorax.current[4].current.checked,
+                    //////////////////////////////////////////////////////////
+                    offen_e: isChecked_Abdomen.current[0].current.checked,
+                    geschlossen_e: isChecked_Abdomen.current[1].current.checked,
+                    leicht_e: isChecked_Abdomen.current[2].current.checked,
+                    mittel_e: isChecked_Abdomen.current[3].current.checked,
+                    schwer_e: isChecked_Abdomen.current[4].current.checked,
+                    //////////////////////////////////////////////////////////
+                    offen_f: isChecked_BWS_LWS.current[0].current.checked,
+                    geschlossen_f: isChecked_BWS_LWS.current[1].current.checked,
+                    leicht_f: isChecked_BWS_LWS.current[2].current.checked,
+                    mittel_f: isChecked_BWS_LWS.current[3].current.checked,
+                    schwer_f: isChecked_BWS_LWS.current[4].current.checked,
+                    //////////////////////////////////////////////////////////
+                    offen_g: isChecked_Becken.current[0].current.checked,
+                    geschlossen_g: isChecked_Becken.current[1].current.checked,
+                    leicht_g: isChecked_Becken.current[2].current.checked,
+                    mittel_g: isChecked_Becken.current[3].current.checked,
+                    schwer_g: isChecked_Becken.current[4].current.checked,
+                    //////////////////////////////////////////////////////////
+                    offen_h: isChecked_Obere_Extremitaeten.current[0].current.checked,
+                    geschlossen_h: isChecked_Obere_Extremitaeten.current[1].current.checked,
+                    leicht_h: isChecked_Obere_Extremitaeten.current[2].current.checked,
+                    mittel_h: isChecked_Obere_Extremitaeten.current[3].current.checked,
+                    schwer_h: isChecked_Obere_Extremitaeten.current[4].current.checked,
+                    //////////////////////////////////////////////////////////
+                    offen_i: isChecked_Untere_Extremitaeten.current[0].current.checked,
+                    geschlossen_i: isChecked_Untere_Extremitaeten.current[1].current.checked,
+                    leicht_i: isChecked_Untere_Extremitaeten.current[2].current.checked,
+                    mittel_i: isChecked_Untere_Extremitaeten.current[3].current.checked,
+                    schwer_i: isChecked_Untere_Extremitaeten.current[4].current.checked,
+                    //////////////////////////////////////////////////////////
+                    offen_j: isChecked_Weichteile.current[0].current.checked,
+                    geschlossen_j: isChecked_Weichteile.current[1].current.checked,
+                    leicht_j: isChecked_Weichteile.current[2].current.checked,
+                    mittel_j: isChecked_Weichteile.current[3].current.checked,
+                    schwer_j: isChecked_Weichteile.current[4].current.checked
+                    //////////////////////////////////////////////////////////
+
+                }
+            );
+
+            console.log("verletzungen : -------------------------------------------------------------------------------------------------------------------" + response.data);
+        } catch (error) {
+            //console.log(error);
+        }
+    }
+
+    const decode_object = async (token) => {
+        try {
+            const response = await axios.post(
+                "http://localhost:8800/protocol_draft/decodedObject",
+                {},
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+
+            return response.data;
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const get_datas = async () => {
+        const draft_protocol_id = pub_draft_protocol_token.current.obj;
+        const instance = parseInt(localStorage.getItem('deutsches_rottes_kreuz_herrenberg_instance'));
+        console.log("draft_pro_id : " + pub_draft_protocol_token.current.obj);
+        console.log("instanceid : " + instance);
+        try {
+            const response = await axios.post(
+                "http://localhost:8800/protocol_draft/get_datas",
+                {
+                    id: draft_protocol_id,
+                    instance_index: instance
+                }
+            );
+
+            return response.data;
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     const encodeToken = async (userId) => {
         try {
@@ -96,11 +459,19 @@ export default function Verletzungen() {
         }
     };
 
-    const nav_next = () => {
+    const nav_next = async () => {
+        const save = async () => {
+            await save_datas_verletzungen();
+        }
+        await save();
         navigate('/monitoring');
     }
 
-    const nav_previous = () => {
+    const nav_previous = async () => {
+        const save = async () => {
+            await save_datas_verletzungen();
+        }
+        await save();
         navigate('/neurologie');
     }
 

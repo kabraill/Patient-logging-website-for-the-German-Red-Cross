@@ -36,6 +36,7 @@ export default function Monitoring() {
 
 
     const pub_token = useRef();
+    const pub_draft_protocol_token = useRef();
 
     const [loading, setLoading] = useState(true); // Add loading state
 
@@ -67,14 +68,186 @@ export default function Monitoring() {
                 console.log(localStorage.getItem('deutsches_rottes_kreuz_herrenberg_token'));
                 console.log(localStorage.getItem('deutsches_rottes_kreuz_herrenberg_isLoggedIn'));
                 setLoading(false); // Update loading state
+                const draft_protocol_token = localStorage.getItem('deutsches_rottes_kreuz_herrenberg_draft_protocol');
+                const draft_protocol_instance = localStorage.getItem('deutsches_rottes_kreuz_herrenberg_instance');
+                //console.log("load before protcol -----------------------------------------------------------------------------------------");
+                if (draft_protocol_token && draft_protocol_instance) {
 
+                    const decoded_object_a = await decode_object(draft_protocol_token);
+                    pub_draft_protocol_token.current = decoded_object_a;
+                    //console.log("pub_draft_protocol_tokennnnnnnnnnnnnnnnnnnnnn obj : " + pub_draft_protocol_token.current)
+                    const datas = await get_datas();
+
+                    if (typeof datas === 'undefined') {
+                        localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_draft_protocol');
+                        localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_instance');
+                        navigate('/einstellungen');
+                        return;
+                    }
+
+                    console.log("datasssssssssssssssssssssssss : " + datas);
+
+                    if (datas.monitoring.zeit_1 !== null) {
+                        zeit_1.current.value = datas.monitoring.zeit_1;
+                    }
+
+                    if (datas.monitoring.puls_1 !== null) {
+                        puls_1.current.value = datas.monitoring.puls_1;
+
+                        if (puls_1.current.value.match('^([0-9]+)$') || puls_1.current.value === "") {
+                            puls_1_l.current.style.color = "black";
+                        } else {
+                            puls_1_l.current.style.color = "red";
+                        }
+                    } else {
+                        puls_1_l.current.style.color = "black";
+                    }
+
+                    if (datas.monitoring.blutdruck_1 !== null) {
+                        blutdruck_1.current.value = datas.monitoring.blutdruck_1;
+
+                        if (blutdruck_1.current.value.match('^[0-9]{1,3}\\/[0-9]{1,3}$') || blutdruck_1.current.value === "") {
+                            blutdruck_1_l.current.style.color = "black";
+                        } else {
+                            blutdruck_1_l.current.style.color = "red";
+                        }
+                    } else {
+                        blutdruck_1_l.current.style.color = "black";
+                    }
+
+                    if (datas.monitoring.spo2_1 !== null) {
+                        SpO2_1.current.value = datas.monitoring.spo2_1;
+
+                        if (SpO2_1.current.value.match('^([0-9]+)$') || SpO2_1.current.value === "") {
+                            SpO2_1_l.current.style.color = "black";
+                        } else {
+                            SpO2_1_l.current.style.color = "red";
+                        }
+                    } else {
+                        SpO2_1_l.current.style.color = "black";
+                    }
+
+                    ////////////////////////////////////////////////
+
+                    if (datas.monitoring.zeit_2 !== null) {
+                        zeit_2.current.value = datas.monitoring.zeit_2;
+                    }
+
+                    if (datas.monitoring.puls_2 !== null) {
+                        puls_2.current.value = datas.monitoring.puls_2;
+
+                        if (puls_2.current.value.match('^([0-9]+)$') || puls_2.current.value === "") {
+                            puls_2_l.current.style.color = "black";
+                        } else {
+                            puls_2_l.current.style.color = "red";
+                        }
+                    } else {
+                        puls_2_l.current.style.color = "black";
+                    }
+
+                    if (datas.monitoring.blutdruck_2 !== null) {
+                        blutdruck_2.current.value = datas.monitoring.blutdruck_2;
+
+                        if (blutdruck_2.current.value.match('^[0-9]{1,3}\\/[0-9]{1,3}$') || blutdruck_2.current.value === "") {
+                            blutdruck_2_l.current.style.color = "black";
+                        } else {
+                            blutdruck_2_l.current.style.color = "red";
+                        }
+                    } else {
+                        blutdruck_2_l.current.style.color = "black";
+                    }
+
+                    if (datas.monitoring.spo2_2 !== null) {
+                        SpO2_2.current.value = datas.monitoring.spo2_2;
+
+                        if (SpO2_2.current.value.match('^([0-9]+)$') || SpO2_2.current.value === "") {
+                            SpO2_2_l.current.style.color = "black";
+                        } else {
+                            SpO2_2_l.current.style.color = "red";
+                        }
+                    } else {
+                        SpO2_2_l.current.style.color = "black";
+                    }
+
+
+                } else {
+                    navigate('/einstellungen');
+                }
             } else {
                 setLoading(false);
                 navigate('/');
             }
-        }
+
+
+        };
         fetchData();
     }, []);
+
+    const save_datas_monitoring = async () => {
+
+        try {
+            const response = await axios.put(
+                "http://localhost:8800/protocol_draft/save_datas_monitoring",
+                {
+                    id: pub_draft_protocol_token.current.obj,
+                    instance_index: parseInt(localStorage.getItem('deutsches_rottes_kreuz_herrenberg_instance')),
+
+                    zeit_1_a: zeit_1.current.value,
+                    puls_1_a: puls_1.current.value,
+                    blutdruck_1_a: blutdruck_1.current.value,
+                    SpO2_1_a: SpO2_1.current.value,
+
+                    zeit_2_a: zeit_2.current.value,
+                    puls_2_a: puls_2.current.value,
+                    blutdruck_2_a: blutdruck_2.current.value,
+                    SpO2_2_a: SpO2_2.current.value,
+                }
+            );
+
+            console.log("beteiligte_einsatzkraefte : -------------------------------------------------------------------------------------------------------------------" + response.data);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const decode_object = async (token) => {
+        try {
+            const response = await axios.post(
+                "http://localhost:8800/protocol_draft/decodedObject",
+                {},
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+
+            return response.data;
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const get_datas = async () => {
+        const draft_protocol_id = pub_draft_protocol_token.current.obj;
+        const instance = parseInt(localStorage.getItem('deutsches_rottes_kreuz_herrenberg_instance'));
+        console.log("draft_pro_id : " + pub_draft_protocol_token.current.obj);
+        console.log("instanceid : " + instance);
+        try {
+            const response = await axios.post(
+                "http://localhost:8800/protocol_draft/get_datas",
+                {
+                    id: draft_protocol_id,
+                    instance_index: instance
+                }
+            );
+
+            return response.data;
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     const encodeToken = async (userId) => {
         try {
@@ -106,11 +279,19 @@ export default function Monitoring() {
         }
     };
 
-    const nav_next = () => {
+    const nav_next = async () => {
+        const save = async () => {
+            await save_datas_monitoring();
+        }
+        await save();
         navigate('/massnahmen_einsatzart');
     }
 
-    const nav_previous = () => {
+    const nav_previous = async () => {
+        const save = async () => {
+            await save_datas_monitoring();
+        }
+        await save();
         navigate('/verletzungen');
     }
 
@@ -133,7 +314,7 @@ export default function Monitoring() {
     };
 
     const handleChange_SpO2_1 = (e) => {
-        
+
         if (e.target.value.match('^([0-9]+)$') || e.target.value === "") {
             SpO2_1_l.current.style.color = "black";
         } else {
@@ -142,7 +323,7 @@ export default function Monitoring() {
     };
 
     const handleChange_puls_2 = (e) => {
-        
+
         if (e.target.value.match('^([0-9]+)$') || e.target.value === "") {
             puls_2_l.current.style.color = "black";
         } else {
@@ -151,7 +332,7 @@ export default function Monitoring() {
     };
 
     const handleChange_blutdruck_2 = (e) => {
-    
+
         if (e.target.value.match('^[0-9]{1,3}\\/[0-9]{1,3}$') || e.target.value === "") {
             blutdruck_2_l.current.style.color = "black";
         } else {
@@ -160,7 +341,7 @@ export default function Monitoring() {
     };
 
     const handleChange_SpO2_2 = (e) => {
-        
+
         if (e.target.value.match('^([0-9]+)$') || e.target.value === "") {
             SpO2_2_l.current.style.color = "black";
         } else {
