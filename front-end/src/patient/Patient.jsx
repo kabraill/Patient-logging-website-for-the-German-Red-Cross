@@ -15,7 +15,9 @@ import {
 export default function Patient() {
 
     const navigate = useNavigate();
-    
+
+    const [datasss, setDatasss] = useState();
+
     const gender = useRef("unbekannt");
     const alter = useRef("");
 
@@ -71,9 +73,8 @@ export default function Patient() {
                         navigate('/einstellungen');
                         return;
                     }
-
                     console.log("datasssssssssssssssssssssssss : " + datas);
-
+                    setDatasss(datas);
                     if (datas.patient.geschlecht !== null) {
                         gender.current.value = datas.patient.geschlecht;
 
@@ -109,7 +110,45 @@ export default function Patient() {
 
         };
         fetchData();
+
+
+
+        // Attach the event listener for beforeunload
+        //window.addEventListener("beforeunload", handleBeforeUnload);
+        //window.addEventListener("unload", handleBeforeUnload);
+
+        /*return () => {
+            // Clean up: remove the event listener before component unmounts
+            //if (a.current == 2) {
+            window.removeEventListener("beforeunload", handleBeforeUnload);
+            //window.removeEventListener("unload", handleBeforeUnload);
+            //}
+            //a.current = a.current + 1;
+        };*/
     }, []);
+
+    const handleBeforeUnload = (event) => {
+        // Save the patient data synchronously before unmounting the component
+        try {
+            const response = axios.put(
+                "http://localhost:8800/protocol_draft/save_datas_patient",
+                {
+                    id: pub_draft_protocol_token.current.obj,
+                    instance_index: parseInt(localStorage.getItem('deutsches_rottes_kreuz_herrenberg_instance')),
+                    geschlecht_a: gender.current.value,
+                    alter_a: alter.current.value
+                }
+            );
+
+            console.log("beteiligte_einsatzkraefte : -------------------------------------------------------------------------------------------------------------------" + response.data);
+        } catch (error) {
+            console.log(error);
+        }
+
+        // This message is ignored by most modern browsers, but it is required
+        // for older browsers to display a custom message to the user.
+        event.returnValue = 'Are you sure you want to leave this page?';
+    };
 
     const save_datas_patient = async () => {
 
@@ -216,7 +255,7 @@ export default function Patient() {
     }
 
     function handleOnChange(e) {
-        
+
         if (e.target.value === "unbekannt") {
             gender_l.current.style.color = "red";
         } else {
@@ -232,6 +271,62 @@ export default function Patient() {
         }
     }
 
+    const delete_d = async () => {
+        const userResponse = window.confirm("Sind Sie sicher, dass Sie das Protokoll löschen möchten?");
+
+        if (userResponse) {
+            const draft_protocol_id = pub_draft_protocol_token.current.obj;
+            const instance = parseInt(localStorage.getItem('deutsches_rottes_kreuz_herrenberg_instance'));
+
+            try {
+                const response = await axios.post(
+                    "http://localhost:8800/protocol_draft/delete",
+                    {
+                        id: draft_protocol_id,
+                        instance_index: instance
+                    }
+                );
+
+            } catch (error) {
+                console.log(error);
+            }
+
+            localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_draft_protocol');
+            localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_instance');
+            console.log("deeeeeeellllllllllllllleeeeeeeeeeeeeeeeeeeeeetttttttteeeeeeeeeeeee");
+            navigate('/einstellungen');
+        } else {
+
+        }
+    };
+
+    const instanz_erstellen = async () => {
+        const userResponse = window.confirm("Sind Sie sicher, dass Sie ein neues Instanz erstellen möchten?");
+
+        if (userResponse) {
+            const draft_protocol_id = pub_draft_protocol_token.current.obj;
+            const instance = parseInt(localStorage.getItem('deutsches_rottes_kreuz_herrenberg_instance'));
+
+            try {
+                const response = await axios.post(
+                    "http://localhost:8800/protocol_draft/create_instance",
+                    {
+                        id: draft_protocol_id,
+                        instance_index: instance
+                    }
+                );
+
+                localStorage.setItem('deutsches_rottes_kreuz_herrenberg_instance', response.data.toString());
+            } catch (error) {
+                console.log(error);
+            }
+
+            alert("Sie haben ein neues instanz vom Protokoll erstellt");
+        } else {
+
+        }
+    };
+
     if (loading) {
         return (<div style={{ pointerEvents: "none" }} className="patient">
             <Sidebar currentPage="patient" />
@@ -246,8 +341,9 @@ export default function Patient() {
 
     return (
         <div className="patient">
-            <Sidebar currentPage="patient" />
-            <Topbar />
+            <Sidebar currentPage="patient" save_a={save_datas_patient} datas={datasss} 
+            del={delete_d} instanz_erstellen={instanz_erstellen}/>
+            <Topbar currentPage="patient" datas={datasss} />
             <div onClick={() => {
                 document.getElementById("sidebar_mc_id").style.width = "0px";
                 document.getElementById("sidebar_mc_id").style.border = "none";

@@ -17,6 +17,8 @@ export default function Massnahmen_einsatzart() {
 
     const navigate = useNavigate();
 
+    const [datasss, setDatasss] = useState();
+
     const ischeckedMassnahmen_value = useRef([useRef(), useRef(), useRef(), useRef(), useRef(), useRef(), useRef(), useRef(),
     useRef(), useRef(), useRef(), useRef(), useRef(), useRef(), useRef(), useRef(), useRef(), useRef(), useRef()]);
     const sonstigg = useRef();
@@ -83,7 +85,7 @@ export default function Massnahmen_einsatzart() {
                         navigate('/einstellungen');
                         return;
                     }
-
+                    setDatasss(datas);
                     console.log("datasssssssssssssssssssssssss : " + datas);
 
                     if (datas.massnahmen_einsatzart.massnahmen.atemwege_freimachen !== null) {
@@ -453,7 +455,61 @@ export default function Massnahmen_einsatzart() {
         }
     }
 
+    const delete_d = async () => {
+        const userResponse = window.confirm("Sind Sie sicher, dass Sie das Protokoll löschen möchten?");
 
+        if (userResponse) {
+            const draft_protocol_id = pub_draft_protocol_token.current.obj;
+            const instance = parseInt(localStorage.getItem('deutsches_rottes_kreuz_herrenberg_instance'));
+
+            try {
+                const response = await axios.post(
+                    "http://localhost:8800/protocol_draft/delete",
+                    {
+                        id: draft_protocol_id,
+                        instance_index: instance
+                    }
+                );
+
+            } catch (error) {
+                console.log(error);
+            }
+
+            localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_draft_protocol');
+            localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_instance');
+            console.log("deeeeeeellllllllllllllleeeeeeeeeeeeeeeeeeeeeetttttttteeeeeeeeeeeee");
+            navigate('/einstellungen');
+        } else {
+
+        }
+    };
+
+    const instanz_erstellen = async () => {
+        const userResponse = window.confirm("Sind Sie sicher, dass Sie ein neues Instanz erstellen möchten?");
+
+        if (userResponse) {
+            const draft_protocol_id = pub_draft_protocol_token.current.obj;
+            const instance = parseInt(localStorage.getItem('deutsches_rottes_kreuz_herrenberg_instance'));
+
+            try {
+                const response = await axios.post(
+                    "http://localhost:8800/protocol_draft/create_instance",
+                    {
+                        id: draft_protocol_id,
+                        instance_index: instance
+                    }
+                );
+
+                localStorage.setItem('deutsches_rottes_kreuz_herrenberg_instance', response.data.toString());
+            } catch (error) {
+                console.log(error);
+            }
+
+            alert("Sie haben ein neues instanz vom Protokoll erstellt");
+        } else {
+
+        }
+    };
 
     if (loading) {
         return (<div style={{ pointerEvents: "none" }} className="massnahmen_einsatzart">
@@ -469,8 +525,9 @@ export default function Massnahmen_einsatzart() {
 
     return (
         <div className="massnahmen_einsatzart">
-            <Sidebar currentPage="massnahmen_einsatzart" />
-            <Topbar />
+            <Sidebar currentPage="massnahmen_einsatzart" save_a={save_datas_massnahmen_einsatzart} datas={datasss}
+            del={delete_d} instanz_erstellen={instanz_erstellen} />
+            <Topbar currentPage="massnahmen_einsatzart" datas={datasss} />
             <div onClick={() => {
                 document.getElementById("sidebar_mc_id").style.width = "0px";
                 document.getElementById("sidebar_mc_id").style.border = "none";

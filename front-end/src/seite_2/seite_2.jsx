@@ -16,7 +16,9 @@ import axios from "axios";
 export default function Seite_2() {
 
     const navigate = useNavigate();
-    
+
+    const [datasss, setDatasss] = useState();
+
     const isChecked = useRef([useRef(), useRef(), useRef()]);
     const Einsatzkraefte_patienten = useRef([useRef(), useRef(), useRef()]);
     const Einsatzkraefte_ort = useRef([useRef(), useRef(), useRef()]);
@@ -73,23 +75,25 @@ export default function Seite_2() {
                         navigate('/einstellungen');
                         return;
                     }
-                    
+
+                    setDatasss(datas);
+
                     console.log("datasssssssssssssssssssssssss : " + datas);
 
                     if (datas.beteiligte_einsatzkraefte.eingesetzte_fahrzeuge.privat_pkw !== null) {
-                        
+
                         isChecked.current[0].current.checked = datas.beteiligte_einsatzkraefte.eingesetzte_fahrzeuge.privat_pkw;
                         //console.log("belueftung.unauffaellig : " + isChecked_belueftung.current[0].current.checked)
                     }
 
                     if (datas.beteiligte_einsatzkraefte.eingesetzte_fahrzeuge.feuerwehr_mtw !== null) {
-                        
+
                         isChecked.current[1].current.checked = datas.beteiligte_einsatzkraefte.eingesetzte_fahrzeuge.feuerwehr_mtw;
                         //console.log("belueftung.unauffaellig : " + isChecked_belueftung.current[1].current.checked)
                     }
 
                     if (datas.beteiligte_einsatzkraefte.eingesetzte_fahrzeuge.z_58_19_2 !== null) {
-                        
+
                         isChecked.current[2].current.checked = datas.beteiligte_einsatzkraefte.eingesetzte_fahrzeuge.z_58_19_2;
                         //console.log("belueftung.unauffaellig : " + isChecked_belueftung.current[2].current.checked)
                     }
@@ -97,7 +101,7 @@ export default function Seite_2() {
                     const map_array1 = Object.values(datas.beteiligte_einsatzkraefte.eingesetzte_fahrzeuge);
 
 
-                    if(map_array1.includes(null)){
+                    if (map_array1.includes(null)) {
                         eingesetzte_fahrzeuge_l.current.style.color = "red";
                     } else {
                         if (map_array1.includes(true)) {
@@ -109,24 +113,24 @@ export default function Seite_2() {
 
 
                     if (datas.beteiligte_einsatzkraefte.einsatzkraefte_am_patienten.x !== null) {
-                        
+
                         Einsatzkraefte_patienten.current[0].current.checked = datas.beteiligte_einsatzkraefte.einsatzkraefte_am_patienten.x;
                     }
 
                     if (datas.beteiligte_einsatzkraefte.einsatzkraefte_am_patienten.y !== null) {
-                        
+
                         Einsatzkraefte_patienten.current[1].current.checked = datas.beteiligte_einsatzkraefte.einsatzkraefte_am_patienten.y;
                     }
 
                     if (datas.beteiligte_einsatzkraefte.einsatzkraefte_am_patienten.z !== null) {
-                        
+
                         Einsatzkraefte_patienten.current[2].current.checked = datas.beteiligte_einsatzkraefte.einsatzkraefte_am_patienten.z;
                     }
 
                     const map_array2 = Object.values(datas.beteiligte_einsatzkraefte.einsatzkraefte_am_patienten);
 
-                    
-                    if(map_array2.includes(null)){
+
+                    if (map_array2.includes(null)) {
                         Einsatzkraefte_patienten_l.current.style.color = "red";
                     } else {
                         if (map_array2.includes(true)) {
@@ -138,17 +142,17 @@ export default function Seite_2() {
 
 
                     if (datas.beteiligte_einsatzkraefte.einsatzkraefte_vor_ort.x !== null) {
-                        
+
                         Einsatzkraefte_ort.current[0].current.checked = datas.beteiligte_einsatzkraefte.einsatzkraefte_vor_ort.x;
                     }
 
                     if (datas.beteiligte_einsatzkraefte.einsatzkraefte_vor_ort.y !== null) {
-                        
+
                         Einsatzkraefte_ort.current[1].current.checked = datas.beteiligte_einsatzkraefte.einsatzkraefte_vor_ort.y;
                     }
 
                     if (datas.beteiligte_einsatzkraefte.einsatzkraefte_vor_ort.z !== null) {
-                        
+
                         Einsatzkraefte_ort.current[2].current.checked = datas.beteiligte_einsatzkraefte.einsatzkraefte_vor_ort.z;
                     }
 
@@ -165,7 +169,7 @@ export default function Seite_2() {
 
         };
         fetchData();
-        
+
     }, []);
 
     const save_datas_beteiligte_einsatzkraefte = async () => {
@@ -319,6 +323,62 @@ export default function Seite_2() {
 
     }
 
+    const delete_d = async () => {
+        const userResponse = window.confirm("Sind Sie sicher, dass Sie das Protokoll löschen möchten?");
+
+        if (userResponse) {
+            const draft_protocol_id = pub_draft_protocol_token.current.obj;
+            const instance = parseInt(localStorage.getItem('deutsches_rottes_kreuz_herrenberg_instance'));
+
+            try {
+                const response = await axios.post(
+                    "http://localhost:8800/protocol_draft/delete",
+                    {
+                        id: draft_protocol_id,
+                        instance_index: instance
+                    }
+                );
+
+            } catch (error) {
+                console.log(error);
+            }
+
+            localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_draft_protocol');
+            localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_instance');
+            console.log("deeeeeeellllllllllllllleeeeeeeeeeeeeeeeeeeeeetttttttteeeeeeeeeeeee");
+            navigate('/einstellungen');
+        } else {
+
+        }
+    };
+
+    const instanz_erstellen = async () => {
+        const userResponse = window.confirm("Sind Sie sicher, dass Sie ein neues Instanz erstellen möchten?");
+
+        if (userResponse) {
+            const draft_protocol_id = pub_draft_protocol_token.current.obj;
+            const instance = parseInt(localStorage.getItem('deutsches_rottes_kreuz_herrenberg_instance'));
+
+            try {
+                const response = await axios.post(
+                    "http://localhost:8800/protocol_draft/create_instance",
+                    {
+                        id: draft_protocol_id,
+                        instance_index: instance
+                    }
+                );
+
+                localStorage.setItem('deutsches_rottes_kreuz_herrenberg_instance', response.data.toString());
+            } catch (error) {
+                console.log(error);
+            }
+
+            alert("Sie haben ein neues instanz vom Protokoll erstellt");
+        } else {
+
+        }
+    };
+
     if (loading) {
         return (<div style={{ pointerEvents: "none" }} className="s2">
             <Sidebar currentPage="beteiligte_einsatzkraefte" />
@@ -333,8 +393,9 @@ export default function Seite_2() {
 
     return (
         <div className="s2">
-            <Sidebar currentPage="beteiligte_einsatzkraefte" />
-            <Topbar />
+            <Sidebar currentPage="beteiligte_einsatzkraefte" save_a={save_datas_beteiligte_einsatzkraefte} datas={datasss}
+                del={delete_d} instanz_erstellen={instanz_erstellen} />
+            <Topbar currentPage="beteiligte_einsatzkraefte" datas={datasss} />
             <div onClick={() => {
                 document.getElementById("sidebar_mc_id").style.width = "0px";
                 document.getElementById("sidebar_mc_id").style.border = "none";

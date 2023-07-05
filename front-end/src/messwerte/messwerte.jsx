@@ -17,6 +17,7 @@ export default function Messwerte() {
 
     const navigate = useNavigate();
 
+    const [datasss, setDatasss] = useState();
 
     const PulsValue = useRef();
     const BlutdruckValue = useRef();
@@ -76,42 +77,7 @@ export default function Messwerte() {
                         navigate('/einstellungen');
                         return;
                     }
-
-                    if (datas.messwerte.puls !== null) {
-                        PulsValue.current.value = datas.messwerte.puls;
-
-                        if (PulsValue.current.value.match("^([0-9]+)$") || PulsValue.current.value === "") {
-                            PulsValue_l.current.style.color = "black";
-                        } else {
-                            PulsValue_l.current.style.color = "red";
-                        }
-                    } else {
-                        PulsValue_l.current.style.color = "black";
-                    }
-
-                    if (datas.messwerte.blutdruck !== null) {
-                        BlutdruckValue.current.value = datas.messwerte.blutdruck;
-
-                        if (BlutdruckValue.current.value.match('^[0-9]{2,3}\\/[0-9]{2,3}$') || BlutdruckValue.current.value === "") {
-                            BlutdruckValue_l.current.style.color = "black";
-                        } else {
-                            BlutdruckValue_l.current.style.color = "red";
-                        }
-                    } else {
-                        BlutdruckValue_l.current.style.color = "black";
-                    }
-
-                    if (datas.messwerte.spo2 !== null) {
-                        SPo2Value.current.value = datas.messwerte.spo2;
-
-                        if (SPo2Value.current.value.match("^([0-9]+)$") || SPo2Value.current.value === "") {
-                            SPo2Value_l.current.style.color = "black";
-                        } else {
-                            SPo2Value_l.current.style.color = "red";
-                        }
-                    } else {
-                        SPo2Value_l.current.style.color = "black";
-                    }
+                    setDatasss(datas)
 
                     console.log("-------//////////////////////////////////////////////////////////////////////");
                     if (datas.messwerte.keine_messwerte !== null) {
@@ -123,14 +89,103 @@ export default function Messwerte() {
                             PulsValue.current.disabled = true;
                             BlutdruckValue.current.disabled = true;
                             SPo2Value.current.disabled = true;
+
+                            PulsValue_l.current.style.color = "black";
+                            BlutdruckValue_l.current.style.color = "black";
+                            SPo2Value_l.current.style.color = "black";
+
+                            if (datas.messwerte.puls !== null) {
+                                PulsValue.current.value = datas.messwerte.puls;
+                            }
+
+                            if (datas.messwerte.blutdruck !== null) {
+                                BlutdruckValue.current.value = datas.messwerte.blutdruck;
+                            }
+
+                            if (datas.messwerte.spo2 !== null) {
+                                SPo2Value.current.value = datas.messwerte.spo2;
+                            }
+
+
                         } else {
                             document.getElementById("messwerte_keine_messwerte_label").style.background = "rgb(255, 255, 255)";
                             PulsValue.current.disabled = false;
                             BlutdruckValue.current.disabled = false;
                             SPo2Value.current.disabled = false;
+
+                            if (datas.messwerte.puls !== null) {
+                                PulsValue.current.value = datas.messwerte.puls;
+                                if (PulsValue.current.value.match("^([0-9]+)$") || PulsValue.current.value === "") {
+                                    PulsValue_l.current.style.color = "black";
+                                } else {
+                                    PulsValue_l.current.style.color = "red";
+                                }
+                            } else {
+                                PulsValue_l.current.style.color = "black";
+                            }
+
+                            if (datas.messwerte.blutdruck !== null) {
+                                BlutdruckValue.current.value = datas.messwerte.blutdruck;
+                                if (BlutdruckValue.current.value.match('^[0-9]{2,3}\\/[0-9]{2,3}$') || BlutdruckValue.current.value === "") {
+                                    BlutdruckValue_l.current.style.color = "black";
+                                } else {
+                                    BlutdruckValue_l.current.style.color = "red";
+                                }
+                            } else {
+                                BlutdruckValue_l.current.style.color = "black";
+                            }
+
+                            if (datas.messwerte.spo2 !== null) {
+                                SPo2Value.current.value = datas.messwerte.spo2;
+                                if (SPo2Value.current.value.match("^([0-9]+)$") || SPo2Value.current.value === "") {
+                                    SPo2Value_l.current.style.color = "black";
+                                } else {
+                                    SPo2Value_l.current.style.color = "red";
+                                }
+                            } else {
+                                SPo2Value_l.current.style.color = "black";
+                            }
+
+
                         }
                     } else {
                         document.getElementById("messwerte_keine_messwerte_label").style.background = "rgb(255, 255, 255)";
+
+                        if (datas.messwerte.puls !== null) {
+                            PulsValue.current.value = datas.messwerte.puls;
+
+                            if (PulsValue.current.value.match("^([0-9]+)$") || PulsValue.current.value === "") {
+                                PulsValue_l.current.style.color = "black";
+                            } else {
+                                PulsValue_l.current.style.color = "red";
+                            }
+                        } else {
+                            PulsValue_l.current.style.color = "black";
+                        }
+
+                        if (datas.messwerte.blutdruck !== null) {
+                            BlutdruckValue.current.value = datas.messwerte.blutdruck;
+
+                            if (BlutdruckValue.current.value.match('^[0-9]{2,3}\\/[0-9]{2,3}$') || BlutdruckValue.current.value === "") {
+                                BlutdruckValue_l.current.style.color = "black";
+                            } else {
+                                BlutdruckValue_l.current.style.color = "red";
+                            }
+                        } else {
+                            BlutdruckValue_l.current.style.color = "black";
+                        }
+
+                        if (datas.messwerte.spo2 !== null) {
+                            SPo2Value.current.value = datas.messwerte.spo2;
+
+                            if (SPo2Value.current.value.match("^([0-9]+)$") || SPo2Value.current.value === "") {
+                                SPo2Value_l.current.style.color = "black";
+                            } else {
+                                SPo2Value_l.current.style.color = "red";
+                            }
+                        } else {
+                            SPo2Value_l.current.style.color = "black";
+                        }
                     }
 
                 } else {
@@ -287,15 +342,93 @@ export default function Messwerte() {
             PulsValue.current.disabled = true;
             BlutdruckValue.current.disabled = true;
             SPo2Value.current.disabled = true;
+
+            PulsValue_l.current.style.color = "black";
+            BlutdruckValue_l.current.style.color = "black";
+            SPo2Value_l.current.style.color = "black";
+
         } else {
             document.getElementById("messwerte_keine_messwerte_label").style.background = "rgb(255, 255, 255)";
             PulsValue.current.disabled = false;
             BlutdruckValue.current.disabled = false;
             SPo2Value.current.disabled = false;
+
+            if (PulsValue.current.value.match("^([0-9]+)$") || PulsValue.current.value === "") {
+                PulsValue_l.current.style.color = "black";
+            } else {
+                PulsValue_l.current.style.color = "red";
+            }
+
+            if (BlutdruckValue.current.value.match('^[0-9]{2,3}\\/[0-9]{2,3}$') || BlutdruckValue.current.value === "") {
+                BlutdruckValue_l.current.style.color = "black";
+            } else {
+                BlutdruckValue_l.current.style.color = "red";
+            }
+
+            if (SPo2Value.current.value.match("^([0-9]+)$") || SPo2Value.current.value === "") {
+                SPo2Value_l.current.style.color = "black";
+            } else {
+                SPo2Value_l.current.style.color = "red";
+            }
         }
     }
 
+    const delete_d = async () => {
+        const userResponse = window.confirm("Sind Sie sicher, dass Sie das Protokoll löschen möchten?");
 
+        if (userResponse) {
+            const draft_protocol_id = pub_draft_protocol_token.current.obj;
+            const instance = parseInt(localStorage.getItem('deutsches_rottes_kreuz_herrenberg_instance'));
+
+            try {
+                const response = await axios.post(
+                    "http://localhost:8800/protocol_draft/delete",
+                    {
+                        id: draft_protocol_id,
+                        instance_index: instance
+                    }
+                );
+
+            } catch (error) {
+                console.log(error);
+            }
+
+            localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_draft_protocol');
+            localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_instance');
+            console.log("deeeeeeellllllllllllllleeeeeeeeeeeeeeeeeeeeeetttttttteeeeeeeeeeeee");
+            navigate('/einstellungen');
+        } else {
+
+        }
+
+    };
+
+    const instanz_erstellen = async () => {
+        const userResponse = window.confirm("Sind Sie sicher, dass Sie ein neues Instanz erstellen möchten?");
+
+        if (userResponse) {
+            const draft_protocol_id = pub_draft_protocol_token.current.obj;
+            const instance = parseInt(localStorage.getItem('deutsches_rottes_kreuz_herrenberg_instance'));
+
+            try {
+                const response = await axios.post(
+                    "http://localhost:8800/protocol_draft/create_instance",
+                    {
+                        id: draft_protocol_id,
+                        instance_index: instance
+                    }
+                );
+
+                localStorage.setItem('deutsches_rottes_kreuz_herrenberg_instance', response.data.toString());
+            } catch (error) {
+                console.log(error);
+            }
+
+            alert("Sie haben ein neues instanz vom Protokoll erstellt");
+        } else {
+
+        }
+    };
 
     if (loading) {
         return (<div style={{ pointerEvents: "none" }} className="messwerte">
@@ -311,8 +444,9 @@ export default function Messwerte() {
 
     return (
         <div className="messwerte">
-            <Sidebar currentPage="messwerte" />
-            <Topbar />
+            <Sidebar currentPage="messwerte" save_a={save_datas_messwerte} datas={datasss} 
+            del={delete_d} instanz_erstellen={instanz_erstellen}/>
+            <Topbar currentPage="messwerte" datas={datasss} />
             <div onClick={() => {
                 document.getElementById("sidebar_mc_id").style.width = "0px";
                 document.getElementById("sidebar_mc_id").style.border = "none";

@@ -56,6 +56,45 @@ router.post('/get_datas', async (req, res) => {
     }
 });
 
+router.post('/delete', async (req, res) => {
+    try {
+        const draft_proto = await DraftProtocol.findById(req.body.id);
+
+        if (draft_proto && draft_proto.content) {
+            if (req.body.instance_index >= 0 && req.body.instance_index < draft_proto.content.length) {
+                draft_proto.content.splice(req.body.instance_index, 1);
+                await draft_proto.save();
+                res.json(draft_proto); // You can return the updated draft_proto if needed
+            } else {
+                return res.status(400).json("Invalid index provided");
+            }
+            //DraftProtocol
+                await DraftProtocol.deleteOne({_id: req.body.id, 'content': { $size: 0 } });
+        } else {
+            return res.status(404).json("Protocol not found");
+        }
+    } catch (error) {
+        res.sendStatus(500);
+    }
+});
+//return res.status(200).json(elementAtIndex);
+router.post('/create_instance', async (req, res) => {
+    try {
+        const draft_proto = await DraftProtocol.findById(req.body.id);
+
+        if (draft_proto && draft_proto.content) {
+            const elementAtIndex = draft_proto.content[req.body.instance_index];
+            draft_proto.content.push(elementAtIndex);
+            await draft_proto.save();
+            res.json(draft_proto.content.length - 1);
+
+        } else {
+            return res.status(404).json("Protocol nicht gefunden");
+        }
+    } catch (error) {
+        res.sendStatus(500);
+    }
+});
 //einstellungen///////////////////////////////////////////////////////////////////////////////
 
 router.post('/create', async (req, res) => {

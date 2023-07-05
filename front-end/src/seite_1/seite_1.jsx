@@ -17,9 +17,10 @@ import { useNavigate } from "react-router-dom";
 export default function Seite_1() {
     const navigate = useNavigate();
 
+    const [datasss, setDatasss] = useState();
 
-
-
+    const protokoll_id = useRef();
+    const instance_id = useRef();
     const special_marking_name = useRef();
     const special_marking_color = useRef();
     const alarmkey = useRef();
@@ -85,15 +86,20 @@ export default function Seite_1() {
                     //console.log("pub_draft_protocol_tokennnnnnnnnnnnnnnnnnnnnn obj : " + pub_draft_protocol_token.current)
                     const datas = await get_datas();
 
+
                     if (typeof datas === 'undefined') {
                         localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_draft_protocol');
                         localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_instance');
                         navigate('/einstellungen');
                         return;
                     }
+                    setDatasss(datas);
+                    console.log("datasssssssssssssssssssssssss : " + datas);
+                    if (datas._id !== null) {
+                        protokoll_id.current.value = pub_draft_protocol_token.current.obj;
+                    }
 
-                    //console.log("datasssssssssssssssssssssssss : " + datas);
-
+                    instance_id.current.value = draft_protocol_instance;
 
                     if (datas.einsatzdaten.special_marking_name !== null) {
                         special_marking_name.current.value = datas.einsatzdaten.special_marking_name;
@@ -119,25 +125,41 @@ export default function Seite_1() {
                         checkbox_auftragsnummer.current.checked = datas.einsatzdaten.keine_auftragnummer;
                         if (datas.einsatzdaten.keine_auftragnummer === true) {
                             auftragsnummer.current.disabled = true;
+                            auftragsnummer_l.current.style.color = "black";
                             document.getElementById("s1_keine_nummer").style.background = "rgb(220, 220, 220)";
+
+                            if (datas.einsatzdaten.auftragsnummer !== null) {
+                                auftragsnummer.current.value = datas.einsatzdaten.auftragsnummer;
+                            }
                         } else {
                             auftragsnummer.current.disabled = false;
                             document.getElementById("s1_keine_nummer").style.background = "rgb(255, 255, 255)";
+                            if (datas.einsatzdaten.auftragsnummer !== null) {
+                                auftragsnummer.current.value = datas.einsatzdaten.auftragsnummer;
+                                if (datas.einsatzdaten.auftragsnummer.match('^([0-9]+)$')) {
+                                    auftragsnummer_l.current.style.color = "black";
+                                } else {
+                                    auftragsnummer_l.current.style.color = "red";
+                                }
+                            } else {
+                                auftragsnummer_l.current.style.color = "red";
+                            }
                         }
                     } else {
                         document.getElementById("s1_keine_nummer").style.background = "rgb(255, 255, 255)";
-                    }
-
-                    if (datas.einsatzdaten.auftragsnummer !== null) {
-                        auftragsnummer.current.value = datas.einsatzdaten.auftragsnummer;
-                        if (datas.einsatzdaten.auftragsnummer.match('^([0-9]+)$')) {
-                            auftragsnummer_l.current.style.color = "black";
+                        if (datas.einsatzdaten.auftragsnummer !== null) {
+                            auftragsnummer.current.value = datas.einsatzdaten.auftragsnummer;
+                            if (datas.einsatzdaten.auftragsnummer.match('^([0-9]+)$')) {
+                                auftragsnummer_l.current.style.color = "black";
+                            } else {
+                                auftragsnummer_l.current.style.color = "red";
+                            }
                         } else {
                             auftragsnummer_l.current.style.color = "red";
                         }
-                    } else {
-                        auftragsnummer_l.current.style.color = "red";
                     }
+
+
 
 
 
@@ -345,9 +367,17 @@ export default function Seite_1() {
         if (e.target.checked === true) {
             document.getElementById("s1_keine_nummer").style.background = "rgb(220, 220, 220)";
             auftragsnummer.current.disabled = true;
+            auftragsnummer_l.current.style.color = "black";
         } else {
             document.getElementById("s1_keine_nummer").style.background = "rgb(255, 255, 255)";
             auftragsnummer.current.disabled = false;
+
+            if (auftragsnummer.current.value.match('^([0-9]+)$')) {
+                auftragsnummer_l.current.style.color = "black";
+            } else {
+                auftragsnummer_l.current.style.color = "red";
+            }
+
         }
     }
 
@@ -372,6 +402,71 @@ export default function Seite_1() {
 
     }
 
+    function kopieren_id() {
+        navigator.clipboard.writeText(protokoll_id.current.value);
+    }
+
+    function kopieren_instance() {
+        navigator.clipboard.writeText(instance_id.current.value);
+    }
+
+    const delete_d = async () => {
+        const userResponse = window.confirm("Sind Sie sicher, dass Sie das Protokoll löschen möchten?");
+
+        if (userResponse) {
+            const draft_protocol_id = pub_draft_protocol_token.current.obj;
+            const instance = parseInt(localStorage.getItem('deutsches_rottes_kreuz_herrenberg_instance'));
+
+            try {
+                const response = await axios.post(
+                    "http://localhost:8800/protocol_draft/delete",
+                    {
+                        id: draft_protocol_id,
+                        instance_index: instance
+                    }
+                );
+
+            } catch (error) {
+                console.log(error);
+            }
+
+            localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_draft_protocol');
+            localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_instance');
+            console.log("deeeeeeellllllllllllllleeeeeeeeeeeeeeeeeeeeeetttttttteeeeeeeeeeeee");
+            navigate('/einstellungen');
+        } else {
+
+        }
+    };
+
+    const instanz_erstellen = async () => {
+        const userResponse = window.confirm("Sind Sie sicher, dass Sie ein neues Instanz erstellen möchten?");
+
+        if (userResponse) {
+            const draft_protocol_id = pub_draft_protocol_token.current.obj;
+            const instance = parseInt(localStorage.getItem('deutsches_rottes_kreuz_herrenberg_instance'));
+
+            try {
+                const response = await axios.post(
+                    "http://localhost:8800/protocol_draft/create_instance",
+                    {
+                        id: draft_protocol_id,
+                        instance_index: instance
+                    }
+                );
+                
+                localStorage.setItem('deutsches_rottes_kreuz_herrenberg_instance', response.data.toString());
+                instance_id.current.value = response.data.toString();
+            } catch (error) {
+                console.log(error);
+            }
+
+            alert("Sie haben ein neues instanz vom Protokoll erstellt");
+        } else {
+
+        }
+    };
+
     if (loading) {
         return (<div style={{ pointerEvents: "none" }} className="s1">
             <Sidebar currentPage="einsatzdaten" />
@@ -387,8 +482,9 @@ export default function Seite_1() {
     return (
 
         <div className="s1">
-            <Sidebar currentPage="einsatzdaten" />
-            <Topbar />
+            <Sidebar currentPage="einsatzdaten" save_a={save_datas_einsatzdaten} datas={datasss}
+                del={delete_d} instanz_erstellen={instanz_erstellen}/>
+            <Topbar currentPage="einsatzdaten" datas={datasss} />
             <div onClick={() => {
                 document.getElementById("sidebar_mc_id").style.width = "0px";
                 document.getElementById("sidebar_mc_id").style.border = "none";
@@ -397,6 +493,37 @@ export default function Seite_1() {
                     Einsatzdaten
                 </span>
                 <div className="s1_body_components">
+
+                    <div className="s1_body_components_line">
+                        <span className="s1_body_components_line_label">
+                            Protokoll-ID:
+                        </span>
+                        <div className="s1_body_components_line_right">
+                            <input required type="text"
+                                className="s1_body_components_line_right_txt"
+                                ref={protokoll_id}
+                                disabled={true}
+                            />
+
+                            <button onClick={kopieren_id}>Kopieren</button>
+                        </div>
+                    </div>
+                    <div className="horizontal-line"></div>
+                    <div className="s1_body_components_line">
+                        <span className="s1_body_components_line_label">
+                            Instance-Nummer:
+                        </span>
+                        <div className="s1_body_components_line_right">
+                            <input required type="text"
+                                className="s1_body_components_line_right_txt"
+                                ref={instance_id}
+                                disabled={true}
+                            />
+
+                            <button onClick={kopieren_instance}>Kopieren</button>
+                        </div>
+                    </div>
+                    <div className="horizontal-line"></div>
                     <div className="s1_body_components_line">
                         <span className="s1_body_components_line_label">
                             Special Marking:

@@ -2,7 +2,7 @@
     height: 100vh;
     width: 100vw;
     
-    min-height: 738px;
+    min-height: 870px;
 }
 
 .vorschau_body {
@@ -15,7 +15,7 @@
     justify-content: flex-start;
     flex-direction: column;
     gap: 30px;
-    min-height: 693px;
+    min-height: 825px;
     overflow-y: scroll;
     overflow-x: hidden;
 }
@@ -29,9 +29,42 @@
     color: red;
 }
 
+.vorschau_body_result {
+    font-size: 20px;
+    font-weight: bold;
+    margin-top: 10px;
+    
+}
+
+/***************************************************************************/
+
+.vorschau_body_button {
+    width: 350px;
+    height: 40px;
+    border: 2px solid red;
+    border-radius: 5px;
+    font-weight: 500;
+    font-size: 20px;
+    background: white;
+    color: red;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.vorschau_body_button:hover {
+    background: red;
+    color: white;
+    cursor: pointer;
+}
+
+.vorschau_body_button:active {
+    cursor: pointer;
+}
+
 @media only screen and (max-width: 1080px) {
     .vorschau_pdf_viewer {
 
-        width: 100%;
+        width: 95%;
     }
 }

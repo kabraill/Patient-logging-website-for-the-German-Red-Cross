@@ -15,6 +15,8 @@ export default function Anamnese() {
 
     const navigate = useNavigate();
 
+    const [datasss, setDatasss] = useState();
+
     const atemwege = useRef("");
     const isChecked_belueftung = useRef([useRef(), useRef(), useRef(), useRef(), useRef(), useRef(), useRef()]);
     const isChecked_puls = useRef([useRef(), useRef(), useRef(), useRef(), useRef()]);
@@ -75,12 +77,13 @@ export default function Anamnese() {
                         navigate('/einstellungen');
                         return;
                     }
+                    setDatasss(datas)
                     //console.log("datasssssssssssssssssssssssss : " + datas.anamnese.atemwege);
                     if (datas.anamnese.atemwege !== null) {
                         atemwege.current = datas.anamnese.atemwege
-                        if (atemwege.current === "frei"){
+                        if (atemwege.current === "frei") {
                             document.getElementById("anamnese_atemwege_frei").checked = true;
-                        } else if (atemwege.current === "verlegt"){
+                        } else if (atemwege.current === "verlegt") {
                             document.getElementById("anamnese_atemwege_verlegt").checked = true;
                         } else {
 
@@ -96,10 +99,10 @@ export default function Anamnese() {
                         atemwege_l.current.style.color = "red";
                     }
                     //////////////////////////////////////////////////////////////////////////////////
-                    
+
 
                     if (datas.anamnese.belueftung.unauffaellig !== null) {
-                        
+
                         isChecked_belueftung.current[0].current.checked = datas.anamnese.belueftung.unauffaellig;
                         console.log("belueftung.unauffaellig : " + isChecked_belueftung.current[0].current.checked)
                     }
@@ -133,19 +136,19 @@ export default function Anamnese() {
                         console.log("belueftung.atemstillstand : " + datas.anamnese.belueftung.atemstillstand)
                         isChecked_belueftung.current[6].current.checked = datas.anamnese.belueftung.atemstillstand;
                     }
-                    
+
                     if (datas.anamnese.belueftung.sonstiges !== null) {
                         SonstigValue.current.value = datas.anamnese.belueftung.sonstiges;
                     }
 
-                    
+
                     const map_array1 = Object.values(datas.anamnese.belueftung);
-                    
+
 
                     console.log("ttttttttttttttttttttttttt : " + map_array1.length)
                     console.log("ttttttttttttttttttttttttt : " + datas.anamnese.belueftung.sonstiges)
-                    
-                    if(map_array1.includes(null)){
+
+                    if (map_array1.includes(null)) {
                         belueftung_l.current.style.color = "red";
                     } else {
                         if (map_array1.includes(true) || datas.anamnese.belueftung.sonstiges !== "") {
@@ -180,7 +183,7 @@ export default function Anamnese() {
 
                     const map_array2 = Object.values(datas.anamnese.puls);
 
-                    if(map_array2.includes(null)){
+                    if (map_array2.includes(null)) {
                         puls_l.current.style.color = "red";
                     } else {
                         if (map_array2.includes(true)) {
@@ -218,7 +221,7 @@ export default function Anamnese() {
 
                     const map_array3 = Object.values(datas.anamnese.haut);
 
-                    if(map_array3.includes(null)){
+                    if (map_array3.includes(null)) {
                         haut_l.current.style.color = "red";
                     } else {
                         if (map_array3.includes(true)) {
@@ -230,7 +233,7 @@ export default function Anamnese() {
 
                 } else {
                     navigate('/einstellungen');
-                    
+
                 }
             } else {
                 setLoading(false);
@@ -239,11 +242,11 @@ export default function Anamnese() {
 
         };
 
-        
+
 
         fetchData();
 
-        
+
 
     }, []);
 
@@ -437,10 +440,10 @@ export default function Anamnese() {
         console.log(type);
     }
 
-    
+
 
     function handleOnChange_haut(e, type) {
-        
+
         let a = false;
 
         for (let i = 0; i < isChecked_haut.current.length; i += 1) {
@@ -459,6 +462,61 @@ export default function Anamnese() {
         console.log(type);
     }
 
+    const delete_d = async () => {
+        const userResponse = window.confirm("Sind Sie sicher, dass Sie das Protokoll löschen möchten?");
+
+        if (userResponse) {
+            const draft_protocol_id = pub_draft_protocol_token.current.obj;
+            const instance = parseInt(localStorage.getItem('deutsches_rottes_kreuz_herrenberg_instance'));
+
+            try {
+                const response = await axios.post(
+                    "http://localhost:8800/protocol_draft/delete",
+                    {
+                        id: draft_protocol_id,
+                        instance_index: instance
+                    }
+                );
+
+            } catch (error) {
+                console.log(error);
+            }
+
+            localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_draft_protocol');
+            localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_instance');
+            console.log("deeeeeeellllllllllllllleeeeeeeeeeeeeeeeeeeeeetttttttteeeeeeeeeeeee");
+            navigate('/einstellungen');
+        } else {
+
+        }
+    };
+
+    const instanz_erstellen = async () => {
+        const userResponse = window.confirm("Sind Sie sicher, dass Sie ein neues Instanz erstellen möchten?");
+
+        if (userResponse) {
+            const draft_protocol_id = pub_draft_protocol_token.current.obj;
+            const instance = parseInt(localStorage.getItem('deutsches_rottes_kreuz_herrenberg_instance'));
+
+            try {
+                const response = await axios.post(
+                    "http://localhost:8800/protocol_draft/create_instance",
+                    {
+                        id: draft_protocol_id,
+                        instance_index: instance
+                    }
+                );
+
+                localStorage.setItem('deutsches_rottes_kreuz_herrenberg_instance', response.data.toString());
+            } catch (error) {
+                console.log(error);
+            }
+
+            alert("Sie haben ein neues instanz vom Protokoll erstellt");
+        } else {
+
+        }
+    };
 
     if (loading) {
         return (<div style={{ pointerEvents: "none" }} className="anamnese">
@@ -474,8 +532,9 @@ export default function Anamnese() {
 
     return (
         <div className="anamnese">
-            <Sidebar currentPage="anamnese" />
-            <Topbar />
+            <Sidebar currentPage="anamnese" save_a={save_datas_anamnese} datas={datasss} 
+            del={delete_d} instanz_erstellen={instanz_erstellen}/>
+            <Topbar currentPage="anamnese" datas={datasss} />
 
             <div onClick={() => {
                 document.getElementById("sidebar_mc_id").style.width = "0px";
