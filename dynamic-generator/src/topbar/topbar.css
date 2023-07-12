@@ -1,0 +1,42 @@
+.topbar_mc{
+    position: sticky;
+    /*z-index: 1px;*/
+    top: 0px;
+    left: 0px;
+    /*border: 2px solid red;*/
+    height: 45px;
+    width: 100vw;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border: 2px solid rgb(151, 151, 151);
+    
+}
+
+.topbar_mc_left{
+    padding-left: 5px;
+    font-size: 30px !important;
+    font-weight: bold;
+    color: red;
+    cursor: pointer;
+}
+
+.topbar_mc_middle_logo {
+    /*width: 87%;*/
+    max-height: 36px;
+    object-fit: contain;
+}
+
+.topbar_mc_middle_c_txtbx:focus {
+    outline: none;
+    
+}
+
+.topbar_mc_right {
+    padding-left: 5px;
+    font-size: 30px !important;
+    font-weight: bold;
+    color: red;
+    cursor: pointer;
+}
