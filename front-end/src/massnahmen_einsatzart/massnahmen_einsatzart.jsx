@@ -39,7 +39,7 @@ export default function Massnahmen_einsatzart() {
     const Gegebene_Liter_min_l = useRef();
     const Uebergabe_an_l = useRef();
 
-    const [loading, setLoading] = useState(true); // Add loading state
+    
 
     useEffect(() => {
         const fetchData = async () => {
@@ -54,7 +54,7 @@ export default function Massnahmen_einsatzart() {
                     localStorage.setItem('deutsches_rottes_kreuz_herrenberg_isLoggedIn', 'false');
                     localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_draft_protocol');
                     localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_instance');
-                    setLoading(false); // Update loading state
+                    
                     navigate('/');
                     return;
                 }
@@ -68,7 +68,7 @@ export default function Massnahmen_einsatzart() {
 
                 console.log(localStorage.getItem('deutsches_rottes_kreuz_herrenberg_token'));
                 console.log(localStorage.getItem('deutsches_rottes_kreuz_herrenberg_isLoggedIn'));
-                setLoading(false); // Update loading state
+                
                 const draft_protocol_token = localStorage.getItem('deutsches_rottes_kreuz_herrenberg_draft_protocol');
                 const draft_protocol_instance = localStorage.getItem('deutsches_rottes_kreuz_herrenberg_instance');
                 //console.log("load before protcol -----------------------------------------------------------------------------------------");
@@ -265,13 +265,12 @@ export default function Massnahmen_einsatzart() {
                         Freitext.current.value = datas.massnahmen_einsatzart.freitext;
                     }
 
-
-
+                    document.getElementById("main").style.pointerEvents = "auto"
                 } else {
                     navigate('/einstellungen');
                 }
             } else {
-                setLoading(false);
+                
                 navigate('/');
             }
 
@@ -484,9 +483,26 @@ export default function Massnahmen_einsatzart() {
         }
     };
 
-    const instanz_erstellen = async () => {
-        const userResponse = window.confirm("Sind Sie sicher, dass Sie ein neues Instanz erstellen möchten?");
+    const getTimeFromServer = async () => {
+        try {
+            const response = await axios.get("http://localhost:8800/protocol_draft/time");
+            const t = new Date(response.data)
+            console.log(t + "    server time");
 
+            return t;
+        } catch (error) {
+            console.log('Error:', error);
+        }
+    };
+
+    const instanz_erstellen = async () => {
+
+        const creation_datee = await getTimeFromServer();
+        const del_time = new Date(creation_datee);
+        del_time.setMonth(del_time.getMonth() + 2);
+
+        const userResponse = window.confirm("Sind Sie sicher, dass Sie ein neues Instanz erstellen möchten?");
+        
         if (userResponse) {
             const draft_protocol_id = pub_draft_protocol_token.current.obj;
             const instance = parseInt(localStorage.getItem('deutsches_rottes_kreuz_herrenberg_instance'));
@@ -496,11 +512,15 @@ export default function Massnahmen_einsatzart() {
                     "http://localhost:8800/protocol_draft/create_instance",
                     {
                         id: draft_protocol_id,
-                        instance_index: instance
+                        user_id: pub_token.current.userId,
+                        instance_index: instance,
+                        creation_dat: creation_datee,
+                        delete_timee: del_time
                     }
                 );
 
                 localStorage.setItem('deutsches_rottes_kreuz_herrenberg_instance', response.data.toString());
+                
             } catch (error) {
                 console.log(error);
             }
@@ -511,20 +531,9 @@ export default function Massnahmen_einsatzart() {
         }
     };
 
-    if (loading) {
-        return (<div style={{ pointerEvents: "none" }} className="massnahmen_einsatzart">
-            <Sidebar currentPage="massnahmen_einsatzart" />
-            <Topbar />
-            <div className="massnahmen_einsatzart_body">
-                <span className="massnahmen_einsatzart_body_title">
-                    Seite wird geladen
-                </span>
-            </div>
-        </div>); // Render a loading indicator while fetching data
-    }
 
     return (
-        <div className="massnahmen_einsatzart">
+        <div id="main" style={{ pointerEvents: "none" }} className="massnahmen_einsatzart">
             <Sidebar currentPage="massnahmen_einsatzart" save_a={save_datas_massnahmen_einsatzart} datas={datasss}
             del={delete_d} instanz_erstellen={instanz_erstellen} />
             <Topbar currentPage="massnahmen_einsatzart" datas={datasss} />

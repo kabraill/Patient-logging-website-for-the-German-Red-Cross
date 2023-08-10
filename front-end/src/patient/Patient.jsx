@@ -42,7 +42,7 @@ export default function Patient() {
                     localStorage.setItem('deutsches_rottes_kreuz_herrenberg_isLoggedIn', 'false');
                     localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_draft_protocol');
                     localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_instance');
-                    setLoading(false); // Update loading state
+
                     navigate('/');
                     return;
                 }
@@ -56,7 +56,7 @@ export default function Patient() {
 
                 console.log(localStorage.getItem('deutsches_rottes_kreuz_herrenberg_token'));
                 console.log(localStorage.getItem('deutsches_rottes_kreuz_herrenberg_isLoggedIn'));
-                setLoading(false); // Update loading state
+
                 const draft_protocol_token = localStorage.getItem('deutsches_rottes_kreuz_herrenberg_draft_protocol');
                 const draft_protocol_instance = localStorage.getItem('deutsches_rottes_kreuz_herrenberg_instance');
                 //console.log("load before protcol -----------------------------------------------------------------------------------------");
@@ -99,11 +99,13 @@ export default function Patient() {
                         alter_l.current.style.color = "red";
                     }
 
+                    document.getElementById("main").style.pointerEvents = "auto";
+
                 } else {
                     navigate('/einstellungen');
                 }
             } else {
-                setLoading(false);
+
                 navigate('/');
             }
 
@@ -300,7 +302,24 @@ export default function Patient() {
         }
     };
 
+    const getTimeFromServer = async () => {
+        try {
+            const response = await axios.get("http://localhost:8800/protocol_draft/time");
+            const t = new Date(response.data)
+            console.log(t + "    server time");
+
+            return t;
+        } catch (error) {
+            console.log('Error:', error);
+        }
+    };
+
     const instanz_erstellen = async () => {
+
+        const creation_datee = await getTimeFromServer();
+        const del_time = new Date(creation_datee);
+        del_time.setMonth(del_time.getMonth() + 2);
+
         const userResponse = window.confirm("Sind Sie sicher, dass Sie ein neues Instanz erstellen möchten?");
 
         if (userResponse) {
@@ -312,11 +331,15 @@ export default function Patient() {
                     "http://localhost:8800/protocol_draft/create_instance",
                     {
                         id: draft_protocol_id,
-                        instance_index: instance
+                        user_id: pub_token.current.userId,
+                        instance_index: instance,
+                        creation_dat: creation_datee,
+                        delete_timee: del_time
                     }
                 );
 
                 localStorage.setItem('deutsches_rottes_kreuz_herrenberg_instance', response.data.toString());
+
             } catch (error) {
                 console.log(error);
             }
@@ -327,22 +350,10 @@ export default function Patient() {
         }
     };
 
-    if (loading) {
-        return (<div style={{ pointerEvents: "none" }} className="patient">
-            <Sidebar currentPage="patient" />
-            <Topbar />
-            <div className="patient_body">
-                <span className="patient_body_title">
-                    Seite wird geladen
-                </span>
-            </div>
-        </div>); // Render a loading indicator while fetching data
-    }
-
     return (
-        <div className="patient">
-            <Sidebar currentPage="patient" save_a={save_datas_patient} datas={datasss} 
-            del={delete_d} instanz_erstellen={instanz_erstellen}/>
+        <div id="main" style={{ pointerEvents: "none" }} className="patient">
+            <Sidebar currentPage="patient" save_a={save_datas_patient} datas={datasss}
+                del={delete_d} instanz_erstellen={instanz_erstellen} />
             <Topbar currentPage="patient" datas={datasss} />
             <div onClick={() => {
                 document.getElementById("sidebar_mc_id").style.width = "0px";

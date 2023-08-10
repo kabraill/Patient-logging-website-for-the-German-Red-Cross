@@ -14,7 +14,7 @@ import Verletzungen from './verletzungen/verletzungen';
 import Monitoring from './monitoring/monitoring';
 import Massnahmen_einsatzart from './massnahmen_einsatzart/massnahmen_einsatzart';
 import Vorschau from "./vorschau/vorschau";
-
+import Benutzer_verwaltung from "./benutzer_verwaltung/benutzer_verwaltung";
 
 export default function App() {
 
@@ -27,6 +27,7 @@ export default function App() {
         <Routes>
           <Route exact path="/" element={<LLogin />} />
           <Route path="/einstellungen" element={<Einstellungen />} />
+          <Route path="/benutzer_verwaltung" element={<Benutzer_verwaltung />} />
           <Route path="/einsatzdaten" element={<Seite_1 />} />
           <Route path="/beteiligte_einsatzkraefte" element={<Seite_2 />} />
           <Route path="/patient" element={<Patient />} />

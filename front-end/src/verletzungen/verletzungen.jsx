@@ -32,8 +32,6 @@ export default function Verletzungen() {
     const pub_token = useRef();
     const pub_draft_protocol_token = useRef();
 
-    const [loading, setLoading] = useState(true); // Add loading state
-
     useEffect(() => {
         const fetchData = async () => {
             const token = localStorage.getItem('deutsches_rottes_kreuz_herrenberg_token');
@@ -47,7 +45,7 @@ export default function Verletzungen() {
                     localStorage.setItem('deutsches_rottes_kreuz_herrenberg_isLoggedIn', 'false');
                     localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_draft_protocol');
                     localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_instance');
-                    setLoading(false); // Update loading state
+                    
                     navigate('/');
                     return;
                 }
@@ -61,7 +59,7 @@ export default function Verletzungen() {
 
                 console.log(localStorage.getItem('deutsches_rottes_kreuz_herrenberg_token'));
                 console.log(localStorage.getItem('deutsches_rottes_kreuz_herrenberg_isLoggedIn'));
-                setLoading(false); // Update loading state
+                
                 const draft_protocol_token = localStorage.getItem('deutsches_rottes_kreuz_herrenberg_draft_protocol');
                 const draft_protocol_instance = localStorage.getItem('deutsches_rottes_kreuz_herrenberg_instance');
                 //console.log("load before protcol -----------------------------------------------------------------------------------------");
@@ -300,12 +298,12 @@ export default function Verletzungen() {
                         isChecked_Weichteile.current[4].current.checked = datas.verletzungen.weichteile.schwer;
                     }
 
-
+                    document.getElementById("main").style.pointerEvents = "auto"
                 } else {
                     navigate('/einstellungen');
                 }
             } else {
-                setLoading(false);
+                
                 navigate('/');
             }
 
@@ -507,9 +505,26 @@ export default function Verletzungen() {
         }
     };
 
-    const instanz_erstellen = async () => {
-        const userResponse = window.confirm("Sind Sie sicher, dass Sie ein neues Instanz erstellen möchten?");
+    const getTimeFromServer = async () => {
+        try {
+            const response = await axios.get("http://localhost:8800/protocol_draft/time");
+            const t = new Date(response.data)
+            console.log(t + "    server time");
 
+            return t;
+        } catch (error) {
+            console.log('Error:', error);
+        }
+    };
+
+    const instanz_erstellen = async () => {
+
+        const creation_datee = await getTimeFromServer();
+        const del_time = new Date(creation_datee);
+        del_time.setMonth(del_time.getMonth() + 2);
+
+        const userResponse = window.confirm("Sind Sie sicher, dass Sie ein neues Instanz erstellen möchten?");
+        
         if (userResponse) {
             const draft_protocol_id = pub_draft_protocol_token.current.obj;
             const instance = parseInt(localStorage.getItem('deutsches_rottes_kreuz_herrenberg_instance'));
@@ -519,11 +534,15 @@ export default function Verletzungen() {
                     "http://localhost:8800/protocol_draft/create_instance",
                     {
                         id: draft_protocol_id,
-                        instance_index: instance
+                        user_id: pub_token.current.userId,
+                        instance_index: instance,
+                        creation_dat: creation_datee,
+                        delete_timee: del_time
                     }
                 );
 
                 localStorage.setItem('deutsches_rottes_kreuz_herrenberg_instance', response.data.toString());
+                
             } catch (error) {
                 console.log(error);
             }
@@ -534,20 +553,10 @@ export default function Verletzungen() {
         }
     };
 
-    if (loading) {
-        return (<div style={{ pointerEvents: "none" }} className="verletzungen">
-            <Sidebar currentPage="verletzungen" />
-            <Topbar />
-            <div className="verletzungen_body">
-                <span className="verletzungen_body_title">
-                    Seite wird geladen
-                </span>
-            </div>
-        </div>); // Render a loading indicator while fetching data
-    }
+    
 
     return (
-        <div className="verletzungen">
+        <div id="main" style={{ pointerEvents: "none" }} className="verletzungen">
             <Sidebar currentPage="verletzungen" save_a={save_datas_verletzungen} datas={datasss} 
             del={delete_d} instanz_erstellen={instanz_erstellen} />
             <Topbar currentPage="verletzungen" datas={datasss} />

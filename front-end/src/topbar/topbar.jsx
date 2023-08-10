@@ -1,15 +1,113 @@
 import "./topbar.css"
 import { Menu, Logout } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 
+import axios from "axios";
 
-export default function Topbar({datas , currentPage}) {
+export default function Topbar({ datas, currentPage }) {
     const navigate = useNavigate();
 
+    const pub_token = useRef();
+    const user_u = useRef();
+
     useEffect(() => {
-        console.log("topbar");
-    })
+        const fetchData = async () => {
+            const token = localStorage.getItem('deutsches_rottes_kreuz_herrenberg_token');
+            const isLoggedIn = localStorage.getItem('deutsches_rottes_kreuz_herrenberg_isLoggedIn');
+
+
+            if (isLoggedIn === 'true' && token) {
+                const decodedToken = await decodeToken(token);
+                user_u.current = await get_user(decodedToken.userId)
+
+                pub_token.current = decodedToken;
+
+                console.log(new Date(pub_token.current.exp * 1000) + "     :     " + pub_token.current.userId)
+                if (typeof decodedToken === 'undefined') {
+                    localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_token');
+                    localStorage.setItem('deutsches_rottes_kreuz_herrenberg_isLoggedIn', 'false');
+                    localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_draft_protocol');
+                    localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_instance');
+                    navigate('/');
+                    return;
+                }
+
+                //document.getElementById("name").textContent = user_u.current.name;
+                /*
+                console.log(" dec :  " + new Date(decodedToken.exp * 1000))
+                console.log("login page isLoggedIn === 'true' && token")
+
+                localStorage.setItem('deutsches_rottes_kreuz_herrenberg_token', await encodeToken(decodedToken.userId));
+                localStorage.setItem('deutsches_rottes_kreuz_herrenberg_isLoggedIn', 'true');
+
+                console.log(localStorage.getItem('deutsches_rottes_kreuz_herrenberg_token'));
+                console.log(localStorage.getItem('deutsches_rottes_kreuz_herrenberg_isLoggedIn'));*/
+
+
+
+            } else {
+                navigate('/');
+            }
+        }
+        fetchData();
+    }, [])
+
+    const get_user = async (token) => {
+
+        try {
+            const response = await axios.post(
+                "http://localhost:8800/user/get_user",
+                {},
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+
+            if (typeof (response.data) === "string") {
+                navigate('/');
+                //alert(response.data)
+            } else {
+                return response.data;
+            }
+
+
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    const encodeToken = async (userId) => {
+        try {
+            const response = await axios.post("http://localhost:8800/user/encodeToken", {
+                id: userId
+            });
+            return response.data;
+        } catch (error) {
+            console.log('Error:', error);
+        }
+    };
+
+
+    const decodeToken = async (token) => {
+        try {
+            const response = await axios.post(
+                "http://localhost:8800/user/decodeToken",
+                {},
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+
+            return response.data;
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
     async function nav() {
         const userResponse = window.confirm("Sind Sie sicher, dass Sie sich abmelden möchten?");
@@ -34,7 +132,7 @@ export default function Topbar({datas , currentPage}) {
     }
 
     const check_color = () => {
-        if (currentPage !== "einstellungen") {
+        if (currentPage !== "einstellungen" && currentPage !== "benutzer_verwaltung") {
             console.log(currentPage);
             //document.getElementById("einsatzdaten_a").style.color = "red";
             //seite_1////////////////////////////////////////////////////////
@@ -72,7 +170,7 @@ export default function Topbar({datas , currentPage}) {
 
             if (datas.einsatzdaten.alarmzeit !== null) {
 
-                if (!datas.einsatzdaten.alarmzeit.match('^[0-9][0-9]:[0-9][0-9]$')) {
+                if (!datas.einsatzdaten.alarmzeit.match(/^(000[1-9]|00[1-9]\d|0[1-9]\d\d|100\d|10[1-9]\d|1[1-9]\d{2}|[2-9]\d{3}|[1-9]\d{4}|1\d{5}|2[0-6]\d{4}|27[0-4]\d{3}|275[0-6]\d{2}|2757[0-5]\d|275760)-(0[1-9]|1[012])-(0[1-9]|[12]\d|3[01])T(0\d|1\d|2[0-4]):(0\d|[1-5]\d)(?::(0\d|[1-5]\d))?(?:.(00\d|0[1-9]\d|[1-9]\d{2}))?$/gm)) {
                     document.getElementById("einsatzdaten_a").style.color = "red";
                 }
             } else {
@@ -369,8 +467,10 @@ export default function Topbar({datas , currentPage}) {
 
             <img className="topbar_mc_middle_logo" src="assets/red_cross.png" />
 
-            <Logout onClick={() => nav()} className="topbar_mc_right" />
-
+            <div style={{ display: "flex", alignItems: "center", fontSize: "18px", fontWeight: "bold" }}>
+                
+                <Logout onClick={() => nav()} className="topbar_mc_right" />
+            </div>
         </div>
     );
 }

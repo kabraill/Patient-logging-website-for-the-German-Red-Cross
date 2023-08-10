@@ -1,17 +1,122 @@
 import "./sidebar.css"
 import {
     Save, Settings, MonitorHeart, Dataset, BusAlert, Blind, LocalHospital,
-    Preview, Delete, AssistWalker, EventNote, Psychology, Book, Close, CheckCircle, Add
+    Preview, Delete, AssistWalker, EventNote, Psychology, Book, Close, CheckCircle, Add, ManageAccounts
 } from "@mui/icons-material";
 
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 
 import { useNavigate } from "react-router-dom";
 
+import axios from "axios";
 
 export default function Sidebar({ currentPage, save_a, datas, del, instanz_erstellen }) {
 
     const navigate = useNavigate();
+
+    const pub_token = useRef();
+    const user_u = useRef();
+
+    const [administration, setAdministration] = useState(false)
+
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const token = localStorage.getItem('deutsches_rottes_kreuz_herrenberg_token');
+            const isLoggedIn = localStorage.getItem('deutsches_rottes_kreuz_herrenberg_isLoggedIn');
+
+
+
+            if (isLoggedIn === 'true' && token) {
+                const decodedToken = await decodeToken(token);
+                user_u.current = await get_user(decodedToken.userId)
+                if(user_u.current.permission[0] !== "Normaler-Benutzer"){
+                    setAdministration(true)
+                }
+                pub_token.current = decodedToken;
+
+                console.log(new Date(pub_token.current.exp * 1000) + "     :     " + pub_token.current.userId)
+                if (typeof decodedToken === 'undefined') {
+                    localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_token');
+                    localStorage.setItem('deutsches_rottes_kreuz_herrenberg_isLoggedIn', 'false');
+                    localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_draft_protocol');
+                    localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_instance');
+                    navigate('/');
+                    return;
+                }
+                console.log(" dec :  " + new Date(decodedToken.exp * 1000))
+                console.log("login page isLoggedIn === 'true' && token")
+
+                localStorage.setItem('deutsches_rottes_kreuz_herrenberg_token', await encodeToken(decodedToken.userId));
+                localStorage.setItem('deutsches_rottes_kreuz_herrenberg_isLoggedIn', 'true');
+
+                console.log(localStorage.getItem('deutsches_rottes_kreuz_herrenberg_token'));
+                console.log(localStorage.getItem('deutsches_rottes_kreuz_herrenberg_isLoggedIn'));
+                
+
+
+            } else {
+                navigate('/');
+            }
+        }
+        fetchData();
+    }, [])
+
+    const get_user = async (token) => {
+
+        try {
+            const response = await axios.post(
+                "http://localhost:8800/user/get_user",
+                {},
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+
+            if (typeof (response.data) === "string") {
+                navigate('/');
+                alert(response.data)
+            } else {
+                return response.data;
+            }
+
+            
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    const encodeToken = async (userId) => {
+        try {
+            const response = await axios.post("http://localhost:8800/user/encodeToken", {
+                id: userId
+            });
+            return response.data;
+        } catch (error) {
+            console.log('Error:', error);
+        }
+    };
+
+
+    const decodeToken = async (token) => {
+        try {
+            const response = await axios.post(
+                "http://localhost:8800/user/decodeToken",
+                {},
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+
+            return response.data;
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
     const nav = (page) => {
         navigate(page);
@@ -24,7 +129,7 @@ export default function Sidebar({ currentPage, save_a, datas, del, instanz_erste
     }
 
     const check_color = () => {
-        if (currentPage !== "einstellungen") {
+        if (currentPage !== "einstellungen" && currentPage !== "benutzer_verwaltung") {
 
             //document.getElementById("einsatzdaten_a").style.color = "red";
             //seite_1////////////////////////////////////////////////////////
@@ -62,7 +167,7 @@ export default function Sidebar({ currentPage, save_a, datas, del, instanz_erste
 
             if (datas.einsatzdaten.alarmzeit !== null) {
 
-                if (!datas.einsatzdaten.alarmzeit.match('^[0-9][0-9]:[0-9][0-9]$')) {
+                if (!datas.einsatzdaten.alarmzeit.match(/^(000[1-9]|00[1-9]\d|0[1-9]\d\d|100\d|10[1-9]\d|1[1-9]\d{2}|[2-9]\d{3}|[1-9]\d{4}|1\d{5}|2[0-6]\d{4}|27[0-4]\d{3}|275[0-6]\d{2}|2757[0-5]\d|275760)-(0[1-9]|1[012])-(0[1-9]|[12]\d|3[01])T(0\d|1\d|2[0-4]):(0\d|[1-5]\d)(?::(0\d|[1-5]\d))?(?:.(00\d|0[1-9]\d|[1-9]\d{2}))?$/gm)) {
                     document.getElementById("einsatzdaten_a").style.color = "red";
                 }
             } else {
@@ -353,12 +458,13 @@ export default function Sidebar({ currentPage, save_a, datas, del, instanz_erste
 
     }
 
-    
+
 
     return (
         <div id="sidebar_mc_id" className="sidebar_mc">
             <div className="sidebar_mcc">
                 <Close className="sidebar_mc_closebtn" onClick={close_side_bar} />
+                {administration && <a id="benutzer_verwaltung_a" style={currentPage === "benutzer_verwaltung" ? { color: "blue" } : {}} onClick={() => nav("/benutzer_verwaltung")}><ManageAccounts className="sidebar_mc_ico" />Benutzerverwaltung</a>}
                 <a id="einstellungen_a" style={currentPage === "einstellungen" ? { color: "blue" } : {}} onClick={() => nav("/einstellungen")}><Settings className="sidebar_mc_ico" />Einstellungen</a>
                 <hr></hr>
                 <a id="einsatzdaten_a" style={currentPage === "einsatzdaten" ? { color: "blue" } : {}} onClick={() => nav("/einsatzdaten")}><Dataset className="sidebar_mc_ico" />Einsatzdaten</a>
@@ -391,9 +497,9 @@ export default function Sidebar({ currentPage, save_a, datas, del, instanz_erste
                 <a onClick={check_color} ><CheckCircle className="sidebar_mc_ico" />Validieren</a>
 
                 <a style={currentPage === "einstellungen" ? { pointerEvents: "none" } : {}}
-                onClick={() => {
-                    instanz_erstellen();
-                }} ><Add className="sidebar_mc_ico" />Neues Instanz erstellen</a>
+                    onClick={() => {
+                        instanz_erstellen();
+                    }} ><Add className="sidebar_mc_ico" />Neues Instanz erstellen</a>
             </div>
         </div>
     );

@@ -39,8 +39,6 @@
     align-items: center;
     flex-direction: column;
     border: 1px solid black;
-    min-height: 250px;
-    height: 250px;
     width: 826px;
 
 
@@ -48,42 +46,46 @@
 
 .s2_body_components_line {
     /*background-color: aqua;*/
-    flex: 1;
     width: 100%;
     display: flex;
     align-items: center;
     flex-direction: column;
-
-
+    flex-wrap: wrap;
+    
 }
 
 .s2_body_components_line_label {
     background-color: rgb(240, 239, 239);
-    flex: 1;
+    height: 28px;
     display: flex;
     align-items: center;
+    justify-content: flex-start;
     width: calc(100% - 6px);
+    
     padding-left: 6px;
 
 }
 
 .s2_body_components_line_right {
     /*background-color: burlywood;*/
-    flex: 1.8;
     width: 100%;
     display: flex;
     align-items: center;
     justify-content: space-around;
-    gap: 3px;
+    min-height: 60px;
     flex-wrap: wrap;
-    overflow-x: scroll;
-    overflow-y: scroll;
+    gap: 5px;
+    
+
+
+    /*overflow-x: scroll;
+    overflow-y: scroll;*/
 }
 
 .s2_body_components_line_right_dropdown {
     display: flex;
     gap: 5px;
-    margin-left: 5px;
+    margin: 5px;
     cursor: pointer;
     /*background: pink;*/
 }

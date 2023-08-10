@@ -83,6 +83,7 @@
 
 .verletzungen_body_components_line_right3_multiselect {
     display: flex;
+    align-items: center;
     gap: 5px;
     margin-left: 5px;
     cursor: pointer;

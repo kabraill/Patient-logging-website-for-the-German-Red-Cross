@@ -19,8 +19,10 @@ export default function Seite_1() {
 
     const [datasss, setDatasss] = useState();
 
+    const finished = useRef();
     const protokoll_id = useRef();
     const instance_id = useRef();
+    const benutzer_name = useRef();
     const special_marking_name = useRef();
     const special_marking_color = useRef();
     const alarmkey = useRef();
@@ -32,6 +34,7 @@ export default function Seite_1() {
     const ankunft_rtw_nef = useRef();
     const einsatzende = useRef();
 
+    const finished_l = useRef();
     const alarmkey_l = useRef();
     const auftragsnummer_l = useRef();
     const alarmzeit_l = useRef();
@@ -40,6 +43,7 @@ export default function Seite_1() {
 
     const pub_token = useRef();
     const pub_draft_protocol_token = useRef();
+    const user_u = useRef();
 
     const [loading, setLoading] = useState(true); // Add loading state
 
@@ -52,21 +56,19 @@ export default function Seite_1() {
             //console.log("load 1 -----------------------------------------------------------------------------------------");
             if (isLoggedIn === 'true' && token) {
                 const decodedToken = await decodeToken(token);
+                user_u.current = await get_user(decodedToken.userId)
                 pub_token.current = decodedToken;
                 if (typeof decodedToken === 'undefined') {
                     localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_token');
                     localStorage.setItem('deutsches_rottes_kreuz_herrenberg_isLoggedIn', 'false');
                     localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_draft_protocol');
                     localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_instance');
-                    setLoading(false); // Update loading state
                     navigate('/');
-                    //console.log("load type decodedToken = 'undefined-----------------------------------------------------------------------------------------");
-
                     return;
                 }
                 //console.log(" dec :  " + new Date(decodedToken.exp * 1000))
                 //console.log("login page isLoggedIn === 'true' && token")
-
+                console.log(pub_token.current)
 
 
                 localStorage.setItem('deutsches_rottes_kreuz_herrenberg_token', await encodeToken(decodedToken.userId));
@@ -74,16 +76,22 @@ export default function Seite_1() {
 
                 //console.log(localStorage.getItem('deutsches_rottes_kreuz_herrenberg_token'));
                 //console.log(localStorage.getItem('deutsches_rottes_kreuz_herrenberg_isLoggedIn'));
-                setLoading(false); // Update loading state
+
+                // Update loading state
+
 
                 const draft_protocol_token = localStorage.getItem('deutsches_rottes_kreuz_herrenberg_draft_protocol');
                 const draft_protocol_instance = localStorage.getItem('deutsches_rottes_kreuz_herrenberg_instance');
+
                 //console.log("load before protcol -----------------------------------------------------------------------------------------");
                 if (draft_protocol_token && draft_protocol_instance) {
 
+
                     const decoded_object_a = await decode_object(draft_protocol_token);
+
                     pub_draft_protocol_token.current = decoded_object_a;
-                    //console.log("pub_draft_protocol_tokennnnnnnnnnnnnnnnnnnnnn obj : " + pub_draft_protocol_token.current)
+                    console.log("pub_draft_protocol_tokennnnnnnnnnnnnnnnnnnnnn obj : " + pub_draft_protocol_token.current)
+
                     const datas = await get_datas();
 
 
@@ -93,6 +101,7 @@ export default function Seite_1() {
                         navigate('/einstellungen');
                         return;
                     }
+
                     setDatasss(datas);
                     console.log("datasssssssssssssssssssssssss : " + datas);
                     if (datas._id !== null) {
@@ -100,6 +109,10 @@ export default function Seite_1() {
                     }
 
                     instance_id.current.value = draft_protocol_instance;
+
+                    benutzer_name.current.value = user_u.current.name;
+
+                    finished.current.value = datas.finished;
 
                     if (datas.einsatzdaten.special_marking_name !== null) {
                         special_marking_name.current.value = datas.einsatzdaten.special_marking_name;
@@ -169,7 +182,7 @@ export default function Seite_1() {
 
                     if (datas.einsatzdaten.alarmzeit !== null) {
                         alarmzeit.current.value = datas.einsatzdaten.alarmzeit;
-                        if (datas.einsatzdaten.alarmzeit.match('^[0-9][0-9]:[0-9][0-9]$')) {
+                        if (datas.einsatzdaten.alarmzeit.match(/^(000[1-9]|00[1-9]\d|0[1-9]\d\d|100\d|10[1-9]\d|1[1-9]\d{2}|[2-9]\d{3}|[1-9]\d{4}|1\d{5}|2[0-6]\d{4}|27[0-4]\d{3}|275[0-6]\d{2}|2757[0-5]\d|275760)-(0[1-9]|1[012])-(0[1-9]|[12]\d|3[01])T(0\d|1\d|2[0-4]):(0\d|[1-5]\d)(?::(0\d|[1-5]\d))?(?:.(00\d|0[1-9]\d|[1-9]\d{2}))?$/gm)) {
                             alarmzeit_l.current.style.color = "black";
                         } else {
                             alarmzeit_l.current.style.color = "red";
@@ -206,12 +219,18 @@ export default function Seite_1() {
                         einsatzende_l.current.style.color = "red";
                     }
 
+                    document.getElementById("main").style.pointerEvents = "auto";
+
+                    if(user_u.current.permission[0] !== "Normaler-Benutzer"){
+                        finished.current.disabled = false;
+                    }
+
+
 
                 } else {
                     navigate('/einstellungen');
                 }
             } else {
-                setLoading(false);
                 navigate('/');
             }
 
@@ -224,6 +243,32 @@ export default function Seite_1() {
 
     }, []);
 
+    const get_user = async (token) => {
+
+        try {
+            const response = await axios.post(
+                "http://localhost:8800/user/get_user",
+                {},
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+
+            if (typeof (response.data) === "string") {
+                navigate('/');
+                alert(response.data)
+            } else {
+                return response.data;
+            }
+
+
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
     //"#ff0000"
     const save_datas_einsatzdaten = async () => {
 
@@ -231,6 +276,7 @@ export default function Seite_1() {
             const response = await axios.put(
                 "http://localhost:8800/protocol_draft/save_datas_einsatzdaten",
                 {
+                    finished: finished.current.value,
                     id: pub_draft_protocol_token.current.obj,
                     instance_index: parseInt(localStorage.getItem('deutsches_rottes_kreuz_herrenberg_instance')),
                     special_marking_name_a: special_marking_name.current.value,
@@ -253,7 +299,9 @@ export default function Seite_1() {
     }
 
     const decode_object = async (token) => {
+
         try {
+
             const response = await axios.post(
                 "http://localhost:8800/protocol_draft/decodedObject",
                 {},
@@ -354,14 +402,13 @@ export default function Seite_1() {
     }
 
     const handleChange_alarmzeit = (e) => {
-
-        if (e.target.value.match('^[0-9][0-9]:[0-9][0-9]$')) {
+        if (e.target.value.match(/^(000[1-9]|00[1-9]\d|0[1-9]\d\d|100\d|10[1-9]\d|1[1-9]\d{2}|[2-9]\d{3}|[1-9]\d{4}|1\d{5}|2[0-6]\d{4}|27[0-4]\d{3}|275[0-6]\d{2}|2757[0-5]\d|275760)-(0[1-9]|1[012])-(0[1-9]|[12]\d|3[01])T(0\d|1\d|2[0-4]):(0\d|[1-5]\d)(?::(0\d|[1-5]\d))?(?:.(00\d|0[1-9]\d|[1-9]\d{2}))?$/gm)) {
             alarmzeit_l.current.style.color = "black";
         } else {
             alarmzeit_l.current.style.color = "red";
         }
-
     }
+
 
     function handleChangeCheckbox(e) {
         if (e.target.checked === true) {
@@ -410,6 +457,10 @@ export default function Seite_1() {
         navigator.clipboard.writeText(instance_id.current.value);
     }
 
+    function kopieren_benutzer_name() {
+        navigator.clipboard.writeText(benutzer_name.current.value);
+    }
+
     const delete_d = async () => {
         const userResponse = window.confirm("Sind Sie sicher, dass Sie das Protokoll löschen möchten?");
 
@@ -439,7 +490,24 @@ export default function Seite_1() {
         }
     };
 
+    const getTimeFromServer = async () => {
+        try {
+            const response = await axios.get("http://localhost:8800/protocol_draft/time");
+            const t = new Date(response.data)
+            console.log(t + "    server time");
+
+            return t;
+        } catch (error) {
+            console.log('Error:', error);
+        }
+    };
+
     const instanz_erstellen = async () => {
+
+        const creation_datee = await getTimeFromServer();
+        const del_time = new Date(creation_datee);
+        del_time.setMonth(del_time.getMonth() + 2);
+
         const userResponse = window.confirm("Sind Sie sicher, dass Sie ein neues Instanz erstellen möchten?");
 
         if (userResponse) {
@@ -451,12 +519,15 @@ export default function Seite_1() {
                     "http://localhost:8800/protocol_draft/create_instance",
                     {
                         id: draft_protocol_id,
-                        instance_index: instance
+                        user_id: pub_token.current.userId,
+                        instance_index: instance,
+                        creation_dat: creation_datee,
+                        delete_timee: del_time
                     }
                 );
-                
+
                 localStorage.setItem('deutsches_rottes_kreuz_herrenberg_instance', response.data.toString());
-                instance_id.current.value = response.data.toString();
+
             } catch (error) {
                 console.log(error);
             }
@@ -467,23 +538,20 @@ export default function Seite_1() {
         }
     };
 
-    if (loading) {
-        return (<div style={{ pointerEvents: "none" }} className="s1">
-            <Sidebar currentPage="einsatzdaten" />
-            <Topbar />
-            <div className="s1_body">
-                <span className="s1_body_title">
-                    Seite wird geladen
-                </span>
-            </div>
-        </div>);
+    function handleOnChange(e) {
+
+        if (e.target.value === "nein") {
+            finished_l.current.style.color = "red";
+        } else {
+            finished_l.current.style.color = "black";
+        }
     }
 
     return (
 
-        <div className="s1">
+        <div id="main" style={{ pointerEvents: "none" }} className="s1">
             <Sidebar currentPage="einsatzdaten" save_a={save_datas_einsatzdaten} datas={datasss}
-                del={delete_d} instanz_erstellen={instanz_erstellen}/>
+                del={delete_d} instanz_erstellen={instanz_erstellen} />
             <Topbar currentPage="einsatzdaten" datas={datasss} />
             <div onClick={() => {
                 document.getElementById("sidebar_mc_id").style.width = "0px";
@@ -493,6 +561,20 @@ export default function Seite_1() {
                     Einsatzdaten
                 </span>
                 <div className="s1_body_components">
+                    <div className="patient_body_components_line">
+
+                        <span ref={finished_l} className="patient_body_components_line_label">
+                            Protokoll fertig?
+                        </span>
+                        <div className="s1_body_components_line_right">
+                            <select ref={finished} disabled={true}
+                                onChange={handleOnChange} id="select_custom" className="s1_body_components_line_right_dropdown">
+                                <option id="option_custom" className="patient_body_components_line_right_choice" value="ja">Ja</option>
+                                <option id="option_custom" className="patient_body_components_line_right_choice" value="nein">Nein</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div className="horizontal-line"></div>
 
                     <div className="s1_body_components_line">
                         <span className="s1_body_components_line_label">
@@ -524,6 +606,22 @@ export default function Seite_1() {
                         </div>
                     </div>
                     <div className="horizontal-line"></div>
+
+                    <div className="s1_body_components_line">
+                        <span className="s1_body_components_line_label">
+                            Benutzer name:
+                        </span>
+                        <div className="s1_body_components_line_right">
+                            <input required type="text"
+                                className="s1_body_components_line_right_txt"
+                                ref={benutzer_name}
+                                disabled={true}
+                            />
+
+                            <button onClick={kopieren_benutzer_name}>Kopieren</button>
+                        </div>
+                    </div>
+                    <div className="horizontal-line"></div>
                     <div className="s1_body_components_line">
                         <span className="s1_body_components_line_label">
                             Special Marking:
@@ -533,6 +631,7 @@ export default function Seite_1() {
                                 className="s1_body_components_line_right_txt"
                                 ref={special_marking_name}
                                 placeholder="Special Marking Name"
+
                             />
 
                             <input ref={special_marking_color} type="color" defaultValue="#ff0000" />
@@ -596,10 +695,10 @@ export default function Seite_1() {
 
                     <div className="s1_body_components_line">
                         <span ref={alarmzeit_l} className="s1_body_components_line_label">
-                            Alarmzeit: *
+                            Alarm-Zeit-Datum: *
                         </span>
                         <div className="s1_body_components_line_right">
-                            <input required type="time"
+                            <input required type="datetime-local"
                                 ref={alarmzeit}
                                 className="s1_body_components_line_right_txt"
                                 onChange={handleChange_alarmzeit}

@@ -8,7 +8,7 @@ import Sidebar from "../sidebar/sidebar";
 
 
 import {
-    ArrowBackIos, ArrowForwardIos
+    ArrowBackIos, ArrowForwardIos, Key
 } from "@mui/icons-material";
 
 import axios from "axios";
@@ -20,8 +20,8 @@ export default function Seite_2() {
     const [datasss, setDatasss] = useState();
 
     const isChecked = useRef([useRef(), useRef(), useRef()]);
-    const Einsatzkraefte_patienten = useRef([useRef(), useRef(), useRef()]);
-    const Einsatzkraefte_ort = useRef([useRef(), useRef(), useRef()]);
+    const [Einsatzkraefte_patienten, setEinsatzkraefte_patienten] = useState({});
+    const [Einsatzkraefte_ort, setEinsatzkraefte_ort] = useState({});
 
     const eingesetzte_fahrzeuge_l = useRef();
     const Einsatzkraefte_patienten_l = useRef();
@@ -29,7 +29,6 @@ export default function Seite_2() {
     const pub_token = useRef();
     const pub_draft_protocol_token = useRef();
 
-    const [loading, setLoading] = useState(true); // Add loading state
 
     useEffect(() => {
         const fetchData = async () => {
@@ -44,7 +43,6 @@ export default function Seite_2() {
                     localStorage.setItem('deutsches_rottes_kreuz_herrenberg_isLoggedIn', 'false');
                     localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_draft_protocol');
                     localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_instance');
-                    setLoading(false); // Update loading state
                     navigate('/');
                     return;
                 }
@@ -56,9 +54,7 @@ export default function Seite_2() {
                 localStorage.setItem('deutsches_rottes_kreuz_herrenberg_token', await encodeToken(decodedToken.userId));
                 localStorage.setItem('deutsches_rottes_kreuz_herrenberg_isLoggedIn', 'true');
 
-                //console.log(localStorage.getItem('deutsches_rottes_kreuz_herrenberg_token'));
-                //console.log(localStorage.getItem('deutsches_rottes_kreuz_herrenberg_isLoggedIn'));
-                setLoading(false); // Update loading state
+
                 const draft_protocol_token = localStorage.getItem('deutsches_rottes_kreuz_herrenberg_draft_protocol');
                 const draft_protocol_instance = localStorage.getItem('deutsches_rottes_kreuz_herrenberg_instance');
                 //console.log("load before protcol -----------------------------------------------------------------------------------------");
@@ -111,21 +107,13 @@ export default function Seite_2() {
                         }
                     }
 
+                    setEinsatzkraefte_patienten(datas.beteiligte_einsatzkraefte.einsatzkraefte_am_patienten);
+                    /*for (let [key, value] of Object.entries(datas.beteiligte_einsatzkraefte.einsatzkraefte_am_patienten)) {
+                        if (value !== null) {
+                            document.getElementById("beteiligte_einsatzkraefte_patienten_" + key).checked = value;
+                        }
+                    }*/
 
-                    if (datas.beteiligte_einsatzkraefte.einsatzkraefte_am_patienten.x !== null) {
-
-                        Einsatzkraefte_patienten.current[0].current.checked = datas.beteiligte_einsatzkraefte.einsatzkraefte_am_patienten.x;
-                    }
-
-                    if (datas.beteiligte_einsatzkraefte.einsatzkraefte_am_patienten.y !== null) {
-
-                        Einsatzkraefte_patienten.current[1].current.checked = datas.beteiligte_einsatzkraefte.einsatzkraefte_am_patienten.y;
-                    }
-
-                    if (datas.beteiligte_einsatzkraefte.einsatzkraefte_am_patienten.z !== null) {
-
-                        Einsatzkraefte_patienten.current[2].current.checked = datas.beteiligte_einsatzkraefte.einsatzkraefte_am_patienten.z;
-                    }
 
                     const map_array2 = Object.values(datas.beteiligte_einsatzkraefte.einsatzkraefte_am_patienten);
 
@@ -140,29 +128,21 @@ export default function Seite_2() {
                         }
                     }
 
+                    setEinsatzkraefte_ort(datas.beteiligte_einsatzkraefte.einsatzkraefte_vor_ort)
+                    /*for (let [key, value] of Object.entries(datas.beteiligte_einsatzkraefte.einsatzkraefte_vor_ort)) {
+                        if (value !== null) {
+                            document.getElementById("beteiligte_einsatzkraefte_ort_" + key).checked = value;
+                        }
 
-                    if (datas.beteiligte_einsatzkraefte.einsatzkraefte_vor_ort.x !== null) {
+                    }*/
 
-                        Einsatzkraefte_ort.current[0].current.checked = datas.beteiligte_einsatzkraefte.einsatzkraefte_vor_ort.x;
-                    }
-
-                    if (datas.beteiligte_einsatzkraefte.einsatzkraefte_vor_ort.y !== null) {
-
-                        Einsatzkraefte_ort.current[1].current.checked = datas.beteiligte_einsatzkraefte.einsatzkraefte_vor_ort.y;
-                    }
-
-                    if (datas.beteiligte_einsatzkraefte.einsatzkraefte_vor_ort.z !== null) {
-
-                        Einsatzkraefte_ort.current[2].current.checked = datas.beteiligte_einsatzkraefte.einsatzkraefte_vor_ort.z;
-                    }
-
-
+                    document.getElementById("main").style.pointerEvents = "auto";
 
                 } else {
                     navigate('/einstellungen');
                 }
             } else {
-                setLoading(false);
+
                 navigate('/');
             }
 
@@ -175,21 +155,29 @@ export default function Seite_2() {
     const save_datas_beteiligte_einsatzkraefte = async () => {
 
         try {
+            let obj = {
+                id: pub_draft_protocol_token.current.obj,
+                instance_index: parseInt(localStorage.getItem('deutsches_rottes_kreuz_herrenberg_instance')),
+                privat_pkw: isChecked.current[0].current.checked,
+                feuerwehr_mtw: isChecked.current[1].current.checked,
+                z_58_19_2: isChecked.current[2].current.checked,
+                patienten:{},
+                ort: {}
+            }
+
+            for (let [k, v] of Object.entries(Einsatzkraefte_patienten)) {
+                obj.patienten[k] = document.getElementById("beteiligte_einsatzkraefte_patienten_" + k).checked
+
+            }
+
+            for (let [k, v] of Object.entries(Einsatzkraefte_ort)) {
+                obj.ort[k] = document.getElementById("beteiligte_einsatzkraefte_ort_" + k).checked
+
+            }
+
             const response = await axios.put(
                 "http://localhost:8800/protocol_draft/save_datas_beteiligte_einsatzkraefte",
-                {
-                    id: pub_draft_protocol_token.current.obj,
-                    instance_index: parseInt(localStorage.getItem('deutsches_rottes_kreuz_herrenberg_instance')),
-                    privat_pkw: isChecked.current[0].current.checked,
-                    feuerwehr_mtw: isChecked.current[1].current.checked,
-                    z_58_19_2: isChecked.current[2].current.checked,
-                    einsatzkraefte_am_patienten_x: Einsatzkraefte_patienten.current[0].current.checked,
-                    einsatzkraefte_am_patienten_y: Einsatzkraefte_patienten.current[1].current.checked,
-                    einsatzkraefte_am_patienten_z: Einsatzkraefte_patienten.current[2].current.checked,
-                    einsatzkraefte_vor_ort_x: Einsatzkraefte_ort.current[0].current.checked,
-                    einsatzkraefte_vor_ort_y: Einsatzkraefte_ort.current[1].current.checked,
-                    einsatzkraefte_vor_ort_z: Einsatzkraefte_ort.current[2].current.checked
-                }
+                obj
             );
 
             console.log("beteiligte_einsatzkraefte : -------------------------------------------------------------------------------------------------------------------" + response.data);
@@ -304,10 +292,17 @@ export default function Seite_2() {
     }
 
     function handleOnChange_Einsatzkraefte_patienten(e, type) {
-        let a = false;
+        //datasss.beteiligte_einsatzkraefte.einsatzkraefte_am_patienten
+        //id={"beteiligte_einsatzkraefte_patienten_" + key}
 
-        for (let i = 0; i < Einsatzkraefte_patienten.current.length; i += 1) {
-            if (Einsatzkraefte_patienten.current[i].current.checked == true) {
+        setEinsatzkraefte_patienten((prevEinsatzkraefte_patienten) => ({
+            ...prevEinsatzkraefte_patienten,
+            [type]: !prevEinsatzkraefte_patienten[type], // Toggle the value when clicked
+        }));
+
+        let a = false;
+        for (let [key, value] of Object.entries(datasss.beteiligte_einsatzkraefte.einsatzkraefte_am_patienten)) {
+            if (document.getElementById("beteiligte_einsatzkraefte_patienten_" + key).checked == true) {
                 a = true;
                 break;
             }
@@ -319,7 +314,7 @@ export default function Seite_2() {
             Einsatzkraefte_patienten_l.current.style.color = "red"
         }
 
-        console.log(type);
+
 
     }
 
@@ -352,7 +347,24 @@ export default function Seite_2() {
         }
     };
 
+    const getTimeFromServer = async () => {
+        try {
+            const response = await axios.get("http://localhost:8800/protocol_draft/time");
+            const t = new Date(response.data)
+            console.log(t + "    server time");
+
+            return t;
+        } catch (error) {
+            console.log('Error:', error);
+        }
+    };
+
     const instanz_erstellen = async () => {
+
+        const creation_datee = await getTimeFromServer();
+        const del_time = new Date(creation_datee);
+        del_time.setMonth(del_time.getMonth() + 2);
+
         const userResponse = window.confirm("Sind Sie sicher, dass Sie ein neues Instanz erstellen möchten?");
 
         if (userResponse) {
@@ -364,11 +376,15 @@ export default function Seite_2() {
                     "http://localhost:8800/protocol_draft/create_instance",
                     {
                         id: draft_protocol_id,
-                        instance_index: instance
+                        user_id: pub_token.current.userId,
+                        instance_index: instance,
+                        creation_dat: creation_datee,
+                        delete_timee: del_time
                     }
                 );
 
                 localStorage.setItem('deutsches_rottes_kreuz_herrenberg_instance', response.data.toString());
+
             } catch (error) {
                 console.log(error);
             }
@@ -379,27 +395,22 @@ export default function Seite_2() {
         }
     };
 
-    if (loading) {
-        return (<div style={{ pointerEvents: "none" }} className="s2">
-            <Sidebar currentPage="beteiligte_einsatzkraefte" />
-            <Topbar />
-            <div className="s2_body">
-                <span className="s2_body_title">
-                    Seite wird geladen
-                </span>
-            </div>
-        </div>); // Render a loading indicator while fetching data
+    function do_nothing(e, type){
+        setEinsatzkraefte_ort((prevEinsatzkraefte_ort) => ({
+            ...prevEinsatzkraefte_ort,
+            [type]: !prevEinsatzkraefte_ort[type] // Toggle the value when clicked
+        }));
     }
 
     return (
-        <div className="s2">
+        <div id="main" style={{ pointerEvents: "none" }} className="s2">
             <Sidebar currentPage="beteiligte_einsatzkraefte" save_a={save_datas_beteiligte_einsatzkraefte} datas={datasss}
                 del={delete_d} instanz_erstellen={instanz_erstellen} />
             <Topbar currentPage="beteiligte_einsatzkraefte" datas={datasss} />
             <div onClick={() => {
                 document.getElementById("sidebar_mc_id").style.width = "0px";
                 document.getElementById("sidebar_mc_id").style.border = "none";
-                console.log(isChecked);
+
             }} className="s2_body">
                 <span className="s2_body_title">
                     Beteiligte Einsatzkräfte
@@ -448,33 +459,20 @@ export default function Seite_2() {
                             Einsatzkräfte am Patienten: *
                         </span>
                         <div className="s2_body_components_line_right">
-                            <div className="s2_body_components_line_right_dropdown">
-                                <input
-                                    type="checkbox" className="s2_body_components_line_right_dropdown_checkbox"
-                                    id="beteiligte_einsatzkraefte_patienten_x"
-                                    ref={Einsatzkraefte_patienten.current[0]}
-                                    onChange={(e) => handleOnChange_Einsatzkraefte_patienten(e, "X")}
-                                />
-                                <label htmlFor="beteiligte_einsatzkraefte_patienten_x">X</label>
-                            </div>
-                            <div className="s2_body_components_line_right_dropdown">
-                                <input
-                                    type="checkbox" className="s2_body_components_line_right_dropdown_checkbox"
-                                    id="beteiligte_einsatzkraefte_patienten_y"
-                                    ref={Einsatzkraefte_patienten.current[1]}
-                                    onChange={(e) => handleOnChange_Einsatzkraefte_patienten(e, "Y")}
-                                />
-                                <label htmlFor="beteiligte_einsatzkraefte_patienten_y">Y</label>
-                            </div>
-                            <div className="s2_body_components_line_right_dropdown">
-                                <input
-                                    type="checkbox" className="s2_body_components_line_right_dropdown_checkbox"
-                                    id="beteiligte_einsatzkraefte_patienten_z"
-                                    ref={Einsatzkraefte_patienten.current[2]}
-                                    onChange={(e) => handleOnChange_Einsatzkraefte_patienten(e, "Z")}
-                                />
-                                <label htmlFor="beteiligte_einsatzkraefte_patienten_z">Z</label>
-                            </div>
+                            {
+                                Object.entries(Einsatzkraefte_patienten).map(([keyy, value]) => (
+                                    <div className="s2_body_components_line_right_dropdown" key={"pat" + keyy}>
+                                        <input
+                                            type="checkbox"
+                                            className="s2_body_components_line_right_dropdown_checkbox"
+                                            id={"beteiligte_einsatzkraefte_patienten_" + keyy}
+                                            onChange={(e) => handleOnChange_Einsatzkraefte_patienten(e, keyy)}
+                                            checked={value === null ? false : value}
+                                        />
+                                        <label htmlFor={"beteiligte_einsatzkraefte_patienten_" + keyy}>{keyy}</label>
+                                    </div>
+                                ))
+                            }
 
                         </div>
                     </div>
@@ -486,30 +484,19 @@ export default function Seite_2() {
                             Einsatzkräfte vor Ort:
                         </span>
                         <div className="s2_body_components_line_right">
-                            <div className="s2_body_components_line_right_dropdown">
-                                <input
-                                    type="checkbox" className="s2_body_components_line_right_dropdown_checkbox"
-                                    id="beteiligte_einsatzkraefte_ort_x"
-                                    ref={Einsatzkraefte_ort.current[0]}
-                                />
-                                <label htmlFor="beteiligte_einsatzkraefte_ort_x">X</label>
-                            </div>
-                            <div className="s2_body_components_line_right_dropdown">
-                                <input
-                                    type="checkbox" className="s2_body_components_line_right_dropdown_checkbox"
-                                    id="beteiligte_einsatzkraefte_ort_y"
-                                    ref={Einsatzkraefte_ort.current[1]}
-                                />
-                                <label htmlFor="beteiligte_einsatzkraefte_ort_y">Y</label>
-                            </div>
-                            <div className="s2_body_components_line_right_dropdown">
-                                <input
-                                    type="checkbox" className="s2_body_components_line_right_dropdown_checkbox"
-                                    id="beteiligte_einsatzkraefte_ort_z"
-                                    ref={Einsatzkraefte_ort.current[2]}
-                                />
-                                <label htmlFor="beteiligte_einsatzkraefte_ort_z">Z</label>
-                            </div>
+                            {
+                                Object.entries(Einsatzkraefte_ort).map(([keyy, value]) => (
+                                    <div className="s2_body_components_line_right_dropdown" key={"ort" + keyy}>
+                                        <input
+                                            type="checkbox" className="s2_body_components_line_right_dropdown_checkbox"
+                                            id={"beteiligte_einsatzkraefte_ort_" + keyy}
+                                            checked={value === null ? false : value}
+                                            onChange={(e) => do_nothing(e, keyy)}
+                                        />
+                                        <label htmlFor={"beteiligte_einsatzkraefte_ort_" + keyy}>{keyy}</label>
+                                    </div>
+                                ))
+                            }
 
                         </div>
                     </div>
@@ -525,4 +512,5 @@ export default function Seite_2() {
             </div>
         </div>
     );
+
 }

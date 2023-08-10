@@ -38,12 +38,12 @@ export default function LLogin() {
                     localStorage.setItem('deutsches_rottes_kreuz_herrenberg_isLoggedIn', 'false');
                     localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_draft_protocol');
                     localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_instance');
-                    setLoading(false); // Update loading state
+                    document.getElementById("main").style.pointerEvents = "auto";
                 } else {
                     navigate('/einstellungen');
                 }
             } else {
-                setLoading(false); // Update loading state
+                document.getElementById("main").style.pointerEvents = "auto";
             }
         };
 
@@ -93,7 +93,7 @@ export default function LLogin() {
             localStorage.setItem('deutsches_rottes_kreuz_herrenberg_isLoggedIn', 'true');
             navigate('/einstellungen');
         }).catch((error) => {
-            console.log('Error:', error.response.data);
+            alert('Error: '+ error.response.data);
         });
 
     };
@@ -110,12 +110,8 @@ export default function LLogin() {
         setPassword(e.target.value);
     }
 
-    if (loading) {
-        return <div>Seite wird geladen</div>; // Render a loading indicator while fetching data
-    }
-
     return (
-        <div className="login">
+        <div id="main" style={{pointerEvents: "none"}} className="login">
             <div className="login_body">
                 <div className="login_body_top">
                     <img className="login_body_top_ico" src="assets/red_cross.png"></img>

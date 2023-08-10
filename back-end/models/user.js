@@ -7,8 +7,8 @@ const UserSchema = new mongoose.Schema(
     password: String,
     own_finished_protocols: [String],
     id_last_opened_protocol: String,
-    permission: Number,
-    statistics_permission: Number,
+    permission: [String],
+    statistics_permission: [String],
   },
   { timestamps: true }
 );

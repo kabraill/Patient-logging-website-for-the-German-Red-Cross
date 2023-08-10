@@ -23,6 +23,7 @@ export default function Vorschau() {
     const pub_token = useRef();
     const pub_draft_protocol_token = useRef();
     const [datass, setDatass] = useState("");
+    const user_u = useRef();
 
     const [loading, setLoading] = useState(true); // Add loading state
 
@@ -33,13 +34,14 @@ export default function Vorschau() {
 
             if (isLoggedIn === 'true' && token) {
                 const decodedToken = await decodeToken(token);
+                user_u.current = await get_user(decodedToken.userId);
                 pub_token.current = decodedToken;
                 if (typeof decodedToken === 'undefined') {
                     localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_token');
                     localStorage.setItem('deutsches_rottes_kreuz_herrenberg_isLoggedIn', 'false');
                     localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_draft_protocol');
                     localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_instance');
-                    setLoading(false); // Update loading state
+
                     navigate('/');
                     return;
                 }
@@ -53,7 +55,7 @@ export default function Vorschau() {
 
                 console.log(localStorage.getItem('deutsches_rottes_kreuz_herrenberg_token'));
                 console.log(localStorage.getItem('deutsches_rottes_kreuz_herrenberg_isLoggedIn'));
-                setLoading(false); // Update loading state
+
                 const draft_protocol_token = localStorage.getItem('deutsches_rottes_kreuz_herrenberg_draft_protocol');
                 const draft_protocol_instance = localStorage.getItem('deutsches_rottes_kreuz_herrenberg_instance');
                 //console.log("load before protcol -----------------------------------------------------------------------------------------");
@@ -108,7 +110,7 @@ export default function Vorschau() {
 
                     if (datas.einsatzdaten.alarmzeit !== null) {
 
-                        if (!datas.einsatzdaten.alarmzeit.match('^[0-9][0-9]:[0-9][0-9]$')) {
+                        if (!datas.einsatzdaten.alarmzeit.match(/^(000[1-9]|00[1-9]\d|0[1-9]\d\d|100\d|10[1-9]\d|1[1-9]\d{2}|[2-9]\d{3}|[1-9]\d{4}|1\d{5}|2[0-6]\d{4}|27[0-4]\d{3}|275[0-6]\d{2}|2757[0-5]\d|275760)-(0[1-9]|1[012])-(0[1-9]|[12]\d|3[01])T(0\d|1\d|2[0-4]):(0\d|[1-5]\d)(?::(0\d|[1-5]\d))?(?:.(00\d|0[1-9]\d|[1-9]\d{2}))?$/gm)) {
                             document.getElementById("aaaa").style.pointerEvents = "none";
                         }
                     } else {
@@ -399,14 +401,15 @@ export default function Vorschau() {
                         document.getElementById("save_finished_protocol").style.pointerEvents = "none";
                     } else {
                         document.getElementById("res").textContent = "Alle Eingaben sind richtig";
-                        document.getElementById("res").style.color = "black";
+                        document.getElementById("res").style.color = "green";
                     }
 
+                    document.getElementById("main").style.pointerEvents = "auto"
                 } else {
                     navigate('/einstellungen');
                 }
             } else {
-                setLoading(false);
+
                 navigate('/');
             }
 
@@ -414,6 +417,32 @@ export default function Vorschau() {
         };
         fetchData();
     }, []);
+
+    const get_user = async (token) => {
+
+        try {
+            const response = await axios.post(
+                "http://localhost:8800/user/get_user",
+                {},
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+
+            if (typeof (response.data) === "string") {
+                navigate('/');
+                alert(response.data)
+            } else {
+                return response.data;
+            }
+
+
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
     const decode_object = async (token) => {
         try {
@@ -587,6 +616,22 @@ export default function Vorschau() {
 
     const save_finished_pro = async () => {
         const save_finished_pro_a = async () => {
+            if (user_u.current.permission[0] === "Normaler-Benutzer") {
+                alert("Sie haben keine berechtigung, das Protokoll als fertig zu speichern!")
+                return;
+            }
+
+            if (datass.finished === "nein") {
+                alert("Das protokoll ist noch nicht fertig!")
+                return;
+            }
+
+            const userResponse = window.confirm("Sind Sie sicher, dass Sie das Protokol als fertig speichern möchten?");
+
+            if (!userResponse) {
+                return;
+            }
+
             const creation_datee = await getTimeFromServer();
             const del_time = new Date(creation_datee);
             del_time.setFullYear(del_time.getFullYear() + 10);
@@ -640,7 +685,14 @@ export default function Vorschau() {
         }
     };
 
+
+
     const instanz_erstellen = async () => {
+
+        const creation_datee = await getTimeFromServer();
+        const del_time = new Date(creation_datee);
+        del_time.setMonth(del_time.getMonth() + 2);
+
         const userResponse = window.confirm("Sind Sie sicher, dass Sie ein neues Instanz erstellen möchten?");
 
         if (userResponse) {
@@ -652,11 +704,15 @@ export default function Vorschau() {
                     "http://localhost:8800/protocol_draft/create_instance",
                     {
                         id: draft_protocol_id,
-                        instance_index: instance
+                        user_id: pub_token.current.userId,
+                        instance_index: instance,
+                        creation_dat: creation_datee,
+                        delete_timee: del_time
                     }
                 );
 
                 localStorage.setItem('deutsches_rottes_kreuz_herrenberg_instance', response.data.toString());
+
             } catch (error) {
                 console.log(error);
             }
@@ -667,23 +723,10 @@ export default function Vorschau() {
         }
     };
 
-
-    if (loading) {
-        return (<div style={{ pointerEvents: "none" }} className="vorschau">
-            <Sidebar currentPage="vorschau" />
-            <Topbar />
-            <div className="vorschau_body">
-                <span className="vorschau_body_title">
-                    Seite wird geladen
-                </span>
-            </div>
-        </div>); // Render a loading indicator while fetching data
-    }
-
     return (
-        <div className="vorschau">
-            <Sidebar currentPage="vorschau" save_a={savee} datas={datass} 
-            del={delete_d} instanz_erstellen={instanz_erstellen} />
+        <div id="main" style={{ pointerEvents: "none" }} className="vorschau">
+            <Sidebar currentPage="vorschau" save_a={savee} datas={datass}
+                del={delete_d} instanz_erstellen={instanz_erstellen} />
             <Topbar currentPage="vorschau" datas={datass} />
             <div onClick={() => {
                 document.getElementById("sidebar_mc_id").style.width = "0px";
