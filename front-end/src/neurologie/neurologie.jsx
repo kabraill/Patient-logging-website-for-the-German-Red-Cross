@@ -30,7 +30,7 @@ export default function Neurologie() {
     const pub_token = useRef();
     const pub_draft_protocol_token = useRef();
 
-    
+
 
     useEffect(() => {
         const fetchData = async () => {
@@ -45,7 +45,7 @@ export default function Neurologie() {
                     localStorage.setItem('deutsches_rottes_kreuz_herrenberg_isLoggedIn', 'false');
                     localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_draft_protocol');
                     localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_instance');
-                    
+
                     navigate('/');
                     return;
                 }
@@ -59,7 +59,7 @@ export default function Neurologie() {
 
                 console.log(localStorage.getItem('deutsches_rottes_kreuz_herrenberg_token'));
                 console.log(localStorage.getItem('deutsches_rottes_kreuz_herrenberg_isLoggedIn'));
-                
+
                 const draft_protocol_token = localStorage.getItem('deutsches_rottes_kreuz_herrenberg_draft_protocol');
                 const draft_protocol_instance = localStorage.getItem('deutsches_rottes_kreuz_herrenberg_instance');
                 //console.log("load before protcol -----------------------------------------------------------------------------------------");
@@ -162,13 +162,29 @@ export default function Neurologie() {
                     navigate('/einstellungen');
                 }
             } else {
-                
+
                 navigate('/');
             }
 
 
         };
         fetchData();
+
+        const handleBeforeUnload = (e) => {
+
+            e.preventDefault();
+            e.returnValue = ''; // Display a confirmation message
+
+        };
+
+        // Add the event listener
+        window.addEventListener('beforeunload', handleBeforeUnload);
+
+        return () => {
+            // Remove the event listener when the component unmounts
+            window.removeEventListener('beforeunload', handleBeforeUnload);
+        };
+        
     }, []);
 
 
@@ -181,7 +197,7 @@ export default function Neurologie() {
                     id: pub_draft_protocol_token.current.obj,
                     instance_index: parseInt(localStorage.getItem('deutsches_rottes_kreuz_herrenberg_instance')),
                     Bewusstsein_a: Bewusstsein.current.value,
-                    Blutzucker_a: Blutzucker.current.value,
+                    Blutzucker_a: Blutzucker.current.value.trim(),
                     /////////////////////////////////////////////////////////////
                     isChecked_PupilleLinks_eng_a: isChecked_PupilleLinks.current[0].current.checked,
                     isChecked_PupilleLinks_mittel_a: isChecked_PupilleLinks.current[1].current.checked,
@@ -196,9 +212,17 @@ export default function Neurologie() {
                     isChecked_PupilleRechts_entrundet_a: isChecked_PupilleRechts.current[4].current.checked,
                     //////////////////////////////////////////////////////////
                     Schmerzen_a: Schmerzen.current.value,
-                    Schmerzskala_a: Schmerzskala.current.value
+                    Schmerzskala_a: Schmerzskala.current.value.trim()
                 }
             );
+
+            if (response.data === "Protocol nicht gefunden") {
+                alert("Protocol nicht gefunden");
+                localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_draft_protocol');
+                localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_instance');
+                navigate('/einstellungen');
+                return;
+            }
 
             console.log("neurologie : -------------------------------------------------------------------------------------------------------------------" + response.data);
         } catch (error) {
@@ -238,6 +262,14 @@ export default function Neurologie() {
                     instance_index: instance
                 }
             );
+
+            if (response.data === "Protocol nicht gefunden") {
+                alert("Protocol nicht gefunden");
+                localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_draft_protocol');
+                localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_instance');
+                navigate('/einstellungen');
+                return;
+            }
 
             return response.data;
         } catch (error) {
@@ -325,6 +357,22 @@ export default function Neurologie() {
                     }
                 );
 
+                if (response.data === "Protokoll nicht gefunden") {
+                    alert("Protocol nicht gefunden");
+                    localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_draft_protocol');
+                    localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_instance');
+                    navigate('/einstellungen');
+                    return;
+                }
+
+                if (response.data === "Falsche Instanznummer!!") {
+                    alert("Falsche Instanznummer!!");
+                    localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_draft_protocol');
+                    localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_instance');
+                    navigate('/einstellungen');
+                    return;
+                }
+
             } catch (error) {
                 console.log(error);
             }
@@ -357,7 +405,7 @@ export default function Neurologie() {
         del_time.setMonth(del_time.getMonth() + 2);
 
         const userResponse = window.confirm("Sind Sie sicher, dass Sie ein neues Instanz erstellen möchten?");
-        
+
         if (userResponse) {
             const draft_protocol_id = pub_draft_protocol_token.current.obj;
             const instance = parseInt(localStorage.getItem('deutsches_rottes_kreuz_herrenberg_instance'));
@@ -374,8 +422,16 @@ export default function Neurologie() {
                     }
                 );
 
+                if (response.data === "Protocol nicht gefunden") {
+                    alert("Protocol nicht gefunden");
+                    localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_draft_protocol');
+                    localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_instance');
+                    navigate('/einstellungen');
+                    return;
+                }
+
                 localStorage.setItem('deutsches_rottes_kreuz_herrenberg_instance', response.data.toString());
-                
+
             } catch (error) {
                 console.log(error);
             }
@@ -388,9 +444,9 @@ export default function Neurologie() {
 
     return (
         <div id="main" style={{ pointerEvents: "none" }} className="neurologie">
-            <Sidebar currentPage="neurologie" save_a={save_datas_neurologie} datas={datasss} 
-            del={delete_d} instanz_erstellen={instanz_erstellen} />
-            <Topbar currentPage="neurologie" datas={datasss}/>
+            <Sidebar currentPage="neurologie" save_a={save_datas_neurologie} datas={datasss}
+                del={delete_d} instanz_erstellen={instanz_erstellen} />
+            <Topbar currentPage="neurologie" datas={datasss} />
             <div onClick={() => {
                 document.getElementById("sidebar_mc_id").style.width = "0px";
                 document.getElementById("sidebar_mc_id").style.border = "none";

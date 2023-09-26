@@ -479,7 +479,7 @@ export default function Sidebar({ currentPage, save_a, datas, del, instanz_erste
                 <hr></hr>
                 <a id="vorschau_a" style={currentPage === "vorschau" ? { color: "blue" } : {}} onClick={() => nav("/vorschau")}><Preview className="sidebar_mc_ico" />Vorschau</a>
 
-                <a style={(currentPage === "einstellungen" || currentPage === "vorschau") ? { pointerEvents: "none" } : {}}
+                <a style={(currentPage === "einstellungen" || currentPage === "vorschau" || currentPage === "benutzer_verwaltung") ? { pointerEvents: "none" } : {}}
                     onClick={(e) => {
                         document.getElementById("sidebar_mc_id").style.pointerEvents = "none";
                         save_a();
@@ -490,13 +490,13 @@ export default function Sidebar({ currentPage, save_a, datas, del, instanz_erste
                     }} >
                     <Save className="sidebar_mc_ico" />Speichern</a>
 
-                <a style={currentPage === "einstellungen" ? { pointerEvents: "none" } : {}} onClick={() => {
+                <a style={currentPage === "einstellungen" || currentPage === "benutzer_verwaltung"? { pointerEvents: "none" } : {}} onClick={() => {
                     del();
 
                 }} ><Delete className="sidebar_mc_ico" />Löschen</a>
-                <a onClick={check_color} ><CheckCircle className="sidebar_mc_ico" />Validieren</a>
+                <a style={currentPage === "einstellungen" || currentPage === "benutzer_verwaltung"? { pointerEvents: "none" } : {}} onClick={check_color} ><CheckCircle className="sidebar_mc_ico" />Validieren</a>
 
-                <a style={currentPage === "einstellungen" ? { pointerEvents: "none" } : {}}
+                <a style={currentPage === "einstellungen" || currentPage === "benutzer_verwaltung"? { pointerEvents: "none" } : {}}
                     onClick={() => {
                         instanz_erstellen();
                     }} ><Add className="sidebar_mc_ico" />Neues Instanz erstellen</a>

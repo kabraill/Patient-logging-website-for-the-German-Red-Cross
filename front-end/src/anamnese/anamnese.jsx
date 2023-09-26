@@ -46,7 +46,7 @@ export default function Anamnese() {
                     localStorage.setItem('deutsches_rottes_kreuz_herrenberg_isLoggedIn', 'false');
                     localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_draft_protocol');
                     localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_instance');
-                    
+
                     navigate('/');
                     return;
                 }
@@ -60,7 +60,7 @@ export default function Anamnese() {
 
                 console.log(localStorage.getItem('deutsches_rottes_kreuz_herrenberg_token'));
                 console.log(localStorage.getItem('deutsches_rottes_kreuz_herrenberg_isLoggedIn'));
-                
+
                 const draft_protocol_token = localStorage.getItem('deutsches_rottes_kreuz_herrenberg_draft_protocol');
                 const draft_protocol_instance = localStorage.getItem('deutsches_rottes_kreuz_herrenberg_instance');
                 //console.log("load before protcol -----------------------------------------------------------------------------------------");
@@ -237,7 +237,7 @@ export default function Anamnese() {
 
                 }
             } else {
-                
+
                 navigate('/');
             }
 
@@ -247,7 +247,20 @@ export default function Anamnese() {
 
         fetchData();
 
+        const handleBeforeUnload = (e) => {
 
+            e.preventDefault();
+            e.returnValue = ''; // Display a confirmation message
+
+        };
+
+        // Add the event listener
+        window.addEventListener('beforeunload', handleBeforeUnload);
+
+        return () => {
+            // Remove the event listener when the component unmounts
+            window.removeEventListener('beforeunload', handleBeforeUnload);
+        };
 
     }, []);
 
@@ -269,7 +282,7 @@ export default function Anamnese() {
                     belueftung_atemnot_a: isChecked_belueftung.current[4].current.checked,
                     belueftung_hyperventillation_a: isChecked_belueftung.current[5].current.checked,
                     belueftung_atemstillstand_a: isChecked_belueftung.current[6].current.checked,
-                    belueftung_sonstiges_a: SonstigValue.current.value,
+                    belueftung_sonstiges_a: SonstigValue.current.value.trim(),
                     /////////////////////////////////////////////////////
                     puls_regelmaessig_a: isChecked_puls.current[0].current.checked,
                     puls_unregelmaessig_a: isChecked_puls.current[1].current.checked,
@@ -285,6 +298,14 @@ export default function Anamnese() {
                     haut_kalt_a: isChecked_haut.current[5].current.checked
                 }
             );
+
+            if (response.data === "Protocol nicht gefunden") {
+                alert("Protocol nicht gefunden");
+                localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_draft_protocol');
+                localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_instance');
+                navigate('/einstellungen');
+                return;
+            }
 
             console.log("anamnese : -------------------------------------------------------------------------------------------------------------------" + response.data);
         } catch (error) {
@@ -324,6 +345,14 @@ export default function Anamnese() {
                     instance_index: instance
                 }
             );
+
+            if (response.data === "Protocol nicht gefunden") {
+                alert("Protocol nicht gefunden");
+                localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_draft_protocol');
+                localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_instance');
+                navigate('/einstellungen');
+                return;
+            }
 
             return response.data;
         } catch (error) {
@@ -479,6 +508,22 @@ export default function Anamnese() {
                     }
                 );
 
+                if (response.data === "Protokoll nicht gefunden") {
+                    alert("Protocol nicht gefunden");
+                    localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_draft_protocol');
+                    localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_instance');
+                    navigate('/einstellungen');
+                    return;
+                }
+
+                if (response.data === "Falsche Instanznummer!!") {
+                    alert("Falsche Instanznummer!!");
+                    localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_draft_protocol');
+                    localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_instance');
+                    navigate('/einstellungen');
+                    return;
+                }
+
             } catch (error) {
                 console.log(error);
             }
@@ -511,7 +556,7 @@ export default function Anamnese() {
         del_time.setMonth(del_time.getMonth() + 2);
 
         const userResponse = window.confirm("Sind Sie sicher, dass Sie ein neues Instanz erstellen möchten?");
-        
+
         if (userResponse) {
             const draft_protocol_id = pub_draft_protocol_token.current.obj;
             const instance = parseInt(localStorage.getItem('deutsches_rottes_kreuz_herrenberg_instance'));
@@ -528,8 +573,16 @@ export default function Anamnese() {
                     }
                 );
 
+                if (response.data === "Protocol nicht gefunden") {
+                    alert("Protocol nicht gefunden");
+                    localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_draft_protocol');
+                    localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_instance');
+                    navigate('/einstellungen');
+                    return;
+                }
+
                 localStorage.setItem('deutsches_rottes_kreuz_herrenberg_instance', response.data.toString());
-                
+
             } catch (error) {
                 console.log(error);
             }
@@ -542,8 +595,8 @@ export default function Anamnese() {
 
     return (
         <div id="main" style={{ pointerEvents: "none" }} className="anamnese">
-            <Sidebar currentPage="anamnese" save_a={save_datas_anamnese} datas={datasss} 
-            del={delete_d} instanz_erstellen={instanz_erstellen}/>
+            <Sidebar currentPage="anamnese" save_a={save_datas_anamnese} datas={datasss}
+                del={delete_d} instanz_erstellen={instanz_erstellen} />
             <Topbar currentPage="anamnese" datas={datasss} />
 
             <div onClick={() => {

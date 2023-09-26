@@ -11,19 +11,15 @@ export default function Benutzer_verwaltung() {
 
     const navigate = useNavigate();
 
-    const { reload, setReload } = useState(0)
-
     const process_type = useRef("");
-
 
     const [users, setUsers] = useState([]);
     const index = useRef("");
 
 
     const values = useRef([useRef(), useRef(), useRef(), useRef()]);
-    const laden = useRef([useRef(), useRef(), useRef(), useRef()]);
+    const laden = useRef([useRef()]);
     const bearbeiten = useRef([useRef(), useRef(), useRef(), useRef()]);
-    const choices = useRef([useRef(), useRef(), useRef(), useRef()]);
 
     const [user_u, setUser_u] = useState();
     const pub_token = useRef();
@@ -35,8 +31,6 @@ export default function Benutzer_verwaltung() {
         const fetchData = async () => {
             const token = localStorage.getItem('deutsches_rottes_kreuz_herrenberg_token');
             const isLoggedIn = localStorage.getItem('deutsches_rottes_kreuz_herrenberg_isLoggedIn');
-
-
 
             if (isLoggedIn === 'true' && token) {
                 const decodedToken = await decodeToken(token);
@@ -68,6 +62,21 @@ export default function Benutzer_verwaltung() {
             }
         }
         fetchData();
+
+        const handleBeforeUnload = (e) => {
+
+            e.preventDefault();
+            e.returnValue = ''; // Display a confirmation message
+
+        };
+
+        // Add the event listener
+        window.addEventListener('beforeunload', handleBeforeUnload);
+
+        return () => {
+            // Remove the event listener when the component unmounts
+            window.removeEventListener('beforeunload', handleBeforeUnload);
+        };
     }, []);
 
     const get_user = async (token) => {
@@ -128,6 +137,26 @@ export default function Benutzer_verwaltung() {
 
     const erstellen_main = async () => {
         const erstellen = async () => {
+            if (!values.current[0].current.value.match(/^([a-zA-Z]+\w+-)*[a-zA-Z]+\w+$/)) {
+                alert("Der Name ist ungültig!!");
+                return;
+            }
+
+            if (values.current[1].current.value.includes(" ")) {
+                alert("Das Kennwort darf kein Leerzeichen enthallten!!");
+                return;
+            }
+
+            if (!values.current[2].current.value.includes("@")) {
+                alert("Die E-mail muss @ Symbol enthalten!!");
+                return;
+            }
+
+            if (values.current[2].current.value.includes(" ")) {
+                alert("Die E-mail darf kein Leerzeichen enthalten!");
+                return;
+            }
+
             const userResponse = window.confirm("Sind Sie sicher, dass Sie einen neuen Benutzer erstellen möchten?");
             if (!userResponse) {
                 return;
@@ -135,9 +164,9 @@ export default function Benutzer_verwaltung() {
 
             try {
                 const response = await axios.post("http://localhost:8800/user/register", {
-                    name: values.current[0].current.value,
-                    password: values.current[1].current.value,
-                    email: values.current[2].current.value,
+                    name: values.current[0].current.value.trim(),
+                    password: values.current[1].current.value.trim(),
+                    email: values.current[2].current.value.trim(),
                     permission: [values.current[3].current.value],
                     statistics_permission: []
                 })
@@ -206,20 +235,13 @@ export default function Benutzer_verwaltung() {
 
             let obj = {}
 
-            if (process_type.current === "benutzer_laden_Name") {
-                obj.name = laden.current[0].current.value
-            } else if (process_type.current === "benutzer_laden_kennwort") {
-                obj.password = laden.current[1].current.value
-            } else if (process_type.current === "benutzer_laden_email") {
-                obj.email = laden.current[2].current.value
-            } else if (process_type.current === "benutzer_laden_berechtigung") {
-                obj.permission = laden.current[3].current.value
-            } else {
-                alert("Wählen Sie bitte ein Suchkriterium aus")
+            if (laden.current[0].current.value.trim() === "") {
+
+                alert("Schreiben Sie einen Namen oder Eine E-mail zu suchen!!")
                 return;
             }
 
-
+            obj.text = laden.current[0].current.value.trim()
             try {
                 const response = await axios.post("http://localhost:8800/user/laden", obj,
                     {
@@ -326,13 +348,34 @@ export default function Benutzer_verwaltung() {
 
 
         bearbeiten.current[0].current.value = users[index.current].name;
+        bearbeiten.current[1].current.value = "";
         bearbeiten.current[2].current.value = users[index.current].email;
         bearbeiten.current[3].current.value = users[index.current].permission[0];
-
     }
 
     async function speichern_main() {
         async function speichern() {
+
+            if (!bearbeiten.current[0].current.value.match(/^([a-zA-Z]+\w+-)*[a-zA-Z]+\w+$/)) {
+                alert("Der neue Benutzername hat einen falschen Muster!");
+                return;
+            }
+
+            if (bearbeiten.current[1].current.value.includes(" ")) {
+                alert("Das Kennwort darf kein Leerzeichen enthalten!");
+                return;
+            }
+
+            if (!bearbeiten.current[2].current.value.includes("@")) {
+                alert("Die E-mail muss @ enthalten!");
+                return;
+            }
+
+            if (bearbeiten.current[2].current.value.includes(" ")) {
+                alert("Die E-mail darf kein Leerzeichen enthalten!");
+                return;
+            }
+
             const userResponse = window.confirm("Sind Sie sicher, dass Sie speichern möchten?");
             if (!userResponse) {
                 return;
@@ -343,22 +386,13 @@ export default function Benutzer_verwaltung() {
                         old_name: users[index.current].name
                     }
 
-                    if (choices.current[0].current.checked == true) {
-                        obj.new_name = bearbeiten.current[0].current.value;
-                    }
+                    obj.new_name = bearbeiten.current[0].current.value.trim();
 
-                    if (choices.current[1].current.checked == true) {
-                        obj.password = bearbeiten.current[1].current.value;
-                    }
+                    obj.password = bearbeiten.current[1].current.value.trim();
 
-                    if (choices.current[2].current.checked == true) {
-                        obj.email = bearbeiten.current[2].current.value;
-                    }
+                    obj.email = bearbeiten.current[2].current.value;
 
-                    if (choices.current[3].current.checked == true) {
-                        obj.permission = bearbeiten.current[3].current.value;
-                    }
-
+                    obj.permission = bearbeiten.current[3].current.value;
 
                     const response = await axios.put("http://localhost:8800/user/save", obj)
 
@@ -368,27 +402,21 @@ export default function Benutzer_verwaltung() {
                     } else {
                         let user_list = users.slice();
 
-                        if (choices.current[0].current.checked == true) {
-                            user_list[index.current].name = bearbeiten.current[0].current.value;
-                        }
+                        user_list[index.current].name = bearbeiten.current[0].current.value.trim();
 
-                        if (choices.current[1].current.checked == true) {
-                            user_list[index.current].password = bearbeiten.current[1].current.value;
-                        }
+                        user_list[index.current].password = bearbeiten.current[1].current.value.trim();
 
-                        if (choices.current[2].current.checked == true) {
-                            user_list[index.current].email = bearbeiten.current[2].current.value;
-                        }
+                        user_list[index.current].email = bearbeiten.current[2].current.value.trim();
 
-                        if (choices.current[3].current.checked == true) {
-                            user_list[index.current].permission = bearbeiten.current[3].current.value;
-                        }
+                        user_list[index.current].permission[0] = bearbeiten.current[3].current.value.trim();
 
-
+                        console.log("perm : " + user_list[index.current].permission);
 
                         setUsers(user_list);
 
                         alert("Die neuen Informationen wurden gespeichert");
+
+
                     }
                 } catch (error) {
                     if (error.response && error.response.data) {
@@ -410,19 +438,27 @@ export default function Benutzer_verwaltung() {
     async function del_user() {
         async function del_user_main() {
 
+            if (!bearbeiten.current[0].current.value.match(/^([a-zA-Z]+\w+-)*[a-zA-Z]+\w+$/)) {
+                alert("Der Benutzername hat einen falschen Muster!");
+                return;
+            }
+
+
             const userResponse = window.confirm("Sind Sie sicher, dass Sie löschen möchten?");
+
             if (!userResponse) {
                 return;
             }
+
             if (index.current !== "") {
                 try {
-                    if (user_u.name === bearbeiten.current[0].current.value) {
+                    if (user_u.name === bearbeiten.current[0].current.value.trim()) {
 
                         alert("Sie können Ihr eigenes Konto nicht löschen")
                         return;
                     }
                     const response = await axios.post("http://localhost:8800/user/delete", {
-                        name: bearbeiten.current[0].current.value
+                        name: bearbeiten.current[0].current.value.trim()
                     })
 
                     console.log(typeof (response.data))
@@ -430,6 +466,19 @@ export default function Benutzer_verwaltung() {
 
                         alert(response.data)
                     } else {
+
+                        let user_list = users.slice();
+
+                        user_list.splice(index.current, 1)
+
+                        setUsers(user_list);
+                        bearbeiten.current[0].current.value = "";
+                        bearbeiten.current[1].current.value = "";
+                        bearbeiten.current[2].current.value = "";
+                        bearbeiten.current[3].current.value = "Normaler-Benutzer";
+                        if (users.length - 1 == 0) {
+                            document.getElementById("benutzer_bearbeiten").style.pointerEvents = "none";
+                        }
 
                         alert("Das Konto wurde erfolgreich gelöscht");
                     }
@@ -561,68 +610,9 @@ export default function Benutzer_verwaltung() {
                         <div className="einstellungen_body_components_line_right">
                             <div className="einstellungen_body_components_line_right">
                                 <div className="verletzungen_body_components_line_right3_multiselect">
-                                    <input
-                                        className="anamnese_body_components_line_right3_multiselect_radio"
-                                        id="benutzer_laden_Name"
-                                        type="radio"
-                                        name="benutzer_laden"
-                                        value="benutzer_laden_Name"
-                                        onClick={(e) => handleOnChange_process_bearbeiten(e, "a")} />
-                                    <label htmlFor="benutzer_laden_Name">Name</label>
                                     <input ref={laden.current[0]}
                                         style={{ fontSize: "15px" }}
-                                        placeholder="zumindest 4 buchstaben" />
-                                </div>
-
-                                <div className="verletzungen_body_components_line_right3_multiselect">
-                                    <input
-                                        className="anamnese_body_components_line_right3_multiselect_radio"
-                                        id="benutzer_laden_kennwort"
-                                        type="radio"
-                                        name="benutzer_laden"
-                                        value="benutzer_laden_kennwort"
-                                        onClick={(e) => handleOnChange_process_bearbeiten(e, "a")} />
-                                    <label htmlFor="benutzer_laden_kennwort">Kennwort</label>
-                                    <input ref={laden.current[1]}
-                                        style={{ fontSize: "15px" }}
-                                        placeholder="zumindest 6 buchstaben"
-                                    />
-                                </div>
-
-                                <div className="verletzungen_body_components_line_right3_multiselect">
-                                    <input
-                                        className="anamnese_body_components_line_right3_multiselect_radio"
-                                        id="benutzer_laden_email"
-                                        type="radio"
-                                        name="benutzer_laden"
-                                        value="benutzer_laden_email"
-                                        onClick={(e) => handleOnChange_process_bearbeiten(e, "a")} />
-                                    <label htmlFor="benutzer_laden_email">E-mail</label>
-                                    <input ref={laden.current[2]}
-                                        style={{ fontSize: "15px" }}
-                                        placeholder="zumindest 5 buchstaben"
-                                    />
-                                </div>
-
-                                <div style={{ width: "90%", flexWrap: "wrap" }} className="verletzungen_body_components_line_right3_multiselect">
-                                    <input
-                                        className="anamnese_body_components_line_right3_multiselect_radio"
-                                        id="benutzer_laden_berechtigung"
-                                        type="radio"
-                                        name="benutzer_laden"
-                                        value="benutzer_laden_berechtigung"
-                                        onClick={(e) => handleOnChange_process_bearbeiten(e, "a")} />
-                                    <label htmlFor="benutzer_laden_berechtigung">Berechtigung</label>
-                                    <select ref={laden.current[3]}
-                                        id="select_custom" className="patient_body_components_line_right_dropdown">
-                                        <option id="option_custom" className="patient_body_components_line_right_choice" value="Normaler-Benutzer">Normaler Benutzer</option>
-                                        {(user_u !== undefined && (user_u.permission[0] === "Organisation-Administrator"
-                                            || user_u.permission[0] === "Global-Admin"))
-                                            && < option id="option_custom" className="patient_body_components_line_right_choice" value="Benutzer-Administrator">Benutzersadministrator</option>}
-                                        {(user_u !== undefined && (user_u.permission[0] === "Global-Admin"))
-                                            && <option id="option_custom" className="patient_body_components_line_right_choice" value="Organisation-Administrator">Organisationsadministrator</option>}
-
-                                    </select>
+                                        placeholder="Name oder E-mail" />
                                 </div>
                             </div>
 
@@ -632,6 +622,7 @@ export default function Benutzer_verwaltung() {
                         </div>
                     </div>}
 
+                    <div className="horizontal-line"></div>
                     {laden_isVisible && <div id="benutzer_bearbeiten" style={{ pointerEvents: "none" }} className="einstellungen_body_components_line">
                         <span className="einstellungen_body_components_line_label">
                             Benutzer Bearbeiten:
@@ -654,39 +645,26 @@ export default function Benutzer_verwaltung() {
 
                             <div className="einstellungen_body_components_line_right">
                                 <div className="verletzungen_body_components_line_right3_multiselect">
-                                    <input
-                                        type="checkbox"
-                                        ref={choices.current[0]}
-                                        id="choices_name"
-                                    />
+
                                     <label htmlFor="choices_name">Name</label>
-                                    <input ref={bearbeiten.current[0]}
+                                    <input id="choices_name" ref={bearbeiten.current[0]}
                                         style={{ fontSize: "15px" }}
                                         placeholder="zumindest 4 buchstaben" />
                                 </div>
 
                                 <div className="verletzungen_body_components_line_right3_multiselect">
-                                    <input
-                                        type="checkbox"
-                                        ref={choices.current[1]}
-                                        id="choices_password"
 
-                                    />
                                     <label htmlFor="choices_password">Kennwort</label>
-                                    <input ref={bearbeiten.current[1]}
+                                    <input type="password" id="choices_password" ref={bearbeiten.current[1]}
                                         style={{ fontSize: "15px" }}
                                         placeholder="zumindest 6 buchstaben"
                                     />
                                 </div>
 
                                 <div className="verletzungen_body_components_line_right3_multiselect">
-                                    <input
-                                        type="checkbox"
-                                        ref={choices.current[2]}
-                                        id="choices_email"
-                                    />
+
                                     <label htmlFor="choices_email">E-mail</label>
-                                    <input ref={bearbeiten.current[2]}
+                                    <input id="choices_email" ref={bearbeiten.current[2]}
                                         style={{ fontSize: "15px" }}
                                         placeholder="zumindest 5 buchstaben"
                                     />
@@ -694,12 +672,8 @@ export default function Benutzer_verwaltung() {
 
                                 <div style={{ width: "90%", flexWrap: "wrap" }} className="verletzungen_body_components_line_right3_multiselect">
 
-                                    <input
-                                        type="checkbox"
-                                        ref={choices.current[3]}
-                                        id="choices_permission"
-                                    />
-                                    <label htmlFor="choices_permission">Berechtigung</label>
+
+                                    <label>Berechtigung</label>
                                     <select ref={bearbeiten.current[3]}
                                         id="select_custom" className="patient_body_components_line_right_dropdown">
                                         <option id="option_custom" className="patient_body_components_line_right_choice" value="Normaler-Benutzer">Normaler Benutzer</option>

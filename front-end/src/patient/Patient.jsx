@@ -113,44 +113,25 @@ export default function Patient() {
         };
         fetchData();
 
+        const handleBeforeUnload = (e) => {
+           
+                e.preventDefault();
+                e.returnValue = ''; // Display a confirmation message
+            
+        };
+
+        // Add the event listener
+        window.addEventListener('beforeunload', handleBeforeUnload);
+
+        return () => {
+            // Remove the event listener when the component unmounts
+            window.removeEventListener('beforeunload', handleBeforeUnload);
+        };
 
 
-        // Attach the event listener for beforeunload
-        //window.addEventListener("beforeunload", handleBeforeUnload);
-        //window.addEventListener("unload", handleBeforeUnload);
-
-        /*return () => {
-            // Clean up: remove the event listener before component unmounts
-            //if (a.current == 2) {
-            window.removeEventListener("beforeunload", handleBeforeUnload);
-            //window.removeEventListener("unload", handleBeforeUnload);
-            //}
-            //a.current = a.current + 1;
-        };*/
     }, []);
 
-    const handleBeforeUnload = (event) => {
-        // Save the patient data synchronously before unmounting the component
-        try {
-            const response = axios.put(
-                "http://localhost:8800/protocol_draft/save_datas_patient",
-                {
-                    id: pub_draft_protocol_token.current.obj,
-                    instance_index: parseInt(localStorage.getItem('deutsches_rottes_kreuz_herrenberg_instance')),
-                    geschlecht_a: gender.current.value,
-                    alter_a: alter.current.value
-                }
-            );
 
-            console.log("beteiligte_einsatzkraefte : -------------------------------------------------------------------------------------------------------------------" + response.data);
-        } catch (error) {
-            console.log(error);
-        }
-
-        // This message is ignored by most modern browsers, but it is required
-        // for older browsers to display a custom message to the user.
-        event.returnValue = 'Are you sure you want to leave this page?';
-    };
 
     const save_datas_patient = async () => {
 
@@ -161,9 +142,17 @@ export default function Patient() {
                     id: pub_draft_protocol_token.current.obj,
                     instance_index: parseInt(localStorage.getItem('deutsches_rottes_kreuz_herrenberg_instance')),
                     geschlecht_a: gender.current.value,
-                    alter_a: alter.current.value
+                    alter_a: alter.current.value.trim()
                 }
             );
+
+            if (response.data === "Protocol nicht gefunden") {
+                alert("Protocol nicht gefunden");
+                localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_draft_protocol');
+                localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_instance');
+                navigate('/einstellungen');
+                return;
+            }
 
             console.log("beteiligte_einsatzkraefte : -------------------------------------------------------------------------------------------------------------------" + response.data);
         } catch (error) {
@@ -203,6 +192,14 @@ export default function Patient() {
                     instance_index: instance
                 }
             );
+
+            if (response.data === "Protocol nicht gefunden") {
+                alert("Protocol nicht gefunden");
+                localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_draft_protocol');
+                localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_instance');
+                navigate('/einstellungen');
+                return;
+            }
 
             return response.data;
         } catch (error) {
@@ -289,6 +286,22 @@ export default function Patient() {
                     }
                 );
 
+                if (response.data === "Protokoll nicht gefunden") {
+                    alert("Protocol nicht gefunden");
+                    localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_draft_protocol');
+                    localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_instance');
+                    navigate('/einstellungen');
+                    return;
+                }
+
+                if (response.data === "Falsche Instanznummer!!") {
+                    alert("Falsche Instanznummer!!");
+                    localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_draft_protocol');
+                    localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_instance');
+                    navigate('/einstellungen');
+                    return;
+                }
+
             } catch (error) {
                 console.log(error);
             }
@@ -337,6 +350,14 @@ export default function Patient() {
                         delete_timee: del_time
                     }
                 );
+
+                if (response.data === "Protocol nicht gefunden") {
+                    alert("Protocol nicht gefunden");
+                    localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_draft_protocol');
+                    localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_instance');
+                    navigate('/einstellungen');
+                    return;
+                }
 
                 localStorage.setItem('deutsches_rottes_kreuz_herrenberg_instance', response.data.toString());
 

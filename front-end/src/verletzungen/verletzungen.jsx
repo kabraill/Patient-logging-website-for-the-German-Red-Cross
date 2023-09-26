@@ -45,7 +45,7 @@ export default function Verletzungen() {
                     localStorage.setItem('deutsches_rottes_kreuz_herrenberg_isLoggedIn', 'false');
                     localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_draft_protocol');
                     localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_instance');
-                    
+
                     navigate('/');
                     return;
                 }
@@ -59,7 +59,7 @@ export default function Verletzungen() {
 
                 console.log(localStorage.getItem('deutsches_rottes_kreuz_herrenberg_token'));
                 console.log(localStorage.getItem('deutsches_rottes_kreuz_herrenberg_isLoggedIn'));
-                
+
                 const draft_protocol_token = localStorage.getItem('deutsches_rottes_kreuz_herrenberg_draft_protocol');
                 const draft_protocol_instance = localStorage.getItem('deutsches_rottes_kreuz_herrenberg_instance');
                 //console.log("load before protcol -----------------------------------------------------------------------------------------");
@@ -303,13 +303,28 @@ export default function Verletzungen() {
                     navigate('/einstellungen');
                 }
             } else {
-                
+
                 navigate('/');
             }
 
 
         };
         fetchData();
+
+        const handleBeforeUnload = (e) => {
+
+            e.preventDefault();
+            e.returnValue = ''; // Display a confirmation message
+
+        };
+
+        // Add the event listener
+        window.addEventListener('beforeunload', handleBeforeUnload);
+
+        return () => {
+            // Remove the event listener when the component unmounts
+            window.removeEventListener('beforeunload', handleBeforeUnload);
+        };
     }, []);
 
     const save_datas_verletzungen = async () => {
@@ -385,6 +400,14 @@ export default function Verletzungen() {
                 }
             );
 
+            if (response.data === "Protocol nicht gefunden") {
+                alert("Protocol nicht gefunden");
+                localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_draft_protocol');
+                localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_instance');
+                navigate('/einstellungen');
+                return;
+            }
+
             console.log("verletzungen : -------------------------------------------------------------------------------------------------------------------" + response.data);
         } catch (error) {
             //console.log(error);
@@ -423,6 +446,14 @@ export default function Verletzungen() {
                     instance_index: instance
                 }
             );
+
+            if (response.data === "Protocol nicht gefunden") {
+                alert("Protocol nicht gefunden");
+                localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_draft_protocol');
+                localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_instance');
+                navigate('/einstellungen');
+                return;
+            }
 
             return response.data;
         } catch (error) {
@@ -492,6 +523,22 @@ export default function Verletzungen() {
                     }
                 );
 
+                if (response.data === "Protokoll nicht gefunden") {
+                    alert("Protocol nicht gefunden");
+                    localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_draft_protocol');
+                    localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_instance');
+                    navigate('/einstellungen');
+                    return;
+                }
+
+                if (response.data === "Falsche Instanznummer!!") {
+                    alert("Falsche Instanznummer!!");
+                    localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_draft_protocol');
+                    localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_instance');
+                    navigate('/einstellungen');
+                    return;
+                }
+
             } catch (error) {
                 console.log(error);
             }
@@ -524,7 +571,7 @@ export default function Verletzungen() {
         del_time.setMonth(del_time.getMonth() + 2);
 
         const userResponse = window.confirm("Sind Sie sicher, dass Sie ein neues Instanz erstellen möchten?");
-        
+
         if (userResponse) {
             const draft_protocol_id = pub_draft_protocol_token.current.obj;
             const instance = parseInt(localStorage.getItem('deutsches_rottes_kreuz_herrenberg_instance'));
@@ -541,8 +588,16 @@ export default function Verletzungen() {
                     }
                 );
 
+                if (response.data === "Protocol nicht gefunden") {
+                    alert("Protocol nicht gefunden");
+                    localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_draft_protocol');
+                    localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_instance');
+                    navigate('/einstellungen');
+                    return;
+                }
+
                 localStorage.setItem('deutsches_rottes_kreuz_herrenberg_instance', response.data.toString());
-                
+
             } catch (error) {
                 console.log(error);
             }
@@ -553,12 +608,12 @@ export default function Verletzungen() {
         }
     };
 
-    
+
 
     return (
         <div id="main" style={{ pointerEvents: "none" }} className="verletzungen">
-            <Sidebar currentPage="verletzungen" save_a={save_datas_verletzungen} datas={datasss} 
-            del={delete_d} instanz_erstellen={instanz_erstellen} />
+            <Sidebar currentPage="verletzungen" save_a={save_datas_verletzungen} datas={datasss}
+                del={delete_d} instanz_erstellen={instanz_erstellen} />
             <Topbar currentPage="verletzungen" datas={datasss} />
             <div onClick={() => {
                 document.getElementById("sidebar_mc_id").style.width = "0px";

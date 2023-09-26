@@ -39,7 +39,7 @@ export default function Massnahmen_einsatzart() {
     const Gegebene_Liter_min_l = useRef();
     const Uebergabe_an_l = useRef();
 
-    
+
 
     useEffect(() => {
         const fetchData = async () => {
@@ -54,7 +54,7 @@ export default function Massnahmen_einsatzart() {
                     localStorage.setItem('deutsches_rottes_kreuz_herrenberg_isLoggedIn', 'false');
                     localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_draft_protocol');
                     localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_instance');
-                    
+
                     navigate('/');
                     return;
                 }
@@ -68,7 +68,7 @@ export default function Massnahmen_einsatzart() {
 
                 console.log(localStorage.getItem('deutsches_rottes_kreuz_herrenberg_token'));
                 console.log(localStorage.getItem('deutsches_rottes_kreuz_herrenberg_isLoggedIn'));
-                
+
                 const draft_protocol_token = localStorage.getItem('deutsches_rottes_kreuz_herrenberg_draft_protocol');
                 const draft_protocol_instance = localStorage.getItem('deutsches_rottes_kreuz_herrenberg_instance');
                 //console.log("load before protcol -----------------------------------------------------------------------------------------");
@@ -270,13 +270,28 @@ export default function Massnahmen_einsatzart() {
                     navigate('/einstellungen');
                 }
             } else {
-                
+
                 navigate('/');
             }
 
 
         };
         fetchData();
+
+        const handleBeforeUnload = (e) => {
+
+            e.preventDefault();
+            e.returnValue = ''; // Display a confirmation message
+
+        };
+
+        // Add the event listener
+        window.addEventListener('beforeunload', handleBeforeUnload);
+
+        return () => {
+            // Remove the event listener when the component unmounts
+            window.removeEventListener('beforeunload', handleBeforeUnload);
+        };
     }, []);
 
     const save_datas_massnahmen_einsatzart = async () => {
@@ -311,10 +326,10 @@ export default function Massnahmen_einsatzart() {
                     ischeckedMassnahmen_einweisung_rd: ischeckedMassnahmen_value.current[16].current.checked,
                     ischeckedMassnahmen_unterstuetzung_rd: ischeckedMassnahmen_value.current[17].current.checked,
                     ischeckedMassnahmen_nnd_abwartend: ischeckedMassnahmen_value.current[18].current.checked,
-                    ischeckedMassnahmen_sonstiges: sonstigg.current.value,
+                    ischeckedMassnahmen_sonstiges: sonstigg.current.value.trim(),
                     /////////////////
-                    bei_aed_anzahl_schocks_a: Anzahl_Schocks.current.value,
-                    bei_o2_gegebene_liter_min_a: Gegebene_Liter_min.current.value,
+                    bei_aed_anzahl_schocks_a: Anzahl_Schocks.current.value.trim(),
+                    bei_o2_gegebene_liter_min_a: Gegebene_Liter_min.current.value.trim(),
                     /////////////////
                     ischeckedEinsatzart_verkehrsunfall: ischeckedEinsatzart_value.current[0].current.checked,
                     ischeckedEinsatzart_chirurgischer_notfall: ischeckedEinsatzart_value.current[1].current.checked,
@@ -325,17 +340,24 @@ export default function Massnahmen_einsatzart() {
                     ischeckedEinsatzart_arbeitsunfall: ischeckedEinsatzart_value.current[6].current.checked,
                     ischeckedEinsatzart_gynaekologischer_notfall: ischeckedEinsatzart_value.current[7].current.checked,
                     ischeckedEinsatzart_fehleinsatz_siehe_protokoll_fehleinsatz: ischeckedEinsatzart_value.current[8].current.checked,
-                    ischeckedEinsatzart_sonstiges: sonstigg2.current.value,
+                    ischeckedEinsatzart_sonstiges: sonstigg2.current.value.trim(),
                     /////////////////
                     Weitere_beteiligte_Einsatzkraefte_feuerwehr: Weitere_beteiligte_Einsatzkraefte.current[0].current.checked,
                     Weitere_beteiligte_Einsatzkraefte_polizei: Weitere_beteiligte_Einsatzkraefte.current[1].current.checked,
-                    Weitere_beteiligte_Einsatzkraefte_sonstiges: sonstigg3.current.value,
+                    Weitere_beteiligte_Einsatzkraefte_sonstiges: sonstigg3.current.value.trim(),
                     ////////////////
-                    Uebergabe_an_a: Uebergabe_an.current.value,
-                    Freitext_a: Freitext.current.value
+                    Uebergabe_an_a: Uebergabe_an.current.value.trim(),
+                    Freitext_a: Freitext.current.value.trim()
                 }
             );
 
+            if (response.data === "Protocol nicht gefunden") {
+                alert("Protocol nicht gefunden");
+                localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_draft_protocol');
+                localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_instance');
+                navigate('/einstellungen');
+                return;
+            }
             console.log("beteiligte_einsatzkraefte : -------------------------------------------------------------------------------------------------------------------" + response.data);
         } catch (error) {
             console.log(error);
@@ -374,6 +396,14 @@ export default function Massnahmen_einsatzart() {
                     instance_index: instance
                 }
             );
+
+            if (response.data === "Protocol nicht gefunden") {
+                alert("Protocol nicht gefunden");
+                localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_draft_protocol');
+                localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_instance');
+                navigate('/einstellungen');
+                return;
+            }
 
             return response.data;
         } catch (error) {
@@ -470,6 +500,22 @@ export default function Massnahmen_einsatzart() {
                     }
                 );
 
+                if (response.data === "Protokoll nicht gefunden") {
+                    alert("Protocol nicht gefunden");
+                    localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_draft_protocol');
+                    localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_instance');
+                    navigate('/einstellungen');
+                    return;
+                }
+
+                if (response.data === "Falsche Instanznummer!!") {
+                    alert("Falsche Instanznummer!!");
+                    localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_draft_protocol');
+                    localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_instance');
+                    navigate('/einstellungen');
+                    return;
+                }
+
             } catch (error) {
                 console.log(error);
             }
@@ -502,7 +548,7 @@ export default function Massnahmen_einsatzart() {
         del_time.setMonth(del_time.getMonth() + 2);
 
         const userResponse = window.confirm("Sind Sie sicher, dass Sie ein neues Instanz erstellen möchten?");
-        
+
         if (userResponse) {
             const draft_protocol_id = pub_draft_protocol_token.current.obj;
             const instance = parseInt(localStorage.getItem('deutsches_rottes_kreuz_herrenberg_instance'));
@@ -519,8 +565,16 @@ export default function Massnahmen_einsatzart() {
                     }
                 );
 
+                if (response.data === "Protocol nicht gefunden") {
+                    alert("Protocol nicht gefunden");
+                    localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_draft_protocol');
+                    localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_instance');
+                    navigate('/einstellungen');
+                    return;
+                }
+
                 localStorage.setItem('deutsches_rottes_kreuz_herrenberg_instance', response.data.toString());
-                
+
             } catch (error) {
                 console.log(error);
             }
@@ -535,7 +589,7 @@ export default function Massnahmen_einsatzart() {
     return (
         <div id="main" style={{ pointerEvents: "none" }} className="massnahmen_einsatzart">
             <Sidebar currentPage="massnahmen_einsatzart" save_a={save_datas_massnahmen_einsatzart} datas={datasss}
-            del={delete_d} instanz_erstellen={instanz_erstellen} />
+                del={delete_d} instanz_erstellen={instanz_erstellen} />
             <Topbar currentPage="massnahmen_einsatzart" datas={datasss} />
             <div onClick={() => {
                 document.getElementById("sidebar_mc_id").style.width = "0px";

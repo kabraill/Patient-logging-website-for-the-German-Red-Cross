@@ -48,6 +48,21 @@ export default function LLogin() {
         };
 
         fetchData();
+
+        const handleBeforeUnload = (e) => {
+
+            e.preventDefault();
+            e.returnValue = ''; // Display a confirmation message
+
+        };
+
+        // Add the event listener
+        window.addEventListener('beforeunload', handleBeforeUnload);
+
+        return () => {
+            // Remove the event listener when the component unmounts
+            window.removeEventListener('beforeunload', handleBeforeUnload);
+        };
     }, []);
 
 
@@ -85,15 +100,20 @@ export default function LLogin() {
     const nav = async () => {
 
         await axios.post("http://localhost:8800/user/login", {
-            name: name,
-            password: password
+            name: name.trim(),
+            password: password.trim()
         }).then((response) => {
+
+            if (response.data === "Benutzer nicht gefunden" || response.data === "Falsches Kennwort") {
+                alert(response.data);
+                return;
+            }
 
             localStorage.setItem('deutsches_rottes_kreuz_herrenberg_token', response.data);
             localStorage.setItem('deutsches_rottes_kreuz_herrenberg_isLoggedIn', 'true');
             navigate('/einstellungen');
         }).catch((error) => {
-            alert('Error: '+ error.response.data);
+            alert('Error: ' + error.response.data);
         });
 
     };
@@ -111,7 +131,7 @@ export default function LLogin() {
     }
 
     return (
-        <div id="main" style={{pointerEvents: "none"}} className="login">
+        <div id="main" style={{ pointerEvents: "none" }} className="login">
             <div className="login_body">
                 <div className="login_body_top">
                     <img className="login_body_top_ico" src="assets/red_cross.png"></img>

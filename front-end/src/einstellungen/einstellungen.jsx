@@ -71,6 +71,21 @@ export default function Einstellungen() {
             }
         }
         fetchData();
+
+        const handleBeforeUnload = (e) => {
+
+            e.preventDefault();
+            e.returnValue = ''; // Display a confirmation message
+
+        };
+
+        // Add the event listener
+        window.addEventListener('beforeunload', handleBeforeUnload);
+
+        return () => {
+            // Remove the event listener when the component unmounts
+            window.removeEventListener('beforeunload', handleBeforeUnload);
+        };
     }, []);
 
     const get_user = async (token) => {
@@ -144,9 +159,9 @@ export default function Einstellungen() {
 
     const erstellen_laden_main = async () => {
         const erstellen_laden = async () => {
-            if (anwesende_mitarbeiter.current.value === "") {
+            if (anwesende_mitarbeiter.current.value.trim() === "") {
                 alert("Schreiben Sie bitte die Namen der anwesenden Mitarbeiter");
-            } else if (!anwesende_mitarbeiter.current.value.match(/^(\w+-)*\w+$/)) {
+            } else if (!anwesende_mitarbeiter.current.value.match(/^([a-zA-Z]+\w+-)*[a-zA-Z]+\w+$/)) {
                 alert("Der Text stimmt nicht mit dem angegebenen Beispiel überein");
             } else {
                 let namesMap;
@@ -389,6 +404,11 @@ export default function Einstellungen() {
                         }
                     );
 
+                    if (response.data.startsWith("Die folgenden Benutzer befinden sich nicht:")) {
+                        alert(response.data);
+                        return;
+                    }
+
                     localStorage.setItem('deutsches_rottes_kreuz_herrenberg_draft_protocol', response.data);
                     localStorage.setItem('deutsches_rottes_kreuz_herrenberg_instance', "0");
                     navigate("/einsatzdaten");
@@ -471,31 +491,31 @@ export default function Einstellungen() {
             conditions.type = and_or.current;
 
             if (checkboxes.current[0].current.checked == true) {
-                conditions.id = values.current[0].current.value;
+                conditions.id = values.current[0].current.value.trim();
             }
 
             if (typeof checkboxes.current[1].current !== 'undefined' && checkboxes.current[1].current !== null && checkboxes.current[1].current.checked == true) {
-                conditions.instance = values.current[1].current.value;
+                conditions.instance = values.current[1].current.value.trim();
             }
 
             if (checkboxes.current[2].current.checked == true) {
-                conditions.einsatzdaten.alarmschluessel = values.current[2].current.value;
+                conditions.einsatzdaten.alarmschluessel = values.current[2].current.value.trim();
             }
 
             if (checkboxes.current[3].current.checked == true) {
-                conditions.einsatzdaten.auftragsnummer = values.current[3].current.value;
+                conditions.einsatzdaten.auftragsnummer = values.current[3].current.value.trim();
             }
 
             if (checkboxes.current[4].current.checked == true) {
-                conditions.einsatzdaten.einsatzort = values.current[4].current.value;
+                conditions.einsatzdaten.einsatzort = values.current[4].current.value.trim();
             }
 
             if (checkboxes.current[5].current.checked == true) {
-                conditions.einsatzdaten.alarmzeit = values.current[5].current.value;
+                conditions.einsatzdaten.alarmzeit = values.current[5].current.value.trim();
             }
 
             if (checkboxes.current[6].current.checked == true) {
-                conditions.massnahmen_einsatzart.freitext = values.current[6].current.value;
+                conditions.massnahmen_einsatzart.freitext = values.current[6].current.value.trim();
             }
 
             console.log(conditions)
@@ -695,7 +715,7 @@ export default function Einstellungen() {
                             <input type="text"
                                 ref={anwesende_mitarbeiter}
                                 className="einstellungen_body_components_line_right2_txt"
-                                placeholder="Anwesende Mitarbeiter Z.B lea-tom-uwe-...." />
+                                placeholder="Anwesende Mitarbeiter Z.B lea23-tom41-uwe23-...." />
 
                             <button onClick={erstellen_laden_main} className="s1_body_buttons_btn_next">Erstellen</button>
                         </div>
@@ -704,7 +724,7 @@ export default function Einstellungen() {
 
                     {laden_isVisible && <div className="einstellungen_body_components_line">
                         <span className="einstellungen_body_components_line_label">
-                            Draft Protocol laden:
+                            Protocol laden:
                         </span>
 
                         <div className="einstellungen_body_components_line_right">

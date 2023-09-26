@@ -51,7 +51,7 @@ router.post('/get_datas', async (req, res) => {
             const elementAtIndex = draft_proto.content[req.body.instance_index];
             return res.status(200).json(elementAtIndex);
         } else {
-            return res.status(404).json("Protocol nicht gefunden");
+            return res.status(200).json("Protocol nicht gefunden");
         }
     } catch (error) {
         res.sendStatus(500);
@@ -68,18 +68,18 @@ router.post('/delete', async (req, res) => {
                 await draft_proto.save();
                 res.json(draft_proto); // You can return the updated draft_proto if needed
             } else {
-                return res.status(400).json("Invalid index provided");
+                return res.status(200).json("Falsche Instanznummer!!");
             }
             //DraftProtocol
             await DraftProtocol.deleteOne({ _id: req.body.id, 'content': { $size: 0 } });
         } else {
-            return res.status(404).json("Protocol not found");
+            return res.status(200).json("Protokoll nicht gefunden");
         }
     } catch (error) {
         res.sendStatus(500);
     }
 });
-//return res.status(200).json(elementAtIndex);
+
 router.post('/create_instance', async (req, res) => {
     try {
         const draft_proto = await DraftProtocol.findById(req.body.id);
@@ -96,7 +96,7 @@ router.post('/create_instance', async (req, res) => {
             res.json(draft_proto.content.length - 1);
 
         } else {
-            return res.status(404).json("Protocol nicht gefunden");
+            return res.status(200).json("Protocol nicht gefunden");
         }
     } catch (error) {
         res.sendStatus(500);
@@ -106,6 +106,26 @@ router.post('/create_instance', async (req, res) => {
 
 router.post('/create', async (req, res) => {
     try {
+        let nicht_gefundene_users = [];
+        for (var key in req.body.content[0].beteiligte_einsatzkraefte.einsatzkraefte_am_patienten) {
+
+            const user_u = await User.findOne({ name: key });
+            if (!user_u) {
+                nicht_gefundene_users.push(key)
+                //return res.status(200).json("Benutzer nicht gefunden");
+            }
+        }
+
+        if (nicht_gefundene_users.length > 0){
+            let a = "Die folgenden Benutzer befinden sich nicht: "
+
+            for(let i = 0; i < nicht_gefundene_users.length; i = i + 1){
+                a = a + nicht_gefundene_users[i] + " - ";
+            }
+
+            return res.status(200).json(a);
+        }
+
         // Create a new protocol instance
         const new_draft_Protocol = new DraftProtocol(req.body);
 
@@ -113,7 +133,7 @@ router.post('/create', async (req, res) => {
         const saved_draft_Protocol = await new_draft_Protocol.save();
         const protocol_id_token = generateToken(saved_draft_Protocol._id);
 
-        res.json(protocol_id_token);
+        return res.status(200).json(protocol_id_token);
     } catch (error) {
         console.log(error);
         res.status(500).json({ error: 'An error occurred' });
@@ -868,7 +888,7 @@ router.put('/save_datas_einsatzdaten', async (req, res) => {
             //console.log(draft_proto.content[req.body.instance_index].einsatzdaten);
             return res.status(200).json(draft_proto.content[req.body.instance_index].einsatzdaten);
         } else {
-            return res.status(404).json("Protocol nicht gefunden");
+            return res.status(200).json("Protocol nicht gefunden");
         }
     } catch (error) {
         res.json(error);
@@ -893,13 +913,13 @@ router.put('/save_datas_beteiligte_einsatzkraefte', async (req, res) => {
             for (const [key, value] of Object.entries(req.body.ort)) {
                 draft_proto.content[req.body.instance_index].beteiligte_einsatzkraefte.einsatzkraefte_vor_ort[key] = value;
             }
-            
+
             draft_proto.markModified(`content.${req.body.instance_index}.beteiligte_einsatzkraefte`);
             await draft_proto.save();
             //console.log(draft_proto.content[req.body.instance_index].beteiligte_einsatzkraefte);
             return res.status(200).json(draft_proto.content[req.body.instance_index].beteiligte_einsatzkraefte);
         } else {
-            return res.status(404).json("Protocol nicht gefunden");
+            return res.status(200).json("Protocol nicht gefunden");
         }
     } catch (error) {
         res.json(error);
@@ -921,7 +941,7 @@ router.put('/save_datas_patient', async (req, res) => {
             //console.log(draft_proto.content[req.body.instance_index].patient);
             return res.status(200).json(draft_proto.content[req.body.instance_index].patient);
         } else {
-            return res.status(404).json("Protocol nicht gefunden");
+            return res.status(200).json("Protocol nicht gefunden");
         }
     } catch (error) {
         res.json(error);
@@ -964,7 +984,7 @@ router.put('/save_datas_anamnese', async (req, res) => {
             console.log(draft_proto.content[req.body.instance_index].anamnese);
             return res.status(200).json(draft_proto.content[req.body.instance_index].anamnese);
         } else {
-            return res.status(404).json("Protocol nicht gefunden");
+            return res.status(200).json("Protocol nicht gefunden");
         }
     } catch (error) {
         res.status(404).json("as");
@@ -988,7 +1008,7 @@ router.put('/save_datas_messwerte', async (req, res) => {
             //console.log(draft_proto.content[req.body.instance_index].patient);
             return res.status(200).json(draft_proto.content[req.body.instance_index].messwerte);
         } else {
-            return res.status(404).json("Protocol nicht gefunden");
+            return res.status(200).json("Protocol nicht gefunden");
         }
     } catch (error) {
         res.json(error);
@@ -1025,7 +1045,7 @@ router.put('/save_datas_neurologie', async (req, res) => {
             //console.log(draft_proto.content[req.body.instance_index].patient);
             return res.status(200).json(draft_proto.content[req.body.instance_index].neurologie);
         } else {
-            return res.status(404).json("Protocol nicht gefunden");
+            return res.status(200).json("Protocol nicht gefunden");
         }
     } catch (error) {
         res.json(error);
@@ -1106,7 +1126,7 @@ router.put('/save_datas_verletzungen', async (req, res) => {
             //console.log(draft_proto.content[req.body.instance_index].patient);
             return res.status(200).json(draft_proto.content[req.body.instance_index].verletzungen);
         } else {
-            return res.status(404).json("Protocol nicht gefunden");
+            return res.status(200).json("Protocol nicht gefunden");
         }
     } catch (error) {
         res.json(error);
@@ -1135,7 +1155,7 @@ router.put('/save_datas_monitoring', async (req, res) => {
             //console.log(draft_proto.content[req.body.instance_index].patient);
             return res.status(200).json(draft_proto.content[req.body.instance_index].monitoring);
         } else {
-            return res.status(404).json("Protocol nicht gefunden");
+            return res.status(200).json("Protocol nicht gefunden");
         }
     } catch (error) {
         res.json(error);
@@ -1205,7 +1225,7 @@ router.put('/save_datas_massnahmen_einsatzart', async (req, res) => {
             //console.log(draft_proto.content[req.body.instance_index].patient);
             return res.status(200).json(draft_proto.content[req.body.instance_index].massnahmen_einsatzart);
         } else {
-            return res.status(404).json("Protocol nicht gefunden");
+            return res.status(200).json("Protocol nicht gefunden");
         }
     } catch (error) {
         res.json(error);

@@ -221,7 +221,7 @@ export default function Seite_1() {
 
                     document.getElementById("main").style.pointerEvents = "auto";
 
-                    if(user_u.current.permission[0] !== "Normaler-Benutzer"){
+                    if (user_u.current.permission[0] !== "Normaler-Benutzer") {
                         finished.current.disabled = false;
                     }
 
@@ -239,6 +239,21 @@ export default function Seite_1() {
 
         //debugger;
         load_page();
+
+        const handleBeforeUnload = (e) => {
+
+            e.preventDefault();
+            e.returnValue = ''; // Display a confirmation message
+
+        };
+
+        // Add the event listener
+        window.addEventListener('beforeunload', handleBeforeUnload);
+
+        return () => {
+            // Remove the event listener when the component unmounts
+            window.removeEventListener('beforeunload', handleBeforeUnload);
+        };
 
 
     }, []);
@@ -279,18 +294,26 @@ export default function Seite_1() {
                     finished: finished.current.value,
                     id: pub_draft_protocol_token.current.obj,
                     instance_index: parseInt(localStorage.getItem('deutsches_rottes_kreuz_herrenberg_instance')),
-                    special_marking_name_a: special_marking_name.current.value,
+                    special_marking_name_a: special_marking_name.current.value.trim(),
                     special_marking_color_a: special_marking_color.current.value,
-                    alarmkey_a: alarmkey.current.value,
+                    alarmkey_a: alarmkey.current.value.trim(),
                     keine_auftragnummer_a: checkbox_auftragsnummer.current.checked,
-                    auftragsnummer_a: auftragsnummer.current.value,
-                    einsatzort_a: einsatzort.current.value,
+                    auftragsnummer_a: auftragsnummer.current.value.trim(),
+                    einsatzort_a: einsatzort.current.value.trim(),
                     alarmzeit_a: alarmzeit.current.value,
                     ankunfthvo_a: ankunfthvo.current.value,
                     ankunft_rtw_nef_a: ankunft_rtw_nef.current.value,
                     einsatzende_a: einsatzende.current.value
                 }
             );
+
+            if (response.data === "Protocol nicht gefunden") {
+                alert("Protocol nicht gefunden");
+                localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_draft_protocol');
+                localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_instance');
+                navigate('/einstellungen');
+                return;
+            }
 
             console.log("einsatzdaten : -------------------------------------------------------------------------------------------------------------------" + response.data);
         } catch (error) {
@@ -332,6 +355,14 @@ export default function Seite_1() {
                     instance_index: instance
                 }
             );
+
+            if (response.data === "Protocol nicht gefunden") {
+                alert("Protocol nicht gefunden");
+                localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_draft_protocol');
+                localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_instance');
+                navigate('/einstellungen');
+                return;
+            }
 
             return response.data;
         } catch (error) {
@@ -477,6 +508,22 @@ export default function Seite_1() {
                     }
                 );
 
+                if (response.data === "Protokoll nicht gefunden") {
+                    alert("Protocol nicht gefunden");
+                    localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_draft_protocol');
+                    localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_instance');
+                    navigate('/einstellungen');
+                    return;
+                }
+
+                if (response.data === "Falsche Instanznummer!!") {
+                    alert("Falsche Instanznummer!!");
+                    localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_draft_protocol');
+                    localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_instance');
+                    navigate('/einstellungen');
+                    return;
+                }
+
             } catch (error) {
                 console.log(error);
             }
@@ -526,7 +573,16 @@ export default function Seite_1() {
                     }
                 );
 
+                if (response.data === "Protocol nicht gefunden") {
+                    alert("Protocol nicht gefunden");
+                    localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_draft_protocol');
+                    localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_instance');
+                    navigate('/einstellungen');
+                    return;
+                }
+
                 localStorage.setItem('deutsches_rottes_kreuz_herrenberg_instance', response.data.toString());
+                instance_id.current.value = response.data.toString();
 
             } catch (error) {
                 console.log(error);

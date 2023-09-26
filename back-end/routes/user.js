@@ -108,30 +108,32 @@ router.post("/laden", async (req, res) => {
 
   try {
 
-    if (req.body.password) {
+    if (req.body.text.includes("@")) {
 
-      const users = await User.find({});
-      let users_password = [];
+      const users = await User.find({ email: req.body.text })
+
+      if (users.length == 0) {
+        return res.json("Kein Benutzer wurde gefunden");
+      }
+
+      let users_perm = []
+
       for (let usr of users) {
-        const passwordMatch = await bcrypt.compare(
-          req.body.password,
-          usr.password
-        );
-
-        if (passwordMatch && perm.includes(usr.permission[0])) {
-          users_password.push(usr)
+        if (perm.includes(usr.permission[0])) {
+          users_perm.push(usr)
         }
       }
 
-      if (users_password.length == 0) {
+      if (users_perm.length == 0) {
         return res.json("Kein Benutzer wurde gefunden");
       }
-      //
-      return res.status(200).json(users_password);
+
+      return res.status(200).json(users_perm);
 
     } else {
-      const users = await User.find(req.body)
 
+      const users = await User.find({ name: req.body.text })
+      console.log(users.length)
       if (users.length == 0) {
         return res.json("Kein Benutzer wurde gefunden");
       }
@@ -187,19 +189,19 @@ router.post("/alle_laden", async (req, res) => {
 router.put("/save", async (req, res) => {
   try {
     // Check if the name has at least 4 letters
-    if (req.body.new_name && req.body.new_name.length < 4) {
+    if (req.body.new_name.length < 4) {
       return res.json("Der Name muss zumindest 4 Buchstaben enthalten.");
     }
 
     // Check if the email has at least 5 letters
-    if (req.body.email && req.body.email.length < 5) {
+    if (req.body.email.length < 5) {
       return res.json("Die Email muss zumindest 5 Buchstaben enthalten.");
     }
 
     // Check if the password has at least 6 letters
 
-    console.log(req.body.password)
-    if (req.body.password && req.body.password.length < 6) {
+   
+    if (req.body.password.length < 6) {
       return res.json("Das Kennwort muss zumindest 6 Buchstaben enthalten");
     }
 
@@ -211,38 +213,38 @@ router.put("/save", async (req, res) => {
       return res.json("Kein Benutzer wurde gefunden");
     }
 
-    if (!req.body.new_name && !req.body.password && !req.body.email && !req.body.permission) {
+    /*if (!req.body.new_name && !req.body.password && !req.body.email && !req.body.permission) {
       return res.json("Sie müssen zumindest ein Speicherkriterium auswählen");
+    }*/
+
+
+    //if (req.body.new_name) {
+    const user_name = await User.findOne({ name: req.body.new_name })
+
+    if (user_name) {
+      return res.json("Der gleiche Name befindet sich schon");
     }
+    user[0].name = req.body.new_name;
+    //}
 
+    //if (req.body.password) {
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(req.body.password, salt);
+    user[0].password = hashedPassword;
+    //}
 
-    if (req.body.new_name) {
-      const user_name = await User.findOne({ name: req.body.new_name })
+    //if (req.body.email) {
+    const user_email = await User.findOne({ email: req.body.email })
 
-      if (user_name) {
-        return res.json("Der gleiche Name befindet sich schon");
-      }
-      user[0].name = req.body.new_name;
+    if (user_email) {
+      return res.json("Die gleiche Email befindet sich schon");
     }
+    user[0].email = req.body.email;
+    //}
 
-    if (req.body.password) {
-      const salt = await bcrypt.genSalt(10);
-      const hashedPassword = await bcrypt.hash(req.body.password, salt);
-      user[0].password = hashedPassword;
-    }
-
-    if (req.body.email) {
-      const user_email = await User.findOne({ email: req.body.email })
-
-      if (user_email) {
-        return res.json("Die gleiche Email befindet sich schon");
-      }
-      user[0].email = req.body.email;
-    }
-
-    if (req.body.permission) {
-      user[0].permission[0] = req.body.permission;
-    }
+    //if (req.body.permission) {
+    user[0].permission[0] = req.body.permission;
+    //}
 
 
     //draft_proto.markModified(`content.${req.body.instance_index}`);
@@ -279,7 +281,7 @@ router.post("/login", async (req, res) => {
 
     const user = await User.findOne({ name: req.body.name });
     if (!user) {
-      return res.status(404).json("Benutzer nicht gefunden");
+      return res.status(200).json("Benutzer nicht gefunden");
     }
 
     const passwordMatch = await bcrypt.compare(
@@ -293,7 +295,7 @@ router.post("/login", async (req, res) => {
       //console.log(typeof(user._id))
       return res.status(200).json(token);
     } else {
-      return res.status(401).json("Falsches Kennwort");
+      return res.status(200).json("Falsches Kennwort");
     }
   } catch (err) {
     return res.status(500).json(err);
@@ -352,7 +354,7 @@ router.post('/get_user', async (req, res) => {
   const user = await User.findById(token);
 
   if (!user) {
-    return res.json("Kein Benutzer wurde gefunden");
+    return res.status(200).json("Kein Benutzer wurde gefunden");
   }
 
   try {

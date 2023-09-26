@@ -150,6 +150,21 @@ export default function Seite_2() {
         };
         fetchData();
 
+        const handleBeforeUnload = (e) => {
+
+            e.preventDefault();
+            e.returnValue = ''; // Display a confirmation message
+
+        };
+
+        // Add the event listener
+        window.addEventListener('beforeunload', handleBeforeUnload);
+
+        return () => {
+            // Remove the event listener when the component unmounts
+            window.removeEventListener('beforeunload', handleBeforeUnload);
+        };
+        
     }, []);
 
     const save_datas_beteiligte_einsatzkraefte = async () => {
@@ -161,7 +176,7 @@ export default function Seite_2() {
                 privat_pkw: isChecked.current[0].current.checked,
                 feuerwehr_mtw: isChecked.current[1].current.checked,
                 z_58_19_2: isChecked.current[2].current.checked,
-                patienten:{},
+                patienten: {},
                 ort: {}
             }
 
@@ -179,6 +194,14 @@ export default function Seite_2() {
                 "http://localhost:8800/protocol_draft/save_datas_beteiligte_einsatzkraefte",
                 obj
             );
+
+            if (response.data === "Protocol nicht gefunden") {
+                alert("Protocol nicht gefunden");
+                localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_draft_protocol');
+                localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_instance');
+                navigate('/einstellungen');
+                return;
+            }
 
             console.log("beteiligte_einsatzkraefte : -------------------------------------------------------------------------------------------------------------------" + response.data);
         } catch (error) {
@@ -218,6 +241,14 @@ export default function Seite_2() {
                     instance_index: instance
                 }
             );
+
+            if (response.data === "Protocol nicht gefunden") {
+                alert("Protocol nicht gefunden");
+                localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_draft_protocol');
+                localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_instance');
+                navigate('/einstellungen');
+                return;
+            }
 
             return response.data;
         } catch (error) {
@@ -334,6 +365,22 @@ export default function Seite_2() {
                     }
                 );
 
+                if (response.data === "Protokoll nicht gefunden") {
+                    alert("Protocol nicht gefunden");
+                    localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_draft_protocol');
+                    localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_instance');
+                    navigate('/einstellungen');
+                    return;
+                }
+
+                if (response.data === "Falsche Instanznummer!!") {
+                    alert("Falsche Instanznummer!!");
+                    localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_draft_protocol');
+                    localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_instance');
+                    navigate('/einstellungen');
+                    return;
+                }
+
             } catch (error) {
                 console.log(error);
             }
@@ -383,6 +430,14 @@ export default function Seite_2() {
                     }
                 );
 
+                if (response.data === "Protocol nicht gefunden") {
+                    alert("Protocol nicht gefunden");
+                    localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_draft_protocol');
+                    localStorage.removeItem('deutsches_rottes_kreuz_herrenberg_instance');
+                    navigate('/einstellungen');
+                    return;
+                }
+
                 localStorage.setItem('deutsches_rottes_kreuz_herrenberg_instance', response.data.toString());
 
             } catch (error) {
@@ -395,7 +450,7 @@ export default function Seite_2() {
         }
     };
 
-    function do_nothing(e, type){
+    function do_nothing(e, type) {
         setEinsatzkraefte_ort((prevEinsatzkraefte_ort) => ({
             ...prevEinsatzkraefte_ort,
             [type]: !prevEinsatzkraefte_ort[type] // Toggle the value when clicked
