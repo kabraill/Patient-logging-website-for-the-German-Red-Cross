@@ -1,0 +1,13 @@
+# Frontend
+/front-end/node_modules/
+
+# Backend
+/back-end/node_modules/
+
+# Generator
+/dynamic-generator/node_modules/
+
+# General
+.env
+*.log
+.DS_Store
