@@ -1,4 +1,4 @@
-# Patient Logging Website for the German Red Cross
+# Dynamic version of Patient Logging Website for the German Red Cross
 
 ## Installation and Setup
 
