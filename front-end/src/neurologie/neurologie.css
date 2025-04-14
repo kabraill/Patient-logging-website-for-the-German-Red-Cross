@@ -1,0 +1,120 @@
+.neurologie {
+    height: 100vh;
+    width: 100vw;
+    min-height: 700px;
+}
+
+.neurologie_body {
+    /*background-color: aquamarine;*/
+
+    height: calc(100vh - 45px);
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-direction: column;
+    gap: 30px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    min-height: 655px;
+
+}
+
+/************************************************************************/
+
+.neurologie_body_title {
+    font-size: 25px;
+    font-weight: bold;
+    margin-top: 10px;
+    color: red;
+}
+
+/***********************************************************************/
+
+.neurologie_body_components {
+    /*background-color: rgb(240, 239, 239);*/
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    border: 1px solid black;
+    min-height: 500px;
+    height: 500px;
+    width: 826px;
+}
+
+.neurologie_body_components_line {
+    /*background-color: aqua;*/
+    flex: 1;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+
+}
+
+.neurologie_body_components_line_label {
+    background-color: rgb(240, 239, 239);
+    flex: 1;
+    display: flex;
+    align-items: center;
+    width: calc(100% - 6px);
+    padding-left: 6px;
+
+}
+
+.neurologie_body_components_line_right1 {
+    /*background-color: rgb(122, 196, 199);*/
+    flex: 2;
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.neurologie_body_components_line_right_singleselect {
+    flex: 1;
+    height: 75%;
+    font-size: 18px;
+
+}
+
+.neurologie_body_components_line_right1_txt {
+    flex: 1;
+    font-size: 18px;
+    height: 75%;
+    border: none;
+    padding-left: 6px;
+}
+
+.neurologie_body_components_line_right1_txt:focus {
+    outline: none;
+
+}
+
+.neurologie_body_components_line_right3 {
+    /*background-color: burlywood;*/
+    flex: 2;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    gap: 3px;
+    flex-wrap: wrap;
+    overflow-x: scroll;
+    overflow-y: scroll;
+}
+
+.neurologie_body_components_line_right3_multiselect {
+    display: flex;
+    gap: 5px;
+    margin-left: 5px;
+    cursor: pointer;
+    /*background: pink;*/
+}
+
+/*********************************************************************/
+@media only screen and (max-width: 1080px) {
+    .neurologie_body_components {
+
+        width: 100%;
+    }
+}

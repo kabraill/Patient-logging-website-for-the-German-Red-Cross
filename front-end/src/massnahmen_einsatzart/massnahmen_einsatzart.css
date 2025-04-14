@@ -1,0 +1,232 @@
+.massnahmen_einsatzart {
+    height: 100vh;
+    width: 100vw;
+    min-height: 900px;
+}
+
+.massnahmen_einsatzart_body {
+    /*background-color: aquamarine;*/
+    height: calc(100vh - 45px);
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-direction: column;
+    gap: 30px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    min-height: 855px;
+
+}
+
+/************************************************************************/
+
+.massnahmen_einsatzart_body_title {
+    font-size: 25px;
+    font-weight: bold;
+    margin-top: 10px;
+    color: red;
+}
+
+/***********************************************************************/
+
+.massnahmen_einsatzart_body_components {
+    /*background-color: rgb(240, 239, 239);*/
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    border: 1px solid black;
+    min-height: 700px;
+    height: 700px;
+    width: 826px;
+}
+
+.massnahmen_einsatzart_body_components_line {
+    /*background-color: aqua;*/
+    flex: 1;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+
+}
+
+.massnahmen_einsatzart_body_components_line_label {
+    background-color: rgb(240, 239, 239);
+    flex: 1;
+    display: flex;
+    align-items: center;
+    width: calc(100% - 6px);
+    padding-left: 6px;
+
+}
+
+.massnahmen_einsatzart_body_components_line_right3 {
+    /*background-color: burlywood;*/
+    flex: 9;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    gap: 3px;
+    flex-wrap: wrap;
+    overflow-x: scroll;
+    overflow-y: scroll;
+    min-height: 110px;
+}
+
+.massnahmen_einsatzart_body_components_line_right3_multiselect {
+    display: flex;
+    gap: 5px;
+    margin-left: 5px;
+    cursor: pointer;
+    /*background: pink;*/
+}
+
+.massnahmen_einsatzart_body_components_line_right3_sontiges {
+    text-overflow: ellipsis;
+    font-size: 15px;
+    width: 40%;
+    border: none;
+    background-color: rgb(240, 240, 240);
+}
+
+.massnahmen_einsatzart_body_components_line_right3_sontiges:focus {
+    outline: none;
+}
+
+
+.massnahmen_einsatzart_body_components_line_right {
+    /*background-color: burlywood;*/
+    flex: 2;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 3px;
+
+}
+
+.massnahmen_einsatzart_body_components_line_right_txt {
+    flex: 1;
+    height: 80%;
+    border: none;
+    font-size: 18px;
+    padding-left: 6px;
+}
+
+.massnahmen_einsatzart_body_components_line_right_txt:focus {
+    outline: none;
+}
+
+.massnahmen_einsatzart_body_components_line_right2 {
+    /*background-color: plum;*/
+    flex: 2;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    min-height: 85px;
+}
+
+.massnahmen_einsatzart_body_components_line_right2_body {
+    /*background-color: burlywood;*/
+    flex: 6;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    gap: 3px;
+    flex-wrap: wrap;
+    overflow-x: scroll;
+    overflow-y: scroll;
+}
+
+.massnahmen_einsatzart_body_components_line_right2_body_multiselect {
+    display: flex;
+    gap: 5px;
+    margin-left: 5px;
+    cursor: pointer;
+    /*background: pink;*/
+}
+
+.massnahmen_einsatzart_body_components_line_right2_body_multiselect_marking {
+    display: flex;
+    gap: 5px;
+    margin-left: 5px;
+    color: #FF0000;
+}
+
+.massnahmen_einsatzart_body_components_line_right2_txt {
+    flex: 1;
+    text-overflow: ellipsis;
+    font-size: 15px;
+    width: 90%;
+    padding-left: 6px;
+    margin-top: 6px;
+    margin-bottom: 6px;
+    border: none;
+    background-color: rgb(240, 240, 240);
+}
+
+.massnahmen_einsatzart_body_components_line_right2_txt {
+    outline: none;
+}
+
+.massnahmen_einsatzart_body_components_line_right4 {
+    /*background-color: plum;*/
+    flex: 2;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    
+}
+/***********************************************************/
+@media only screen and (max-width: 1080px) {
+    .massnahmen_einsatzart {
+        min-height: 1012px;
+    }
+
+    .massnahmen_einsatzart_body {
+        min-height: 967px;
+    }
+
+    .massnahmen_einsatzart_body_components {
+        min-height: 800px;
+        height: 800px;
+        width: 100%;
+    }
+
+    .massnahmen_einsatzart_body_components_line_right3{
+        min-height: 135px;
+    }
+
+    .massnahmen_einsatzart_body_components_line_right2{
+        min-height: 110px;
+    }
+}
+
+/***********************************************************/
+@media only screen and (max-width: 400px) {
+    .massnahmen_einsatzart {
+        min-height: 1212px;
+    }
+
+    .massnahmen_einsatzart_body {
+        min-height: 1167px;
+    }
+
+    .massnahmen_einsatzart_body_components {
+        min-height: 1000px;
+        height: 1000px;
+        width: 100%;
+    }
+
+    .massnahmen_einsatzart_body_components_line_right3{
+        min-height: 250px;
+    }
+
+    .massnahmen_einsatzart_body_components_line_right2{
+        min-height: 180px;
+    }
+}

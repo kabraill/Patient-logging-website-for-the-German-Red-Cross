@@ -1,0 +1,68 @@
+.sidebar_mc {
+    height: 100%;
+    width: 250px;
+    position: fixed;
+    z-index: 1;
+    top: 47px;
+    left: 0px;
+    background: white;
+    overflow-x: hidden;
+    transition: 0.4s;
+    padding-top: 60px;
+    overflow-y: scroll;
+    border: 2px solid rgb(151, 151, 151);
+    
+  }
+  
+  .sidebar_mcc{
+    min-height: 933px;
+  }
+
+  .sidebar_mc a {
+    user-select: none;
+    padding: 10px 15px 10px 20px;
+    /*text-decoration: none;*/
+    font-size: 20px;
+    color: rgb(151, 151, 151);
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    /*border: 1px solid red;*/
+    /*transition: 0.3s;*/
+  }
+  
+  .sidebar_mc a:hover {
+    color: white;
+    background-color: rgb(151, 151, 151);
+    cursor: pointer;
+  }
+
+  .sidebar_mc a:active {
+    cursor: pointer;
+  }
+
+  .sidebar_mc_ico {
+    margin-right: 10px;
+  }
+  
+  .sidebar_mc .sidebar_mc_closebtn {
+    cursor: pointer;
+    position: absolute;
+    top: 10px;
+    left: 15px;
+    font-size: 36px;
+    color: rgb(151, 151, 151);
+  }
+
+  .sidebar_mc hr{
+    margin-top: 10px;
+    margin-bottom: 10px;
+    color: white;
+  }
+
+  @media only screen and (max-width: 1333px) {
+    .sidebar_mc {
+
+        width: 0px;
+    }
+}
